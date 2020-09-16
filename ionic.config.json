@@ -1,0 +1,7 @@
+{
+  "name": "bookkeeping",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
