@@ -1,3 +1,69 @@
 .displayContent {
     display: contents;
 }
+
+
+/* .selectAlert {
+    position: absolute;
+    right: 271px;
+    top: 81px;
+} */
+
+.alert-wrapper.sc-ion-alert-md {
+    position: absolute;
+    right: 257px;
+    /* left: 0; */
+    top: 134px;
+}
+
+.sc-ion-alert-md-h {
+    --min-width: 229px;
+}
+
+.positionRelative {
+    position: relative;
+}
+
+.selectBox {
+    width: 99%;
+    background-color: white;
+    padding: 5px;
+    border-radius: 20px;
+}
+
+.paddTop {
+    padding-top: 200px;
+}
+
+.InutField {
+    width: 152px;
+    margin: 21px 0px;
+}
+
+.borderDiv {
+    border: 1px solid;
+    width: 60%;
+}
+
+.imgSize {
+    width: 240px;
+    height: 230px;
+}
+
+
+/* global css */
+
+.globalBtn {
+    background-color: #00898d !important;
+    background-color: #00898d !important;
+    padding: 11px;
+    color: white;
+    font-size: 15px;
+    margin: 7px 0px;
+    /* --ion-color-base: var(--ion-color-success, #00898d) !important;
+    --ion-color-base-rgb: var(--ion-color-success-rgb, 45, 211, 111) !important;
+    --ion-color-contrast: var(--ion-color-success-contrast, #fff) !important;
+    --ion-color-contrast-rgb: var(--ion-color-success-contrast-rgb, #00898d) !important;
+    --ion-color-shade: var(--ion-color-success-shade, #00898d) !important;
+    --ion-color-tint: var(--ion-color-success-tint, #00898d) !important; */
+}
