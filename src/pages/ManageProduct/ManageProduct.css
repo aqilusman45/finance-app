@@ -24,6 +24,12 @@
     margin: 26px 0;
 }
 
+.updatebgDark {
+    background-color: #2a292ad9;
+    height: 100vh;
+    padding-top: 50px;
+}
+
 
 /* table css */
 

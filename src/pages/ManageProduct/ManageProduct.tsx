@@ -8,7 +8,7 @@ const ManageProduct = (Props: any) => {
     return (
         <>
             <IonContent >
-                <IonGrid className="bgDark">
+                <IonGrid className="updatebgDark">
                     <IonRow>
                         <IonCol className="displayFlex ion-justify-content-center customMargin">
                             <IonButton className="CustomBtn" color="light">Update</IonButton>
