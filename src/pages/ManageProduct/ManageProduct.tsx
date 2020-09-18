@@ -21,10 +21,10 @@ const ManageProduct = (Props: any) => {
                     </IonRow>
                     <IonRow>
                         <IonCol size="2">
-                            <div className="borderDiv">
+                            <div className="updateborderDiv">
 
                                 {/* <img src={img}/> */}
-                                <IonImg className="imgSize" src={img} />
+                                <IonImg className="UpdateimgSize" src={img} />
                             </div>
                         </IonCol>
                         <IonCol size="10">

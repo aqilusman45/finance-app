@@ -11,14 +11,13 @@
     margin: 6px 30px;
 }
 
-.borderDiv {
+.updateborderDiv {
     border: 1px solid;
-    width: 97%;
+    width: 100%;
 }
 
-.imgSize {
-    width: 193px;
-    height: 230px;
+.UpdateimgSizeimgSize {
+    width: 202px;
 }
 
 .customMargin {
