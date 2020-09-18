@@ -19,6 +19,7 @@ import {
 const HomePage = (props: any) => {
   return (
     <>
+
       <IonMenu side='start' contentId='main-content'>
         <IonHeader>
           <IonToolbar>
@@ -57,6 +58,7 @@ const HomePage = (props: any) => {
           </IonToolbar>
         </IonHeader>
       </IonPage>
+
     </>
   );
 };

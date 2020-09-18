@@ -1,12 +1,12 @@
 import React from 'react'
-import './AddProduct.css'
-import NewIonMenu from './../IonMenu/NewIonMenu'
+import './UpdateProduct.css'
+import NewIonMenu from '../IonMenu/NewIonMenu'
 import img from './../images/moble.jpeg'
 import './../GlobalCss.css'
 
 import { IonGrid, IonRow, IonCol, IonContent, IonItem, IonLabel, IonInput, IonImg, } from '@ionic/react';
 
-const AddProduct = () => {
+const UpdateProduct = () => {
     return (
         <>
 
@@ -76,7 +76,7 @@ const AddProduct = () => {
                                 </div>
                                 <div className="ion-text-end">
 
-                                <button className="globalBtn">Add new Category</button>
+                                <button className="globalBtn">Save Product</button>
                                 </div>
 
                             </IonCol>
@@ -95,4 +95,4 @@ const AddProduct = () => {
     )
 }
 
-export default AddProduct
+export default UpdateProduct

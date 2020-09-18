@@ -1,0 +1,48 @@
+.displayFlex {
+    display: flex;
+}
+
+.searchBarWidth {
+    width: 22%;
+}
+
+.CustomBtn {
+    height: 75%;
+    margin: 6px 30px;
+}
+
+.borderDiv {
+    border: 1px solid;
+    width: 97%;
+}
+
+.imgSize {
+    width: 193px;
+    height: 230px;
+}
+
+.customMargin {
+    margin: 26px 0;
+}
+
+
+/* table css */
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 17px;
+    background-color: white;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
