@@ -20,7 +20,7 @@ const SignIn: React.FC = () => {
           style={{ height: "96vh" }}
           class="ion-justify-content-start ion-align-items-center"
         >
-          <IonCol class="ion-text-center" size="6" offset="3">
+          <IonCol class="ion-text-center" size="4" offset="4">
             <IonItemGroup>
               <IonItemDivider>
                 <IonLabel>Email</IonLabel>
