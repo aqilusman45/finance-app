@@ -51,3 +51,20 @@ th {
 tr:nth-child(even) {
     background-color: #dddddd;
 }
+
+
+/* globalBtn css */
+
+.globalBtn {
+    background-color: #00898d !important;
+    padding: 11px;
+    color: white;
+    font-size: 15px;
+    margin: 7px 0px;
+    border-radius: 6px;
+}
+
+.globalBtn:hover {
+    background-color: #003c3e !important;
+    transition: 0.9s;
+}
