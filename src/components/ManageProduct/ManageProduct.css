@@ -1,0 +1,70 @@
+.displayFlex {
+    display: flex;
+}
+
+.searchBarWidth {
+    width: 22%;
+}
+
+.CustomBtn {
+    height: 75%;
+    margin: 6px 30px;
+}
+
+.updateborderDiv {
+    border: 1px solid;
+    width: 100%;
+}
+
+.UpdateimgSizeimgSize {
+    width: 202px;
+}
+
+.customMargin {
+    margin: 26px 0;
+}
+
+.updatebgDark {
+    background-color: #2a292ad9;
+    height: 100vh;
+    padding-top: 50px;
+}
+
+
+/* table css */
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 17px;
+    background-color: white;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+
+/* globalBtn css */
+
+.globalBtn {
+    background-color: #00898d !important;
+    padding: 11px;
+    color: white;
+    font-size: 15px;
+    margin: 7px 0px;
+    border-radius: 6px;
+}
+
+.globalBtn:hover {
+    background-color: #003c3e !important;
+    transition: 0.9s;
+}

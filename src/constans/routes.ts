@@ -1,5 +1,6 @@
 import ExploreContainer from "../components/ExploreContainer";
 import AddProduct from "../components/AddProduct/AddProduct";
+import {ManageProduct} from './../components/index'
 export const routes = [
   {
     menuItem: "Inventory",
@@ -15,7 +16,7 @@ export const routes = [
         link: "/manage-products",
         text: "Manage Products",
         icon: "",
-        component: ExploreContainer
+        component: ManageProduct
       },
       {
         link: "/manage-categories",
