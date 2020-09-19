@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import './AddProduct.css';
 import {
   IonGrid,
   IonRow,
@@ -56,7 +57,9 @@ const AddProduct: React.FC = () => {
                 <IonSelectOption value="large">Large</IonSelectOption>
               </IonSelect>
             </IonItem>
+            <IonButton  className="addProBtn">Add Product</IonButton>
           </IonCol>
+
         </IonRow>
       </IonGrid>
     </IonContent>
