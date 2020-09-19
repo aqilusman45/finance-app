@@ -1,6 +1,6 @@
 import React from 'react'
 import './ManageProduct.css'
-import img from './../images/moble.jpeg'
+import img from './../../Images/moble.jpeg'
 // import './../GlobalCss.css'
 
 import { IonContent, IonGrid, IonRow, IonCol, IonButton, IonSearchbar, IonImg } from '@ionic/react';
@@ -11,10 +11,12 @@ const ManageProduct = (Props: any) => {
                 <IonGrid className="updatebgDark">
                     <IonRow>
                         <IonCol className="displayFlex ion-justify-content-center customMargin">
-                            <IonButton className="CustomBtn" color="light">Update</IonButton>
-                            <IonButton className="CustomBtn" color="light">Delete</IonButton>
+                            <IonButton className="CustomBtn updateBtn" color="light">Update</IonButton>
+                            <IonButton className="CustomBtn deleteBtn" color="light">Delete</IonButton>
                             <IonSearchbar className="searchBarWidth" showCancelButton="focus" debounce={1000}></IonSearchbar>
-                            <button className="globalBtn">Clear</button>
+                            {/* <button className="globalBtn">Clear</button> */}
+                            <IonButton className="ion-margin">Clear</IonButton>
+                            {/* <IonButton className="CustomBtn " color="light">Delete</IonButton> */}
 
                         </IonCol>
 
@@ -34,8 +36,8 @@ const ManageProduct = (Props: any) => {
                                     <tr>
                                         <th>Product ID</th>
                                         <th>Product Name</th>
-                                        <th>some</th>
-                                        <th>some</th>
+                                        <th>Price</th>
+                                        <th>Price</th>
                                         <th>Quantity</th>
                                         <th>UpdatedOn</th>
                                         <th>Discription</th>
@@ -46,77 +48,54 @@ const ManageProduct = (Props: any) => {
                                 <tbody>
                                     <tr>
 
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
+                                        <td>1</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
 
                                     </tr>
                                     <tr>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
+                                        <td>2</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
 
                                     </tr>
                                     <tr>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
+                                        <td>3</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
 
                                     </tr>
                                     <tr>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
+                                        <td>4</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
 
                                     </tr>
-                                    <tr>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
 
-                                    </tr>
-                                    <tr>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-
-                                    </tr>
                                 </tbody>
                             </table>
                         </IonCol>

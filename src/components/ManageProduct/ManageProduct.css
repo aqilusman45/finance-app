@@ -1,3 +1,8 @@
+.searchbar-input.sc-ion-searchbar-md {
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
 .displayFlex {
     display: flex;
 }
@@ -7,8 +12,16 @@
 }
 
 .CustomBtn {
-    height: 75%;
-    margin: 6px 30px;
+    height: 54%;
+    /* margin: 6px 30px; */
+}
+
+.updateBtn {
+    margin: 16px 8px;
+}
+
+.deleteBtn {
+    margin: 16px 15px;
 }
 
 .updateborderDiv {
@@ -37,7 +50,7 @@ table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
-    font-size: 17px;
+    font-size: 14px;
     background-color: white;
 }
 
