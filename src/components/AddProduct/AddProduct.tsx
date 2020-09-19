@@ -12,6 +12,7 @@ import {
   IonSelectOption,
   IonButton,
 } from "@ionic/react";
+import AddNewBrandAlert from "../AddNewBrandAlert/AddNewBrandAlert";
 
 const AddProduct: React.FC = () => {
   const fileIput = useRef<any>(null);
@@ -48,7 +49,9 @@ const AddProduct: React.FC = () => {
                 <IonSelectOption value="t-shirt">T-shirt</IonSelectOption>
                 <IonSelectOption value="shirt">Shirt</IonSelectOption>
               </IonSelect>
+            <AddNewBrandAlert/>
             </IonItem>
+
             <IonItem className="ion-margin">
               <IonLabel>Sizes</IonLabel>
               <IonSelect multiple={true} placeholder="Select One">
