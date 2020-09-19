@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import './AddProduct.css';
-import {AddNewBrandAlert} from './../index'
 import {
   IonGrid,
   IonRow,
@@ -50,8 +49,6 @@ const AddProduct: React.FC = () => {
                 <IonSelectOption value="shirt">Shirt</IonSelectOption>
               </IonSelect>
             </IonItem>
-            {/* <AddNewBrandAlert/> */}
-
             <IonItem className="ion-margin">
               <IonLabel>Sizes</IonLabel>
               <IonSelect multiple={true} placeholder="Select One">

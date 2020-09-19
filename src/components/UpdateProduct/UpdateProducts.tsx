@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import './UpdateProduct.css';
+import './UpdateProducts.css';
 import {
   IonGrid,
   IonRow,
