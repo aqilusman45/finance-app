@@ -1,6 +1,7 @@
 import { app } from "electron";
 import { createCapacitorElectronApp } from "@capacitor-community/electron-core";
-
+import { router } from "./server";
+const port = 8829;
 // The MainWindow object can be accessed via myCapacitorApp.getMainWindow()
 const myCapacitorApp = createCapacitorElectronApp();
 
@@ -27,3 +28,6 @@ app.on("activate", function () {
 });
 
 // Define any IPC or other custom functionality below here
+router.listen(port, () => {
+  console.log("Server up on " + port);
+});
