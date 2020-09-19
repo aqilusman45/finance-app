@@ -49,8 +49,8 @@ const AddProduct: React.FC = () => {
                 <IonSelectOption value="t-shirt">T-shirt</IonSelectOption>
                 <IonSelectOption value="shirt">Shirt</IonSelectOption>
               </IonSelect>
+            <AddNewBrandAlert/>
             </IonItem>
-            {/* <AddNewBrandAlert/> */}
 
             <IonItem className="ion-margin">
               <IonLabel>Sizes</IonLabel>
