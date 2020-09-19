@@ -65,6 +65,12 @@ tr:nth-child(even) {
     background-color: #dddddd;
 }
 
+.manageDataTable {
+    overflow: scroll;
+    height: 250px;
+    overflow-x: hidden;
+}
+
 
 /* globalBtn css */
 

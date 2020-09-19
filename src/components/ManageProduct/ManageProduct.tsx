@@ -29,7 +29,7 @@ const ManageProduct = (Props: any) => {
                                 <IonImg className="UpdateimgSize" src={img} />
                             </div>
                         </IonCol>
-                        <IonCol size="10">
+                        <IonCol size="10" className="manageDataTable">
 
                             <table>
                                 <thead>
@@ -73,6 +73,150 @@ const ManageProduct = (Props: any) => {
                                     </tr>
                                     <tr>
                                         <td>3</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Redmi 9C</td>
+                                        <td>10,000</td>
+                                        <td>9,000</td>
+                                        <td>1</td>
+                                        <td>August</td>
+                                        <td>Red Color</td>
+                                        <td>RedMi</td>
+                                        <td>RedMi</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
                                         <td>Redmi 9C</td>
                                         <td>10,000</td>
                                         <td>9,000</td>
