@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import './AddProduct.css';
 import {
   IonGrid,
   IonRow,
@@ -12,7 +11,6 @@ import {
   IonSelectOption,
   IonButton,
 } from "@ionic/react";
-import AddNewBrandAlert from "../AddNewBrandAlert/AddNewBrandAlert";
 
 const AddProduct: React.FC = () => {
   const fileIput = useRef<any>(null);
@@ -34,9 +32,15 @@ const AddProduct: React.FC = () => {
               <IonInput> </IonInput>
             </IonItem>
             <input ref={fileIput} style={{ display: "none" }} type="file" />
-            <IonButton onClick={()=>{
-              fileIput.current.click()
-            }} className="ion-margin">Upload image</IonButton>
+            <IonButton
+              onClick={() => {
+                fileIput.current.click();
+              }}
+              className="ion-margin"
+            >
+              Upload image
+            </IonButton>
+            <IonButton>Add Product</IonButton>
           </IonCol>
           <IonCol size="6">
             <IonItem className="ion-margin">
@@ -49,9 +53,7 @@ const AddProduct: React.FC = () => {
                 <IonSelectOption value="t-shirt">T-shirt</IonSelectOption>
                 <IonSelectOption value="shirt">Shirt</IonSelectOption>
               </IonSelect>
-            <AddNewBrandAlert/>
             </IonItem>
-
             <IonItem className="ion-margin">
               <IonLabel>Sizes</IonLabel>
               <IonSelect multiple={true} placeholder="Select One">
@@ -60,9 +62,7 @@ const AddProduct: React.FC = () => {
                 <IonSelectOption value="large">Large</IonSelectOption>
               </IonSelect>
             </IonItem>
-            <IonButton  className="addProBtn">Add Product</IonButton>
           </IonCol>
-
         </IonRow>
       </IonGrid>
     </IonContent>

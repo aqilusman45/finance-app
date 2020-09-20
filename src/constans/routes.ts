@@ -3,8 +3,9 @@ import AddProduct from "../components/AddProduct/AddProduct";
 import {
   ManageProduct,
   AddAttributes,
-  AddNewBrandAlert,
+  ManageAttributes,
 } from "./../components/index";
+
 export const routes = [
   {
     menuItem: "Inventory",
@@ -23,22 +24,16 @@ export const routes = [
         component: ManageProduct,
       },
       {
-        link: "/manage-categories",
-        text: "Manage Categories",
-        icon: "",
-        component: AddNewBrandAlert,
-      },
-      {
         link: "/add-attributes",
         text: "Add Attributes",
         icon: "",
         component: AddAttributes,
       },
       {
-        link: "/manage-designs",
-        text: "Manage Designs",
+        link: "/manage-attributes",
+        text: "Manage Attributes",
         icon: "",
-        component: ExploreContainer,
+        component: ManageAttributes,
       },
     ],
   },

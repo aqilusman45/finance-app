@@ -8,7 +8,7 @@ import {
 } from "@ionic/react";
 import Table from "react-bootstrap/Table";
 
-const ManageProduct: React.FC = () => {
+const ManageAttributes: React.FC = () => {
   return (
     <>
       <IonContent>
@@ -70,4 +70,4 @@ const ManageProduct: React.FC = () => {
   );
 };
 
-export default ManageProduct;
+export default ManageAttributes;
