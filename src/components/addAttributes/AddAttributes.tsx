@@ -10,6 +10,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonButton,
+  IonToggle,
   IonIcon,
 } from "@ionic/react";
 import { trashBin } from "ionicons/icons";
@@ -77,6 +78,10 @@ const AddAttributes: React.FC = () => {
                   setName(e.detail.value || "");
                 }}
               />
+            </IonItem>
+            <IonItem className="ion-margin">
+              <IonLabel position="fixed">Reqiured</IonLabel>
+              <IonToggle />
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="fixed">Options</IonLabel>

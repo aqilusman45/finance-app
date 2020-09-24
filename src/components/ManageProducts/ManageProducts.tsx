@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   IonContent,
   IonGrid,
@@ -7,33 +7,22 @@ import {
   IonSearchbar,
 } from "@ionic/react";
 import Table from "react-bootstrap/Table";
-import { getProducts } from "../../utils/api";
-import { Plugins } from "@capacitor/core";
-
-const { Storage } = Plugins;
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/rootReducer";
+import { fetchProducts } from "../../store/reducers/products";
 
 const ManageProduct: React.FC = () => {
-  const [products, setProducts] = useState<any>([]);
+  const dispatch = useDispatch();
+
+  const { isLoading, products } = useSelector((state: RootState) => {
+    return state.products;
+  });
 
   useEffect(() => {
-    async function fetchData() {
-      const products = await Storage.get({
-        key: "products",
-      });
-
-      if (products.value) {
-        setProducts(JSON.parse(products.value));
-      } else {
-        const data = await getProducts();
-        setProducts(data);
-        Storage.set({
-          key: "products",
-          value: JSON.stringify(data),
-        });
-      }
+    if (!products.length) {
+      dispatch(fetchProducts());
     }
-    fetchData();
-  }, []);
+  }, [products.length, dispatch]);
 
   return (
     <>
@@ -44,7 +33,9 @@ const ManageProduct: React.FC = () => {
               <IonSearchbar showCancelButton="focus" debounce={1000} />
             </IonCol>
           </IonRow>
-          {products.length ? (
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : products.length ? (
             <>
               <IonRow>
                 <IonCol size="12">
@@ -53,7 +44,7 @@ const ManageProduct: React.FC = () => {
                       <tr>
                         <th>#</th>
                         {Object.keys(products[0]).map((heading) => {
-                          return <th key={heading}>{heading.toUpperCase()}</th>
+                          return <th key={heading}>{heading.toUpperCase()}</th>;
                         })}
                       </tr>
                     </thead>

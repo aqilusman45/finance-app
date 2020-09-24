@@ -1,24 +1,38 @@
 import { RxJsonSchema } from "rxdb";
 
-export const userSchema: RxJsonSchema = {
-  title: "user schema",
+export const attributeSchema: RxJsonSchema = {
+  title: "attribute schema",
   version: 0,
-  description: "user accounts",
+  description: "attributes",
   type: "object",
   properties: {
     uid: {
       type: "string",
       primary: true,
     },
-    name: {
+    attributeType: {
       type: "string",
     },
-    email: {
+    attributeName: {
       type: "string",
     },
-    password: {
-      type: "string",
+    required: {
+      type: "boolean",
+    },
+    options: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          value: {
+            type: "string",
+          },
+          label: {
+            type: "string",
+          },
+        },
+      },
     },
   },
-  required: ["uid", "name", "email", "password"],
+  required: ["uid", "attributeType", "attributeName", "required", "options"],
 };

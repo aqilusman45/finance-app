@@ -1,7 +1,9 @@
 import { createRxDatabase, addRxPlugin, RxDatabase, RxJsonSchema } from "rxdb";
 import { MyDatabaseCollections } from "../lib/collections";
+import { IProductDocument } from "../lib/products";
 import { IUserDocument } from "../lib/users";
 import { userSchema } from "../schema";
+import { productSchema } from "../schema/products";
 addRxPlugin(require("pouchdb-adapter-idb"));
 
 let dbPromise: Promise<RxDatabase<MyDatabaseCollections>> | null = null;
@@ -13,6 +15,7 @@ const _create = async () => {
     password: process.env.REACT_APP_PASSWORD,
   });
   await createCollection(db, userSchema, 'users')
+  await createCollection(db, productSchema, 'products')
   return db;
 };
 
@@ -43,4 +46,18 @@ export const addUser = async (user: IUserDocument) => {
   return users.insert({
     ...user,
   });
+};
+
+export const addProduct = async (product: IProductDocument) => {
+  const db = await get();
+  const { products } = db.collections;
+  return products.insert({
+    ...product,
+  });
+};
+
+export const productsQuery = async () => {
+  const db = await get();
+  const { products } = db.collections;
+  return products.find().exec()
 };

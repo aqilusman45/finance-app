@@ -16,7 +16,6 @@ import {
 } from "@ionic/react";
 import { match, Route } from "react-router-dom";
 import { routes } from "../constans/routes";
-import * as RXDB from '../utils/database'
 import React from "react";
 
 const Home: React.FC<{
@@ -25,7 +24,6 @@ const Home: React.FC<{
     pathname: string;
   };
 }> = ({ match, location }) => {
-  RXDB.dump().then(console.log)
 
   return (
     <IonContent>
