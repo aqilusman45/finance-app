@@ -16,6 +16,12 @@ import {
 import { trashBin } from "ionicons/icons";
 import Badge from "react-bootstrap/Badge";
 import { slugify } from "../../utils/slugify";
+import { insertAttribute } from "../../store/reducers/attributes";
+import { AttributeType } from "../../lib/enum";
+import { IAttributeDocument } from "../../lib/attributes";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/rootReducer";
+import { v4 as uuidv4 } from "uuid";
 
 interface IAttribute {
   label: string;
@@ -24,9 +30,16 @@ interface IAttribute {
 
 const AddAttributes: React.FC = () => {
   const [options, setOpions] = useState<IAttribute[]>([]);
-  const [attrType, setType] = useState<string>("");
+  const [attrType, setType] = useState<AttributeType>(AttributeType.CHECKBOXES);
   const [attrName, setName] = useState<string>("");
   const [optionLabel, setLabel] = useState<string>("");
+  const [required, setRequired] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
+
+  const { isLoading } = useSelector((state: RootState) => {
+    return state.attributes;
+  });
 
   const addOption = (option: string) => {
     setLabel("");
@@ -48,6 +61,19 @@ const AddAttributes: React.FC = () => {
     });
   };
 
+  const submitAttribute = () => {
+    const attr = {
+      uid: uuidv4(),
+      attributeName: attrName,
+      attributeType: attrType,
+      options,
+      required,
+    };
+    dispatch(insertAttribute(attr as IAttributeDocument));
+  };
+
+  if (isLoading) return <p>Loading...</p>;
+
   return (
     <IonContent>
       <IonGrid className="ion-margin">
@@ -62,10 +88,10 @@ const AddAttributes: React.FC = () => {
                 value={attrType}
                 placeholder="Select One"
               >
-                <IonSelectOption value="radio">
+                <IonSelectOption value={AttributeType.RADIO}>
                   Radio ( single option )
                 </IonSelectOption>
-                <IonSelectOption value="checkbox">
+                <IonSelectOption value={AttributeType.CHECKBOXES}>
                   Checkboxes ( multiple options )
                 </IonSelectOption>
               </IonSelect>
@@ -81,7 +107,12 @@ const AddAttributes: React.FC = () => {
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="fixed">Reqiured</IonLabel>
-              <IonToggle />
+              <IonToggle
+                checked={required}
+                onIonChange={() => {
+                  setRequired(!required);
+                }}
+              />
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="fixed">Options</IonLabel>
@@ -122,6 +153,9 @@ const AddAttributes: React.FC = () => {
             ))}
             <IonContent>
               <IonButton
+                onClick={() => {
+                  submitAttribute();
+                }}
                 disabled={!attrName || !attrType || !options.length}
                 className="ion-margin"
               >

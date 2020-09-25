@@ -19,10 +19,10 @@ const ManageProduct: React.FC = () => {
   });
 
   useEffect(() => {
-    if (!products.length) {
+    if (!products) {
       dispatch(fetchProducts());
     }
-  }, [products.length, dispatch]);
+  }, [products, dispatch]);
 
   return (
     <>
@@ -35,7 +35,7 @@ const ManageProduct: React.FC = () => {
           </IonRow>
           {isLoading ? (
             <p>Loading...</p>
-          ) : products.length ? (
+          ) : products && products.length ? (
             <>
               <IonRow>
                 <IonCol size="12">

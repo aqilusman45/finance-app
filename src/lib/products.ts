@@ -1,4 +1,3 @@
-import { AttributeType } from "./enum";
 import { RxDocument, RxCollection } from "rxdb";
 
 export interface IProduct {
@@ -12,11 +11,6 @@ export interface IProduct {
 export interface IOption {
   value: string;
   label: string;
-}
-export interface IAttribute {
-  type: AttributeType;
-  name: string;
-  options: IOption[];
 }
 
 export interface IProductDocument extends RxDocument<IProduct> {}

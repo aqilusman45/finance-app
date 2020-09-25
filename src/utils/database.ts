@@ -1,8 +1,10 @@
 import { createRxDatabase, addRxPlugin, RxDatabase, RxJsonSchema } from "rxdb";
+import { IAttributeDocument } from "../lib/attributes";
 import { MyDatabaseCollections } from "../lib/collections";
 import { IProductDocument } from "../lib/products";
 import { IUserDocument } from "../lib/users";
 import { userSchema } from "../schema";
+import { attributeSchema } from "../schema/attributes";
 import { productSchema } from "../schema/products";
 addRxPlugin(require("pouchdb-adapter-idb"));
 
@@ -16,6 +18,7 @@ const _create = async () => {
   });
   await createCollection(db, userSchema, 'users')
   await createCollection(db, productSchema, 'products')
+  await createCollection(db, attributeSchema, 'attributes')
   return db;
 };
 
@@ -48,16 +51,31 @@ export const addUser = async (user: IUserDocument) => {
   });
 };
 
-export const addProduct = async (product: IProductDocument) => {
-  const db = await get();
-  const { products } = db.collections;
-  return products.insert({
-    ...product,
-  });
-};
-
 export const productsQuery = async () => {
   const db = await get();
   const { products } = db.collections;
   return products.find().exec()
+};
+
+export const insertProductMutation = async (product: IProductDocument) => {
+  const db = await get();
+  const { products } = db.collections;
+  return products.insert({
+    ...product
+  })
+};
+
+
+export const insertAttributeMutation = async (attribute: IAttributeDocument) => {
+  const db = await get();
+  const { attributes } = db.collections;
+  return attributes.insert({
+    ...attribute
+  })
+};
+
+export const attributesQuery = async () => {
+  const db = await get();
+  const { attributes } = db.collections;
+  return attributes.find().exec()
 };

@@ -19,6 +19,20 @@ export const productSchema: RxJsonSchema = {
     price: {
       type: "number",
     },
+    images: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          base64: {
+            type: "string",
+          },
+          name: {
+            type: "string",
+          },
+        },
+      },
+    },
   },
   required: ["uid", "quatity", "sku", "price"],
 };
