@@ -19,9 +19,10 @@ import { slugify } from "../../utils/slugify";
 import { insertAttribute } from "../../store/reducers/attributes";
 import { AttributeType } from "../../lib/enum";
 import { IAttributeDocument } from "../../lib/attributes";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { v4 as uuidv4 } from "uuid";
+import { useDispatch, useSelector } from "react-redux";
+
 
 interface IAttribute {
   label: string;

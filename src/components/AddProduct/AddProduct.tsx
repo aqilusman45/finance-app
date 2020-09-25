@@ -9,7 +9,8 @@ import {
   IonInput,
   IonButton,
 } from "@ionic/react";
-
+import { addProductFunc } from "./../../Feature/ManageProductSlice/ManageProductSlice";
+import { useDispatch } from "react-redux";
 const INITIAL_STATE = {
   name: '',
   quantity: 0,
@@ -19,16 +20,24 @@ const INITIAL_STATE = {
 }
 
 const AddProduct: React.FC = () => {
-  const fileIput = useRef<any>(null);
-  const [formFields, setFormFields] = useState({...INITIAL_STATE});
-  const { name, price, quantity, sku } = formFields
 
-  const handleChange = (e: FormEvent<HTMLIonInputElement>) => {
-      setFormFields((prevField)=>({
-        ...prevField,
-        [e.currentTarget.name]: e.currentTarget.value
-      }))
-  }
+  // code added by huzaifa start
+  const [name, setName] = useState<String>('');
+  const [quantity, setQuantity] = useState<Number>();
+  const [sku, setSku] = useState<Number>();
+  const [price, setprice] = useState<Number>();
+  const dispatch=useDispatch()
+  // code added by huzaifa end
+  const fileIput = useRef<any>(null);
+  // const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
+  // const { name, price, quantity, sku } = formFields
+
+  // const handleChange = (e: FormEvent<HTMLIonInputElement>) => {
+  //   setFormFields((prevField) => ({
+  //     ...prevField,
+  //     [e.currentTarget.name]: e.currentTarget.value
+  //   }))
+  // }
 
   return (
     <IonContent>
@@ -36,16 +45,25 @@ const AddProduct: React.FC = () => {
         <IonRow className="ion-justify-content-between">
           <IonCol size="6">
             <IonItem className="ion-margin">
-              <IonLabel position="stacked">Product Name</IonLabel>
-              <IonInput value={name} name='name' onChange={handleChange} />
+  <IonLabel position="stacked">Product Name</IonLabel>
+              <IonInput name='name' onChange={(ev:any) => {
+                setName(ev.target.value)
+
+              }} />
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="stacked">SKU</IonLabel>
-              <IonInput value={sku} name='sku' onChange={handleChange} />
+              <IonInput  name='sku' onChange={(ev: any) => {
+                setSku(ev.target.value)
+
+              }} />
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Price</IonLabel>
-              <IonInput value={price} name='price' onChange={handleChange} />
+              <IonInput  name='price' onChange={(ev: any) => {
+                setprice(ev.target.value)
+
+              }} />
             </IonItem>
             <input ref={fileIput} style={{ display: "none" }} type="file" />
             <IonButton
@@ -56,12 +74,15 @@ const AddProduct: React.FC = () => {
             >
               Upload image
             </IonButton>
-            <IonButton>Add Product</IonButton>
+            <IonButton onClick={() => {dispatch(addProductFunc({name,quantity,sku,price})) }}>Add Product</IonButton>
           </IonCol>
           <IonCol size="6">
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Quantity</IonLabel>
-              <IonInput value={quantity} name='quantity' onChange={handleChange} />
+              <IonInput  name='quantity' onChange={(ev: any) => {
+                setQuantity(ev.target.value)
+
+              }} />
             </IonItem>
             {/* <IonItem className="ion-margin">
               <IonLabel>Categories</IonLabel>
