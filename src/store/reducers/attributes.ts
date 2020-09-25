@@ -23,16 +23,12 @@ const attributesSlice = createSlice({
     doneLoading: (state) => {
       state.isLoading = false;
     },
-    getAttributes: (state, action: PayloadAction<IAttributeDocument[]>) => {
+    getAttributes: (state, action: PayloadAction<IAttribute[]>) => {
       const attributes = action.payload;
-      const deserialized = attributes.map(attr=> transformAttribute(attr))
-      state.attributes = [...deserialized];
+      state.attributes = [...attributes];
       state.isLoading = false;
     },
-    addAttribute: (
-      state,
-      action: PayloadAction<IAttributeDocument>
-    ) => {
+    addAttribute: (state, action: PayloadAction<IAttributeDocument>) => {
       const attribute = action.payload;
       state.attributes?.unshift(transformAttribute(attribute));
       state.isLoading = false;
@@ -53,20 +49,21 @@ export const fetchAttributes = (): AppThunk => async (dispatch) => {
   try {
     dispatch(startLoading());
     const docs = await attributesQuery();
-    dispatch(getAttributes([...docs]));
+    const deserialized = docs.map((attr) => transformAttribute(attr));
+    dispatch(getAttributes([...deserialized]));
     dispatch(doneLoading());
   } catch (error) {
     throw error;
   }
 };
 
-export const insertAttribute = (attribute: IAttributeDocument): AppThunk => async (
-  dispatch
-) => {
+export const insertAttribute = (
+  attribute: IAttributeDocument
+): AppThunk => async (dispatch) => {
   try {
     dispatch(startLoading());
-    const attributesRes = await insertAttributeMutation(attribute);
-    dispatch(addAttribute(attributesRes));
+    await insertAttributeMutation(attribute);
+    dispatch(addAttribute(attribute));
     dispatch(doneLoading());
   } catch (error) {
     throw error;
