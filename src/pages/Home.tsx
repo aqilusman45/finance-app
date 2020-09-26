@@ -15,7 +15,7 @@ import {
   IonButton,
 } from "@ionic/react";
 import { match, Route } from "react-router-dom";
-import { routes } from "../constans/routes";
+import { routes } from "../constants/routes";
 import React from "react";
 
 const Home: React.FC<{

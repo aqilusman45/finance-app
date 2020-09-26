@@ -14,7 +14,23 @@ export const attributeSchema: RxJsonSchema = {
       type: "string",
     },
     attributeName: {
-      type: "string",
+      type: "object",
+      properties: {
+        name: {
+          type: "string",
+        },
+        key: {
+          type: "string",
+        },
+      },
+    },
+    createdAt: {
+      type: "number",
+      default: Date.now(),
+    },
+    updatedAt: {
+      type: "number",
+      default: Date.now(),
     },
     required: {
       type: "boolean",

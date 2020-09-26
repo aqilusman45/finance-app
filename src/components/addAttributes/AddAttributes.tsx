@@ -64,7 +64,10 @@ const AddAttributes: React.FC = () => {
   const submitAttribute = () => {
     const attr = {
       uid: uuidv4(),
-      attributeName: attrName,
+      attributeName: {
+        name: attrName,
+        key: slugify(attrName)
+      },
       attributeType: attrType,
       options,
       required,

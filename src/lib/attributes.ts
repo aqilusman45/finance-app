@@ -4,7 +4,10 @@ import { RxDocument, RxCollection } from "rxdb";
 export interface IAttribute {
   uid: string;
   attributeType: AttributeType;
-  attributeName: string;
+  attributeName: {
+    name: string;
+    key: string;
+  };
   required: boolean;
   options: IOption[];
 }

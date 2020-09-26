@@ -10,7 +10,7 @@ export const productSchema: RxJsonSchema = {
       type: "string",
       primary: true,
     },
-    quatity: {
+    quantity: {
       type: "number",
     },
     sku: {
@@ -19,14 +19,54 @@ export const productSchema: RxJsonSchema = {
     price: {
       type: "number",
     },
-    images: {
+    description: {
+      type: "string",
+    },
+    enabled: {
+      type: "boolean",
+      default: true,
+    },
+    createdAt: {
+      type: "number",
+      default: Date.now(),
+    },
+    updatedAt: {
+      type: "number",
+      default: Date.now(),
+    },
+    attributes: {
       type: "array",
+      default: [],
       items: {
         type: "object",
         properties: {
-          base64: {
+          attributeRef: {
+            ref: "attributes",
             type: "string",
           },
+          options: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                value: {
+                  type: "string",
+                },
+                label: {
+                  type: "string",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    images: {
+      type: "array",
+      default: [],
+      items: {
+        type: "object",
+        properties: {
           name: {
             type: "string",
           },
@@ -34,5 +74,8 @@ export const productSchema: RxJsonSchema = {
       },
     },
   },
-  required: ["uid", "quatity", "sku", "price"],
+  attachments: {
+    encrypted: true,
+  },
+  required: ["uid", "quantity", "sku", "price"],
 };

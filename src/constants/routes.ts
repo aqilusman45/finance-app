@@ -4,7 +4,7 @@ import {
   ManageProduct,
   AddAttributes,
   ManageAttributes,
-} from "./../components/index";
+} from "../components/index";
 
 export const routes = [
   {

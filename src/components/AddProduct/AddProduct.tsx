@@ -1,4 +1,4 @@
-import React, { FormEvent, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   IonGrid,
   IonRow,
@@ -7,47 +7,133 @@ import {
   IonLabel,
   IonItem,
   IonInput,
+  IonLoading,
   IonButton,
+  IonThumbnail,
+  IonImg,
 } from "@ionic/react";
+import Carousel from "react-bootstrap/Carousel";
+import CarouselItem from "react-bootstrap/CarouselItem";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/rootReducer";
+import { v4 as uuidv4 } from "uuid";
+import { fetchAttributes } from "../../store/reducers/attributes";
+import { insertProduct } from "../../store/reducers/products";
+import CheckBox from "../CheckBox/Checkbox";
+import { AttributeType } from "../../lib/enum";
+import { encodeImageFileAsURL } from "../../utils/toBase64";
+import { IImages } from "../../lib/products";
+import { IOption } from "../../lib/attributes";
 
 const INITIAL_STATE = {
-  name: '',
-  quantity: 0,
-  sku: '',
-  price: 0,
-  images: []
-}
+  name: "",
+  quantity: `0`,
+  sku: "",
+  price: `0`,
+  images: [],
+  description: "",
+};
 
 const AddProduct: React.FC = () => {
   const fileIput = useRef<any>(null);
-  const [formFields, setFormFields] = useState({...INITIAL_STATE});
-  const { name, price, quantity, sku } = formFields
 
-  const handleChange = (e: FormEvent<HTMLIonInputElement>) => {
-      setFormFields((prevField)=>({
-        ...prevField,
-        [e.currentTarget.name]: e.currentTarget.value
-      }))
-  }
+  const [index, setIndex] = useState(0);
+  const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
+  const [images, setImages] = useState<IImages[]>([]);
+  const [selectedAttrs, setAttributes] = useState<any>({});
+
+  const dispatch = useDispatch();
+  const { attributes, isLoading } = useSelector(
+    (state: RootState) => state.attributes
+  );
+  const { name, price, quantity, sku, description } = formFields;
+
+  useEffect(() => {
+    if (!attributes) {
+      dispatch(fetchAttributes());
+    }
+  }, [attributes, dispatch]);
+
+  const handleSelect = (selectedIndex: number) => {
+    setIndex(selectedIndex);
+  };
+
+  const handleChange = (e: any) => {
+    setFormFields((prevField) => ({
+      ...prevField,
+      [e.currentTarget.name]: e.currentTarget.value,
+    }));
+  };
+
+  const onFileSelect = (e: any) => {
+    encodeImageFileAsURL(e.target, (image) => {
+      setImages((prevState) => prevState.concat({ ...image }));
+    });
+  };
+
+  const handleAttributes = (options: IOption[], uid: string) => {
+    setAttributes((prevState: any) => {
+      return {
+        ...prevState,
+        [uid]: options,
+      };
+    });
+  };
+
+  const submit = () => {
+    const attrs = Object.keys(selectedAttrs).map((uid) => {
+      return {
+        attributeRef: uid,
+        options: selectedAttrs[uid],
+      };
+    });
+    const product = {
+      name,
+      uid: uuidv4(),
+      price: parseInt(`${price}`),
+      quantity: parseInt(`${quantity}`),
+      sku,
+      description,
+      enabled: true,
+      attributes: attrs,
+      images: images.map(({ name }) => ({ name })),
+    };
+    console.log('product', product);
+    dispatch(insertProduct(product as any, images));
+  };
 
   return (
     <IonContent>
+      <IonLoading isOpen={isLoading} message={"Please wait..."} />
       <IonGrid className="ion-padding">
         <IonRow className="ion-justify-content-between">
           <IonCol size="6">
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Product Name</IonLabel>
-              <IonInput value={name} name='name' onChange={handleChange} />
+              <IonInput value={name} name="name" onIonChange={handleChange} />
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="stacked">SKU</IonLabel>
-              <IonInput value={sku} name='sku' onChange={handleChange} />
+              <IonInput value={sku} name="sku" onIonChange={handleChange} />
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Price</IonLabel>
-              <IonInput value={price} name='price' onChange={handleChange} />
+              <IonInput value={price} name="price" onIonChange={handleChange} />
             </IonItem>
-            <input ref={fileIput} style={{ display: "none" }} type="file" />
+            <IonItem className="ion-margin">
+              <IonLabel position="stacked">Description</IonLabel>
+              <IonInput
+                value={description}
+                name="description"
+                onIonChange={handleChange}
+              />
+            </IonItem>
+            <input
+              ref={fileIput}
+              onChange={onFileSelect}
+              style={{ display: "none" }}
+              type="file"
+            />
             <IonButton
               onClick={() => {
                 fileIput.current.click();
@@ -56,28 +142,64 @@ const AddProduct: React.FC = () => {
             >
               Upload image
             </IonButton>
-            <IonButton>Add Product</IonButton>
+            <IonButton
+              onClick={(e) => {
+                e.preventDefault();
+                submit();
+              }}
+            >
+              Add Product
+            </IonButton>
+            {!!images.length && (
+              <Carousel
+                slide={false}
+                activeIndex={index}
+                onSelect={handleSelect}
+              >
+                {images.map(({ base64, name }) => (
+                  <CarouselItem key={name}>
+                    <IonThumbnail
+                      key={name}
+                      style={{
+                        height: "230px",
+                        width: "100%",
+                      }}
+                    >
+                      <IonImg alt={name} src={base64} />
+                    </IonThumbnail>
+                  </CarouselItem>
+                ))}
+              </Carousel>
+            )}
           </IonCol>
           <IonCol size="6">
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Quantity</IonLabel>
-              <IonInput value={quantity} name='quantity' onChange={handleChange} />
+              <IonInput
+                value={quantity}
+                name="quantity"
+                onIonChange={handleChange}
+              />
             </IonItem>
-            {/* <IonItem className="ion-margin">
-              <IonLabel>Categories</IonLabel>
-              <IonSelect multiple={true} placeholder="Select One">
-                <IonSelectOption value="t-shirt">T-shirt</IonSelectOption>
-                <IonSelectOption value="shirt">Shirt</IonSelectOption>
-              </IonSelect>
-            </IonItem> */}
-            {/* <IonItem className="ion-margin">
-              <IonLabel>Sizes</IonLabel>
-              <IonSelect multiple={true} placeholder="Select One">
-                <IonSelectOption value="small">Small</IonSelectOption>
-                <IonSelectOption value="medium">Medium</IonSelectOption>
-                <IonSelectOption value="large">Large</IonSelectOption>
-              </IonSelect>
-            </IonItem> */}
+            {!!attributes?.length &&
+              attributes.map(
+                ({
+                  attributeName: { key, name },
+                  options,
+                  attributeType,
+                  uid,
+                }) => (
+                  <IonItem key={key} className="ion-margin">
+                    <CheckBox
+                      handleChange={handleAttributes}
+                      multiple={attributeType === AttributeType.CHECKBOXES}
+                      label={name}
+                      uid={uid}
+                      options={options}
+                    />
+                  </IonItem>
+                )
+              )}
           </IonCol>
         </IonRow>
       </IonGrid>

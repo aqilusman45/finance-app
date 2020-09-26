@@ -4,8 +4,22 @@ export interface IProduct {
   uid: string;
   name: string;
   quantity: number;
-  SKU: string;
+  sku: string;
+  description: string;
+  enabled: boolean;
   price: string;
+  attributes: IProductAttributes[];
+  images: IImages[];
+}
+
+export interface IImages {
+  base64: string;
+  name: string;
+  type: string;
+}
+export interface IProductAttributes {
+  attributeRef: string;
+  options: IOption[];
 }
 
 export interface IOption {

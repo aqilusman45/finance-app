@@ -10,6 +10,14 @@ export const userSchema: RxJsonSchema = {
       type: "string",
       primary: true,
     },
+    createdAt: {
+      type: "number",
+      default: Date.now(),
+    },
+    updatedAt: {
+      type: "number",
+      default: Date.now(),
+    },
     name: {
       type: "string",
     },

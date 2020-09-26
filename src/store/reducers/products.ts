@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RxDocument } from "rxdb";
 import { AppThunk } from "..";
-import { IProductDocument } from "../../lib/products";
+import { IImages, IProduct, IProductDocument } from "../../lib/products";
 import { insertProductMutation, productsQuery } from "../../utils/database";
+import { transformProduct } from "../../utils/transform";
 
 interface IInitialState {
-  products: IProductDocument[] | null;
+  products: IProduct[] | null;
   isLoading: boolean;
 }
 const INITIAL_STATE: IInitialState = {
@@ -23,15 +23,12 @@ const productsSlice = createSlice({
     doneLoading: (state) => {
       state.isLoading = false;
     },
-    getProducts: (state, action: PayloadAction<IProductDocument[]>) => {
+    getProducts: (state, action: PayloadAction<IProduct[]>) => {
       const products = action.payload;
       state.products = [...products];
       state.isLoading = false;
     },
-    addProduct: (
-      state,
-      action: PayloadAction<RxDocument<IProductDocument, {}>>
-    ) => {
+    addProduct: (state, action: PayloadAction<IProduct>) => {
       const product = action.payload;
       state.products?.unshift(product);
       state.isLoading = false;
@@ -52,20 +49,29 @@ export const fetchProducts = (): AppThunk => async (dispatch) => {
   try {
     dispatch(startLoading());
     const docs = await productsQuery();
-    dispatch(getProducts([...docs]));
+    const deserialized = docs.map((attr) => transformProduct(attr));
+    dispatch(getProducts([...deserialized]));
     dispatch(doneLoading());
   } catch (error) {
     throw error;
   }
 };
 
-export const insertProduct = (product: IProductDocument): AppThunk => async (
-  dispatch
-) => {
+export const insertProduct = (
+  product: IProductDocument,
+  images: IImages[]
+): AppThunk => async (dispatch) => {
   try {
     dispatch(startLoading());
-    const productRes = await insertProductMutation(product);
-    dispatch(addProduct(productRes));
+    const doc = await insertProductMutation(product);
+    images.forEach(async ({ base64, name, type }) => {
+      await doc.putAttachment({
+        data: base64,
+        id: name,
+        type,
+      });
+    });
+    dispatch(addProduct(product));
     dispatch(doneLoading());
   } catch (error) {
     throw error;
