@@ -31,11 +31,9 @@ export const productSchema: RxJsonSchema = {
     },
     createdAt: {
       type: "number",
-      default: Date.now(),
     },
     updatedAt: {
       type: "number",
-      default: Date.now(),
     },
     attributes: {
       type: "array",

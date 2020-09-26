@@ -6,6 +6,10 @@ import { IUserDocument } from "../lib/users";
 import { userSchema } from "../schema";
 import { attributeSchema } from "../schema/attributes";
 import { productSchema } from "../schema/products";
+import { RxDBEncryptionPlugin } from "rxdb/plugins/encryption";
+import { RxDBValidatePlugin } from "rxdb/plugins/validate";
+addRxPlugin(RxDBValidatePlugin);
+addRxPlugin(RxDBEncryptionPlugin);
 addRxPlugin(require("pouchdb-adapter-idb"));
 
 let dbPromise: Promise<RxDatabase<MyDatabaseCollections>> | null = null;
@@ -16,9 +20,9 @@ const _create = async () => {
     adapter: "idb",
     password: process.env.REACT_APP_PASSWORD,
   });
-  await createCollection(db, userSchema, 'users')
-  await createCollection(db, productSchema, 'products')
-  await createCollection(db, attributeSchema, 'attributes')
+  await createCollection(db, userSchema, "users");
+  await createCollection(db, productSchema, "products");
+  await createCollection(db, attributeSchema, "attributes");
   return db;
 };
 
@@ -54,28 +58,29 @@ export const addUser = async (user: IUserDocument) => {
 export const productsQuery = async () => {
   const db = await get();
   const { products } = db.collections;
-  return products.find().exec()
+  return products.find().exec();
 };
 
 export const insertProductMutation = async (product: IProductDocument) => {
   const db = await get();
   const { products } = db.collections;
   return products.insert({
-    ...product
-  })
+    ...product,
+  });
 };
 
-
-export const insertAttributeMutation = async (attribute: IAttributeDocument) => {
+export const insertAttributeMutation = async (
+  attribute: IAttributeDocument
+) => {
   const db = await get();
   const { attributes } = db.collections;
   return attributes.insert({
-    ...attribute
-  })
+    ...attribute,
+  });
 };
 
 export const attributesQuery = async () => {
   const db = await get();
   const { attributes } = db.collections;
-  return attributes.find().exec()
+  return attributes.find().exec();
 };

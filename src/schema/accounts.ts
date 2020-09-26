@@ -15,11 +15,9 @@ export const userSchema: RxJsonSchema = {
     },
     createdAt: {
       type: "number",
-      default: Date.now(),
     },
     updatedAt: {
       type: "number",
-      default: Date.now(),
     },
     email: {
       type: "string",

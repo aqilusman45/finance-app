@@ -10,6 +10,8 @@ export interface IAttribute {
   };
   required: boolean;
   options: IOption[];
+  createdAt: number;
+  updatedAt: number;
 }
 
 export interface IOption {

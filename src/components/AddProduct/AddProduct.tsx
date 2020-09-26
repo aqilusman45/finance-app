@@ -97,6 +97,8 @@ const AddProduct: React.FC = () => {
       sku,
       description,
       enabled: true,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
       attributes: attrs,
       images: images.map(({ name }) => ({ name })),
     };

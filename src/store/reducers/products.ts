@@ -73,8 +73,8 @@ export const insertProduct = (
       });
     });
     dispatch(addProduct(product));
-    dispatch(doneLoading());
     cb();
+    dispatch(doneLoading());
   } catch (error) {
     throw error;
   }

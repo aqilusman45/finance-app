@@ -22,6 +22,7 @@ import { IAttributeDocument } from "../../lib/attributes";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { v4 as uuidv4 } from "uuid";
+import { useHistory } from "react-router";
 
 interface IAttribute {
   label: string;
@@ -35,6 +36,7 @@ const AddAttributes: React.FC = () => {
   const [optionLabel, setLabel] = useState<string>("");
   const [required, setRequired] = useState<boolean>(false);
 
+  const { push } = useHistory();
   const dispatch = useDispatch();
 
   const { isLoading } = useSelector((state: RootState) => {
@@ -66,13 +68,17 @@ const AddAttributes: React.FC = () => {
       uid: uuidv4(),
       attributeName: {
         name: attrName,
-        key: slugify(attrName)
+        key: slugify(attrName),
       },
       attributeType: attrType,
       options,
       required,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
-    dispatch(insertAttribute(attr as IAttributeDocument));
+    dispatch(insertAttribute(attr as IAttributeDocument, () => {
+      push("/home/manage-attributes");
+    }));
   };
 
   if (isLoading) return <p>Loading...</p>;

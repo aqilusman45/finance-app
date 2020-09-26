@@ -5,6 +5,8 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
+  createdAt: number;
+  updatedAt: number;
 }
 
 export interface IUserDocument extends RxDocument<IUser> {}

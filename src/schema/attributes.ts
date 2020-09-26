@@ -26,11 +26,9 @@ export const attributeSchema: RxJsonSchema = {
     },
     createdAt: {
       type: "number",
-      default: Date.now(),
     },
     updatedAt: {
       type: "number",
-      default: Date.now(),
     },
     required: {
       type: "boolean",

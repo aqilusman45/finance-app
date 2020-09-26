@@ -58,12 +58,14 @@ export const fetchAttributes = (): AppThunk => async (dispatch) => {
 };
 
 export const insertAttribute = (
-  attribute: IAttributeDocument
+  attribute: IAttributeDocument,
+  cb: () => void
 ): AppThunk => async (dispatch) => {
   try {
     dispatch(startLoading());
     await insertAttributeMutation(attribute);
     dispatch(addAttribute(attribute));
+    cb();
     dispatch(doneLoading());
   } catch (error) {
     throw error;

@@ -7,6 +7,8 @@ export interface IProduct {
   sku: string;
   description: string;
   enabled: boolean;
+  createdAt: number;
+  updatedAt: number;
   price: string;
   attributes: IProductAttributes[];
   images: IImages[];
