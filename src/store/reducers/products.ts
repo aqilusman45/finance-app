@@ -59,7 +59,8 @@ export const fetchProducts = (): AppThunk => async (dispatch) => {
 
 export const insertProduct = (
   product: IProductDocument,
-  images: IImages[]
+  images: IImages[],
+  cb: () => void
 ): AppThunk => async (dispatch) => {
   try {
     dispatch(startLoading());
@@ -73,6 +74,7 @@ export const insertProduct = (
     });
     dispatch(addProduct(product));
     dispatch(doneLoading());
+    cb();
   } catch (error) {
     throw error;
   }

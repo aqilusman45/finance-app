@@ -10,6 +10,9 @@ export const productSchema: RxJsonSchema = {
       type: "string",
       primary: true,
     },
+    name: {
+      type: "string",
+    },
     quantity: {
       type: "number",
     },
@@ -77,5 +80,5 @@ export const productSchema: RxJsonSchema = {
   attachments: {
     encrypted: true,
   },
-  required: ["uid", "quantity", "sku", "price"],
+  required: ["uid", "name", "sku", "quantity", "price", "description"]
 };

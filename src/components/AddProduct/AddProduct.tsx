@@ -24,6 +24,7 @@ import { AttributeType } from "../../lib/enum";
 import { encodeImageFileAsURL } from "../../utils/toBase64";
 import { IImages } from "../../lib/products";
 import { IOption } from "../../lib/attributes";
+import { useHistory } from "react-router";
 
 const INITIAL_STATE = {
   name: "",
@@ -42,6 +43,7 @@ const AddProduct: React.FC = () => {
   const [images, setImages] = useState<IImages[]>([]);
   const [selectedAttrs, setAttributes] = useState<any>({});
 
+  const { push } = useHistory();
   const dispatch = useDispatch();
   const { attributes, isLoading } = useSelector(
     (state: RootState) => state.attributes
@@ -90,16 +92,19 @@ const AddProduct: React.FC = () => {
     const product = {
       name,
       uid: uuidv4(),
-      price: parseInt(`${price}`),
       quantity: parseInt(`${quantity}`),
+      price: parseInt(`${price}`),
       sku,
       description,
       enabled: true,
       attributes: attrs,
       images: images.map(({ name }) => ({ name })),
     };
-    console.log('product', product);
-    dispatch(insertProduct(product as any, images));
+    dispatch(
+      insertProduct(product as any, images, () => {
+        push("/home/manage-products");
+      })
+    );
   };
 
   return (
