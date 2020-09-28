@@ -34,6 +34,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "production:build": "react-scripts build && npx cap copy @capacitor-community/electron && cd ./electron && npm run electron:build-windows",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
