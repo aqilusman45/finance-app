@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import './AddProduct.css'
 import {
   IonGrid,
   IonRow,
@@ -11,6 +12,7 @@ import {
   IonButton,
   IonThumbnail,
   IonImg,
+  IonIcon,
 } from "@ionic/react";
 import Carousel from "react-bootstrap/Carousel";
 import CarouselItem from "react-bootstrap/CarouselItem";
@@ -37,6 +39,7 @@ const INITIAL_STATE = {
 
 const AddProduct: React.FC = () => {
   const fileIput = useRef<any>(null);
+  const deleteImg = useRef<any>();
 
   const [index, setIndex] = useState(0);
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
@@ -81,6 +84,18 @@ const AddProduct: React.FC = () => {
       };
     });
   };
+
+  function removeImg(e: any) {
+    // console.log("hello")
+    // console.log("images",images)
+    const name = e.target.getAttribute("alt")
+    console.log("name", name)
+    setImages(images.filter(item => item.name !== name));
+    // setImages((rem)=>rem.pop())
+    // deleteImg.current.remove()
+    // images.pop()
+    // setImages(images.pop())
+  }
 
   const submit = () => {
     const attrs = Object.keys(selectedAttrs).map((uid) => {
@@ -156,23 +171,32 @@ const AddProduct: React.FC = () => {
               }}
             >
               Add Product
-            </IonButton>
+            </IonButton><br />
+            {images.length > 0 ? <IonIcon onClick={removeImg} className="IonIconCss" name="close-circle-outline"></IonIcon> : ''}
+
             {!!images.length && (
               <Carousel
                 slide={false}
                 activeIndex={index}
                 onSelect={handleSelect}
+
+
               >
+
                 {images.map(({ base64, name }) => (
-                  <CarouselItem key={name}>
+                  <CarouselItem key={name} >
+
                     <IonThumbnail
                       key={name}
+
                       style={{
                         height: "230px",
                         width: "100%",
+
                       }}
                     >
-                      <IonImg alt={name} src={base64} />
+                      <IonImg key={name} ref={deleteImg} alt={name} src={base64} />
+
                     </IonThumbnail>
                   </CarouselItem>
                 ))}
@@ -196,16 +220,16 @@ const AddProduct: React.FC = () => {
                   attributeType,
                   uid,
                 }) => (
-                  <IonItem key={key} className="ion-margin">
-                    <CheckBox
-                      handleChange={handleAttributes}
-                      multiple={attributeType === AttributeType.CHECKBOXES}
-                      label={name}
-                      uid={uid}
-                      options={options}
-                    />
-                  </IonItem>
-                )
+                    <IonItem key={key} className="ion-margin">
+                      <CheckBox
+                        handleChange={handleAttributes}
+                        multiple={attributeType === AttributeType.CHECKBOXES}
+                        label={name}
+                        uid={uid}
+                        options={options}
+                      />
+                    </IonItem>
+                  )
               )}
           </IonCol>
         </IonRow>
