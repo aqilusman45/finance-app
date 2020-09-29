@@ -172,7 +172,7 @@ const AddProduct: React.FC = () => {
             >
               Add Product
             </IonButton><br />
-            {images.length > 0 ? <IonIcon onClick={removeImg} className="IonIconCss" name="close-circle-outline"></IonIcon> : ''}
+            {images.length > 0 ? <IonIcon onClick={removeImg} className="IonIconCss" name="close-circle"></IonIcon> : ''}
 
             {!!images.length && (
               <Carousel

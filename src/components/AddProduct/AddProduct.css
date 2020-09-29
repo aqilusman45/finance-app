@@ -6,8 +6,9 @@
     cursor: pointer;
     font-size: 33px;
     color: red;
-    /* top: 61px; */
+    top: 19px;
     position: relative;
     /* right: 13px; */
-    left: 194px;
+    left: 424px;
+    z-index: 999;
 }
