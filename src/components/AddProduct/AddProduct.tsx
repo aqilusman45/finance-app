@@ -40,6 +40,7 @@ const INITIAL_STATE = {
 const AddProduct: React.FC = () => {
   const fileIput = useRef<any>(null);
   const deleteImg = useRef<any>();
+  const [ImageName,setImageName]=useState<any>("")
 
   const [index, setIndex] = useState(0);
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
@@ -86,16 +87,18 @@ const AddProduct: React.FC = () => {
   };
 
   function removeImg(e: any) {
-    // console.log("hello")
-    // console.log("images",images)
-    const name = e.target.getAttribute("alt")
-    console.log("name", name)
+    console.log("hello")
+    const name=ImageName
+    console.log("imgName",name)
+    // const name = e.target.getAttribute("alt")
+    // console.log("name", name)
     setImages(images.filter(item => item.name !== name));
     // setImages((rem)=>rem.pop())
     // deleteImg.current.remove()
     // images.pop()
     // setImages(images.pop())
   }
+  console.log("images",images)
 
   const submit = () => {
     const attrs = Object.keys(selectedAttrs).map((uid) => {
@@ -185,7 +188,7 @@ const AddProduct: React.FC = () => {
 
                 {images.map(({ base64, name }) => (
                   <CarouselItem key={name} >
-
+                    {/* {setImageName(name)} */}
                     <IonThumbnail
                       key={name}
 
@@ -195,7 +198,7 @@ const AddProduct: React.FC = () => {
 
                       }}
                     >
-                      <IonImg key={name} ref={deleteImg} alt={name} src={base64} />
+                      <IonImg key={name} onMouseOver={()=>setImageName(name)} ref={deleteImg} alt={name} src={base64} />
 
                     </IonThumbnail>
                   </CarouselItem>
