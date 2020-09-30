@@ -1,4 +1,10 @@
-import { createRxDatabase, addRxPlugin, RxDatabase, RxJsonSchema } from "rxdb";
+import {
+  createRxDatabase,
+  addRxPlugin,
+  RxDatabase,
+  RxJsonSchema,
+  RxDocument,
+} from "rxdb";
 import { IAttributeDocument } from "../lib/attributes";
 import { MyDatabaseCollections } from "../lib/collections";
 import { IProductDocument } from "../lib/products";
@@ -42,9 +48,32 @@ const createCollection = async (
   });
 };
 
-export const dump = async () => {
+export const createBackup = async () => {
   const db = await get();
-  return db.dump();
+  const dump = await db.dump();
+  dump.collections.forEach((collection, idx) => {
+    const { name, docs } = collection;
+    if (name === "products") {
+      docs.map(async (doc: any, index) => {
+        const { images, uid } = doc;
+        const rxDoc = await findProduct(uid);
+        const imagesWithBase64 = await Promise.all(
+          images.map(async ({ name }: { name: string }) => {
+            const base64 = await (
+              await getAttatchment(rxDoc, name)
+            )?.getStringData();
+            return {
+              name,
+              base64,
+            };
+          })
+        );
+        // @ts-ignore
+        dump.collections[idx].docs[index].images = imagesWithBase64;
+      });
+    }
+  });
+  return dump;
 };
 
 export const addUser = async (user: IUserDocument) => {
@@ -59,6 +88,12 @@ export const productsQuery = async () => {
   const db = await get();
   const { products } = db.collections;
   return products.find().exec();
+};
+
+export const findProduct = async (uid: string) => {
+  const db = await get();
+  const { products } = db.collections;
+  return products.findOne().where("uid").eq(uid).exec();
 };
 
 export const insertProductMutation = async (product: IProductDocument) => {
@@ -83,4 +118,11 @@ export const attributesQuery = async () => {
   const db = await get();
   const { attributes } = db.collections;
   return attributes.find().exec();
+};
+
+export const getAttatchment = async <T>(
+  doc: RxDocument<T, {}> | null,
+  fileName: string
+) => {
+  return doc?.getAttachment(fileName);
 };
