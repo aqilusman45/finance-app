@@ -86,19 +86,10 @@ const AddProduct: React.FC = () => {
     });
   };
 
-  function removeImg(e: any) {
+  function removeImg(name: any) {
     console.log("hello")
-    const name=ImageName
-    console.log("imgName",name)
-    // const name = e.target.getAttribute("alt")
-    // console.log("name", name)
     setImages(images.filter(item => item.name !== name));
-    // setImages((rem)=>rem.pop())
-    // deleteImg.current.remove()
-    // images.pop()
-    // setImages(images.pop())
   }
-  console.log("images",images)
 
   const submit = () => {
     const attrs = Object.keys(selectedAttrs).map((uid) => {
@@ -175,7 +166,7 @@ const AddProduct: React.FC = () => {
             >
               Add Product
             </IonButton><br />
-            {images.length > 0 ? <IonIcon onClick={removeImg} className="IonIconCss" name="close-circle"></IonIcon> : ''}
+            {/* {images.length > 0 ? <IonIcon onClick={removeImg} className="IonIconCss" name="close-circle"></IonIcon> : ''} */}
 
             {!!images.length && (
               <Carousel
@@ -201,6 +192,9 @@ const AddProduct: React.FC = () => {
                       <IonImg key={name} onMouseOver={()=>setImageName(name)} ref={deleteImg} alt={name} src={base64} />
 
                     </IonThumbnail>
+                    <IonIcon onClick={()=>{
+                      removeImg(name)
+                    }} className="IonIconCss" name="close-circle"></IonIcon>
                   </CarouselItem>
                 ))}
               </Carousel>
