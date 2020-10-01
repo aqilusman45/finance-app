@@ -19,6 +19,9 @@ export const productSchema: RxJsonSchema = {
     sku: {
       type: "string",
     },
+    cost: {
+      type: "number",
+    },
     price: {
       type: "number",
     },

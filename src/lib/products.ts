@@ -6,6 +6,7 @@ export interface IProduct {
   quantity: number;
   sku: string;
   description: string;
+  cost : number;
   enabled: boolean;
   createdAt: number;
   updatedAt: number;

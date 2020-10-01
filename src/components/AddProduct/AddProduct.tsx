@@ -31,6 +31,7 @@ const INITIAL_STATE = {
   quantity: `0`,
   sku: "",
   price: `0`,
+  cost: `0`,
   images: [],
   description: "",
 };
@@ -48,7 +49,7 @@ const AddProduct: React.FC = () => {
   const { attributes, isLoading } = useSelector(
     (state: RootState) => state.attributes
   );
-  const { name, price, quantity, sku, description } = formFields;
+  const { name, price, quantity, sku, description, cost } = formFields;
 
   useEffect(() => {
     if (!attributes) {
@@ -95,6 +96,7 @@ const AddProduct: React.FC = () => {
       quantity: parseInt(`${quantity}`),
       price: parseInt(`${price}`),
       sku,
+      cost,
       description,
       enabled: true,
       createdAt: Date.now(),
@@ -126,6 +128,10 @@ const AddProduct: React.FC = () => {
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Price</IonLabel>
               <IonInput value={price} name="price" onIonChange={handleChange} />
+            </IonItem>
+            <IonItem className="ion-margin">
+              <IonLabel position="stacked">Cost</IonLabel>
+              <IonInput value={cost} name="cost" onIonChange={handleChange} />
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Description</IonLabel>
