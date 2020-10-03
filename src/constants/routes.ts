@@ -86,3 +86,8 @@ export const routes = [
     ],
   },
 ];
+
+export const nonMenuRoutes = [{
+  link: '/manage-products/:id',
+  component: ExploreContainer,
+}]

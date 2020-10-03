@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   IonContent,
   IonGrid,
   IonRow,
   IonCol,
   IonSearchbar,
-  IonButton,
   IonLoading,
 } from "@ionic/react";
 import Table from "react-bootstrap/Table";
@@ -13,12 +12,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { fetchAttributes } from "../../store/reducers/attributes";
 import { IAttribute } from "../../lib/attributes";
+import Badge from "react-bootstrap/Badge";
+import "./ManageAttributes.css";
+import AttributeModal from "../ViewAttribute/ViewAttribute";
 
-const headers = ["attributeName", "attributeType", "required"];
+const headers = ["attributeName", "attributeType", "required", "options"];
 
 const ManageAttributes: React.FC = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [attribute, setAttribute] = useState<IAttribute | undefined>();
   const dispatch = useDispatch();
-
   const { isLoading, attributes } = useSelector((state: RootState) => {
     return state.attributes;
   });
@@ -32,6 +35,11 @@ const ManageAttributes: React.FC = () => {
   return (
     <>
       <IonContent>
+        <AttributeModal
+          attribute={attribute}
+          setShowModal={setShowModal}
+          showModal={showModal}
+        />
         <IonGrid className="ion-margin">
           <IonRow>
             <IonCol size="12">
@@ -54,38 +62,63 @@ const ManageAttributes: React.FC = () => {
                     </thead>
                     <tbody>
                       {attributes.map((attribute: IAttribute, index: any) => (
-                        <tr key={attribute.uid}>
+                        <tr
+                          className="table-row-hover"
+                          onClick={() => {
+                            setAttribute(() =>
+                              attributes.find(
+                                (attr) => attr.uid === attribute.uid
+                              )
+                            );
+                            setShowModal(!showModal);
+                          }}
+                          key={attribute.uid}
+                        >
                           <td>{index + 1}</td>
                           {Object.keys(attribute).map((key) => {
+                            // @ts-ignore
+                            const attributeKey = attribute[key];
                             if (headers.includes(key)) {
-                              console.log(attribute);
-                              // @ts-ignore
-                              if (typeof attribute[key] !== "object") {
+                              if (typeof attributeKey !== "object") {
                                 return (
                                   <td
-                                    // @ts-ignore
-                                    key={`${attribute[key]}`}
-                                    // @ts-ignore
-                                  >{`${attribute[key]}`}</td>
+                                    key={`${attributeKey}`}
+                                  >{`${attributeKey}`}</td>
+                                );
+                              } else if (Array.isArray(attributeKey)) {
+                                return (
+                                  <td key={attributeKey[0].label}>
+                                    {attributeKey.map(({ label }, idx) => {
+                                      if (idx < 2) {
+                                        return (
+                                          <Badge
+                                            key={label}
+                                            style={{
+                                              fontSize: 10,
+                                              padding: "10px 10px",
+                                              margin:
+                                                idx === 0 ? "0" : "0 10px",
+                                            }}
+                                            variant="dark"
+                                          >
+                                            {label}
+                                          </Badge>
+                                        );
+                                      }
+                                      return null;
+                                    })}
+                                  </td>
                                 );
                               } else {
                                 return (
                                   <td
-                                    // @ts-ignore
-                                    key={`${attribute[key].name}`}
-                                    // @ts-ignore
-                                  >{`${attribute[key].name}`}</td>
+                                    key={`${attributeKey.name}`}
+                                  >{`${attributeKey.name}`}</td>
                                 );
                               }
                             }
                             return null;
                           })}
-                          <td>
-                            <IonButton>View</IonButton>
-                          </td>
-                          <td>
-                            <IonButton>Edit</IonButton>
-                          </td>
                         </tr>
                       ))}
                     </tbody>
