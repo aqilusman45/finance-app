@@ -10,7 +10,7 @@ import {
   IonLoading,
   IonButton,
   IonThumbnail,
-  IonImg,
+  IonImg
 } from "@ionic/react";
 import Carousel from "react-bootstrap/Carousel";
 import CarouselItem from "react-bootstrap/CarouselItem";
@@ -44,6 +44,11 @@ const AddProduct: React.FC = () => {
   const [images, setImages] = useState<IImages[]>([]);
   const [selectedAttrs, setAttributes] = useState<any>({});
 
+  // myline
+  const [numberPrice, setNumberPrice] = useState<number>();
+  const [numberCost, setNumberCost] = useState<number>();
+
+
   const { push } = useHistory();
   const dispatch = useDispatch();
   const { attributes, isLoading } = useSelector(
@@ -58,10 +63,20 @@ const AddProduct: React.FC = () => {
   }, [attributes, dispatch]);
 
   const handleSelect = (selectedIndex: number) => {
+    console.log(selectedIndex);
+    
     setIndex(selectedIndex);
   };
 
   const handleChange = (e: any) => {
+    console.log(typeof e.target.value);
+    console.log(e);
+    console.log(parseInt(e));
+    
+    
+    // console.log(parseInt(e.target.value));
+    // setNumberCost(parseInt(e.detail.value!, 10))
+    
     setFormFields((prevField) => ({
       ...prevField,
       [e.currentTarget.name]: e.currentTarget.value,
@@ -69,6 +84,8 @@ const AddProduct: React.FC = () => {
   };
 
   const onFileSelect = (e: any) => {
+    console.log(e);
+    
     encodeImageFileAsURL(e.target, (image) => {
       setImages((prevState) => prevState.concat({ ...image }));
     });
@@ -85,6 +102,8 @@ const AddProduct: React.FC = () => {
 
   const submit = () => {
     const attrs = Object.keys(selectedAttrs).map((uid) => {
+      console.log(uid);
+      
       return {
         attributeRef: uid,
         options: selectedAttrs[uid],
@@ -96,7 +115,7 @@ const AddProduct: React.FC = () => {
       quantity: parseInt(`${quantity}`),
       price: parseInt(`${price}`),
       sku,
-      cost,
+      cost: parseInt(cost),
       description,
       enabled: true,
       createdAt: Date.now(),
@@ -104,6 +123,7 @@ const AddProduct: React.FC = () => {
       attributes: attrs,
       images: images.map(({ name }) => ({ name })),
     };
+    console.log('cost type', typeof product.cost);
     dispatch(
       insertProduct(product as any, images, () => {
         push("/home/manage-products");
@@ -119,20 +139,46 @@ const AddProduct: React.FC = () => {
           <IonCol size="6">
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Product Name</IonLabel>
-              <IonInput value={name} name="name" onIonChange={handleChange} />
+              <IonInput value={name} name="name" onIonChange={handleChange} required/>
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="stacked">SKU</IonLabel>
-              <IonInput value={sku} name="sku" onIonChange={handleChange} />
+              <IonInput value={sku} name="sku" onIonChange={handleChange} required/>
             </IonItem>
+
+         {/* my line */}
+    
+{/* myline */}
+
+{/* currentline */}
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Price</IonLabel>
               <IonInput value={price} name="price" onIonChange={handleChange} />
-            </IonItem>
-            <IonItem className="ion-margin">
+            </IonItem> 
+              <IonItem className="ion-margin">
               <IonLabel position="stacked">Cost</IonLabel>
               <IonInput value={cost} name="cost" onIonChange={handleChange} />
             </IonItem>
+{/* currentline */}
+
+{/* myline */}
+
+ {/* my line */}
+            {/* <IonItem class="ion-margin">
+            <IonLabel position="stacked">Price</IonLabel>
+              <IonInput type="number" value={numberPrice} name="price" onIonChange={e => setNumberPrice(parseInt(e.detail.value!, 10))} required></IonInput>
+            </IonItem> */}
+
+ {/* <IonItem class="ion-margin">
+          <IonLabel position="stacked">cost</IonLabel> */}
+            {/* <IonInput type="number" value={numberCost} name="cost" onIonChange={e => setNumberCost(parseInt(e.detail.value!, 10))} required></IonInput> */}
+            {/* <IonInput type="number" value={numberCost} name="cost" onIonChange={e => setNumberCost(parseInt(e.detail.value!, 10))} required></IonInput>
+          </IonItem> */}
+
+{/* myline */}
+{/* myline */}
+
+
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Description</IonLabel>
               <IonInput
