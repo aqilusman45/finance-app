@@ -11,7 +11,7 @@ import {
   IonItem,
   IonIcon,
   IonLabel,
-  IonButton,
+  IonButton
 } from "@ionic/react";
 import {
   checkbox,
@@ -22,6 +22,9 @@ import {
 import { AttributeType } from "../../lib/enum";
 import Badge from "react-bootstrap/Badge";
 
+
+
+
 interface IAttributeModalProps {
   showModal: boolean;
   setShowModal: (show: boolean) => void;
@@ -31,7 +34,7 @@ interface IAttributeModalProps {
 export const AttributeModal: React.FC<IAttributeModalProps> = ({
   setShowModal,
   showModal,
-  attribute,
+  attribute
 }) => {
 
   if (!attribute) return null
@@ -41,7 +44,9 @@ export const AttributeModal: React.FC<IAttributeModalProps> = ({
     attributeType,
     options,
     required,
+    uid
   } = attribute;
+
 
   return (
     <IonModal isOpen={showModal} cssClass="my-custom-class">
@@ -65,8 +70,9 @@ export const AttributeModal: React.FC<IAttributeModalProps> = ({
                   slot="start"
                 />
                 <IonLabel>{attributeType}</IonLabel>
-                <IonButton fill="outline" slot="end">
-                  Edit
+                <IonButton fill="outline" slot="end" routerLink={`/home/edit-attribute/${uid}`}>
+                  
+                        Edit
                 </IonButton>
               </IonItem>
               <IonItem>
