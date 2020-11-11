@@ -76,6 +76,8 @@ const ManageAttributes: React.FC = () => {
                         >
                           <td>{index + 1}</td>
                           {Object.keys(attribute).map((key) => {
+                            console.log(key);
+                            
                             // @ts-ignore
                             const attributeKey = attribute[key];
                             if (headers.includes(key)) {
