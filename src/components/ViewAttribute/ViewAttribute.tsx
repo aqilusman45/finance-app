@@ -21,7 +21,9 @@ import {
 } from "ionicons/icons";
 import { AttributeType } from "../../lib/enum";
 import Badge from "react-bootstrap/Badge";
+import {useHistory } from 'react-router-dom';
 
+let history = useHistory();
 
 
 
@@ -46,9 +48,9 @@ export const AttributeModal: React.FC<IAttributeModalProps> = ({
     required,
     uid
   } = attribute;
-
-
+  
   return (
+    
     <IonModal isOpen={showModal} cssClass="my-custom-class">
       <IonPage>
         <IonContent>
@@ -70,7 +72,7 @@ export const AttributeModal: React.FC<IAttributeModalProps> = ({
                   slot="start"
                 />
                 <IonLabel>{attributeType}</IonLabel>
-                <IonButton fill="outline" slot="end" routerLink={`/home/edit-attribute/${uid}`}>
+                <IonButton fill="outline" slot="end" routerLink={`/home/edit-attribute/${uid}`} onClick={()=>history.push("/home")}>
                   
                         Edit
                 </IonButton>
