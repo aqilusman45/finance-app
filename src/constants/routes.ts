@@ -93,7 +93,7 @@ export const nonMenuRoutes = [{
   component: ExploreContainer,
 },
 {
-  text: "edit-attribute",
+  // text: "edit-attribute",
   link: '/edit-attribute/:id',
   component: ExploreContainer,
 }]
