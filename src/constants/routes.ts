@@ -4,6 +4,7 @@ import {
   ManageProduct,
   AddAttributes,
   ManageAttributes,
+  EditAttribute
 } from "../components/index";
 
 export const routes = [
@@ -93,7 +94,7 @@ export const nonMenuRoutes = [{
   component: ExploreContainer,
 },
 {
-  // text: "edit-attribute",
+  text: "edit-attribute",
   link: '/edit-attribute/:id',
-  component: ExploreContainer,
+  component: EditAttribute,
 }]

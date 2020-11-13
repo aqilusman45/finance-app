@@ -101,7 +101,7 @@ const Home: React.FC<{
                   );
                 })
               )}
-              {nonMenuRoutes.map(({ component, link }) => {
+              {/* {nonMenuRoutes.map(({ component, link }) => {
                   return (
                     <Route
                       key={link}
@@ -110,12 +110,33 @@ const Home: React.FC<{
                       component={component}
                     />
                   );
-               })}
+               })} */}
+               
+               {/* //today 13 nov 2020 */}
+               <IonContent>
+                 <IonRouterOutlet>
+               {nonMenuRoutes.map(({ component, link }) => {
+  
+                
+                  return (
+                    <Route
+                      key={link}
+                      exact
+                      path={`${match.url}${link}`}
+                      component={component}
+
+                    /> 
+                  );
+                })}
+            
+               </IonRouterOutlet>
+               </IonContent>
             </IonRouterOutlet>
           </IonContent>
         </IonPage>
       </IonSplitPane>
     </IonContent>
+    
   );
 };
 

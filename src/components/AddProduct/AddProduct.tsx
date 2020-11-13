@@ -45,8 +45,8 @@ const AddProduct: React.FC = () => {
   const [selectedAttrs, setAttributes] = useState<any>({});
 
   // myline
-  const [numberPrice, setNumberPrice] = useState<number>();
-  const [numberCost, setNumberCost] = useState<number>();
+  // const [numberPrice, setNumberPrice] = useState<number>();
+  // const [numberCost, setNumberCost] = useState<number>();
 
 
   const { push } = useHistory();
