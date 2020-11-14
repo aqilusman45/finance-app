@@ -44,7 +44,7 @@ const AddProduct: React.FC = () => {
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
   const [images, setImages] = useState<IImages[]>([]);
   const [selectedAttrs, setAttributes] = useState<any>({});
-  const [errors,setErrors] = useState<any>({});
+  // const [errors,setErrors] = useState<any>({});
 
 
   const { push } = useHistory();
@@ -112,38 +112,6 @@ const AddProduct: React.FC = () => {
     );
   };
 
-  // const valid = (e: any)=>{
-  //   const {name, value} = e.target;
-  //   switch(name){
-  //     case 'productname':
-  //       errors.name = 
-  //       value.length < 5
-  //         ? 'Full Name must be 8 characters long!'
-  //         : '';
-  //     break;
-  //   case 'SKU': 
-  //     errors.name = 
-  //       value.length < 8
-  //         ? 'SKU must be 8characters long!'
-  //         : '';
-  //     break;
-  //   case 'Price': 
-  //     errors.name = 
-  //       value.length < 8
-  //         ? 'SKU must be 8characters long!'
-  //         : '';
-  //     break;
-  //   case 'Cost': 
-  //     errors.name = 
-  //       value.length < 8
-  //         ? 'SKU must be 8characters long!'
-  //         : '';
-  //     break;
-  //   default:
-  //     break;
-  //   }
-  // }
-
 
   const handleAttributes = (options: IOption[], uid: string) => {
     setAttributes((prevState: any) => {
@@ -152,10 +120,11 @@ const AddProduct: React.FC = () => {
         [uid]: options,
       };
     });
+
   };
 
   const submit = () => {
-    // if(!valid){
+   
         const attrs = Object.keys(selectedAttrs).map((uid) => {
         return {
           attributeRef: uid,
