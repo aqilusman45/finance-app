@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "..";
 import { IAttribute, IAttributeDocument } from "../../lib/attributes";
-import { attributesQuery, insertAttributeMutation } from "../../utils/database";
+import { attributesQuery, insertAttributeMutation , updateAttributeMutation} from "../../utils/database";
 import { transformAttribute } from "../../utils/transform";
 
 interface IInitialState {
@@ -33,12 +33,22 @@ const attributesSlice = createSlice({
       state.attributes?.unshift(transformAttribute(attribute));
       state.isLoading = false;
     },
+    updateAttribute:(state, action: PayloadAction<IAttribute>) => {
+      const attribute = action.payload;
+      state.attributes?.forEach((item, idx)=>{
+        if (item.uid === attribute.uid && state.attributes) {
+          state.attributes[idx] = attribute
+        }
+      })
+      return state
+    },
   },
 });
 
 export const {
   doneLoading,
   addAttribute,
+  updateAttribute,
   getAttributes,
   startLoading,
 } = attributesSlice.actions;
@@ -65,6 +75,21 @@ export const insertAttribute = (
     dispatch(startLoading());
     await insertAttributeMutation(attribute);
     dispatch(addAttribute(attribute));
+    cb();
+    dispatch(doneLoading());
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateAttributeAsync = (
+  attribute: IAttributeDocument,
+  cb: () => void
+): AppThunk => async (dispatch) => {
+  try {
+    dispatch(startLoading());
+    await updateAttributeMutation(attribute);
+    dispatch(updateAttribute(attribute));
     cb();
     dispatch(doneLoading());
   } catch (error) {

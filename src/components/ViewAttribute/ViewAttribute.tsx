@@ -21,6 +21,7 @@ import {
 } from "ionicons/icons";
 import { AttributeType } from "../../lib/enum";
 import Badge from "react-bootstrap/Badge";
+import { Link } from "react-router-dom";
 
 interface IAttributeModalProps {
   showModal: boolean;
@@ -41,6 +42,7 @@ export const AttributeModal: React.FC<IAttributeModalProps> = ({
     attributeType,
     options,
     required,
+    uid
   } = attribute;
 
   return (
@@ -65,9 +67,11 @@ export const AttributeModal: React.FC<IAttributeModalProps> = ({
                   slot="start"
                 />
                 <IonLabel>{attributeType}</IonLabel>
-                <IonButton fill="outline" slot="end">
-                  Edit
-                </IonButton>
+                <Link to={`/home/edit-attribute/${uid}`}>
+                  <IonButton fill="outline" slot="end">
+                    Edit
+                  </IonButton>
+                </Link>
               </IonItem>
               <IonItem>
                 <IonIcon icon={optionsIcon} slot="start" />

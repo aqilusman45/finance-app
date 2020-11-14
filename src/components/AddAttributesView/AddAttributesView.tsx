@@ -23,6 +23,7 @@ export interface IAttributeInput {
 }
 
 interface AddAttributesFormProps {
+  isEdit?: boolean;
   state: {
     options: IAttributeInput[];
     attrType: AttributeType;
@@ -48,6 +49,7 @@ const AddAttributesForm = ({
   addOption,
   removeOption,
   submitAttribute,
+  isEdit,
 }: AddAttributesFormProps) => {
   const { attrName, attrType, optionLabel, options, required } = state;
   return (
@@ -58,6 +60,7 @@ const AddAttributesForm = ({
             <IonItem className="ion-margin">
               <IonLabel>Attribute Type</IonLabel>
               <IonSelect
+                disabled={isEdit}
                 onIonChange={(e) => {
                   setType(e.detail.value);
                 }}
@@ -75,6 +78,7 @@ const AddAttributesForm = ({
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Attribute Name</IonLabel>
               <IonInput
+                disabled={isEdit}
                 value={attrName}
                 onIonChange={(e) => {
                   setName(e.detail.value || "");
@@ -85,6 +89,7 @@ const AddAttributesForm = ({
               <IonLabel position="fixed">Reqiured</IonLabel>
               <IonToggle
                 checked={required}
+                disabled={isEdit}
                 onIonChange={() => {
                   setRequired(!required);
                 }}
@@ -135,7 +140,7 @@ const AddAttributesForm = ({
                 disabled={!attrName || !attrType || !options.length}
                 className="ion-margin"
               >
-                Add Attribute
+                {isEdit ? "Update Attribute" : "Add Attribute"}
               </IonButton>
             </IonContent>
           </IonCol>
