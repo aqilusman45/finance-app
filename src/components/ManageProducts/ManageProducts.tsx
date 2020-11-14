@@ -49,11 +49,15 @@ const ManageProduct: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody>
+                      
                       {products.map((product: any, index: any) => (
+                        
                         <tr key={product.name}>
                           <td>{index}</td>
+                          
                           {Object.values(product).map((value) => (
-                            <td>{`${value}`}</td>
+                                  // console.log(value)         
+                         <td>{`${value}`}</td>
                           ))}
                         </tr>
                       ))}

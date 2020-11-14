@@ -1,3 +1,5 @@
+//see
+
 import React, { useEffect, useState } from "react";
 import {
   IonContent,
@@ -68,6 +70,7 @@ const ManageAttributes: React.FC = () => {
                             setAttribute(() =>
                               attributes.find(
                                 (attr) => attr.uid === attribute.uid
+                             
                               )
                             );
                             setShowModal(!showModal);
@@ -76,20 +79,33 @@ const ManageAttributes: React.FC = () => {
                         >
                           <td>{index + 1}</td>
                           {Object.keys(attribute).map((key) => {
+                            console.log(key);
+                            
                             // @ts-ignore
                             const attributeKey = attribute[key];
                             if (headers.includes(key)) {
                               if (typeof attributeKey !== "object") {
+                                console.log(attributeKey); //radio
+                                
                                 return (
                                   <td
                                     key={`${attributeKey}`}
                                   >{`${attributeKey}`}</td>
                                 );
                               } else if (Array.isArray(attributeKey)) {
+                                console.log(attributeKey[0].label);
+                                console.log('attributeKey test',attributeKey[0]);
+                                
+                                
                                 return (
-                                  <td key={attributeKey[0].label}>
+                                  // <td key={attributeKey[0].label}>
+                                   <td key={attributeKey[0]}> 
                                     {attributeKey.map(({ label }, idx) => {
-                                      if (idx < 2) {
+                                      console.log(label);
+                                      
+                                      if (idx > 2) {
+                                        console.log(idx);
+                                        
                                         return (
                                           <Badge
                                             key={label}

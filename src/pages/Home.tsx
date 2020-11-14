@@ -13,11 +13,16 @@ import {
   IonList,
   IonButtons,
   IonButton,
+ 
 } from "@ionic/react";
 import { match, Route } from "react-router-dom";
-import { routes } from "../constants/routes";
+import { routes,nonMenuRoutes } from "../constants/routes";
+
 import React from "react";
 
+
+
+console.log(routes);
 const Home: React.FC<{
   match: match;
   location: {
@@ -54,6 +59,7 @@ const Home: React.FC<{
                         </IonItem>
                       );
                     })}
+                      
                   </div>
                 );
               })}
@@ -95,11 +101,42 @@ const Home: React.FC<{
                   );
                 })
               )}
+              {/* {nonMenuRoutes.map(({ component, link }) => {
+                  return (
+                    <Route
+                      key={link}
+                      exact
+                      path={`${match.url}${link}`}
+                      component={component}
+                    />
+                  );
+               })} */}
+               
+               {/* //today 13 nov 2020 */}
+               <IonContent>
+                 <IonRouterOutlet>
+               {nonMenuRoutes.map(({ component, link }) => {
+  
+                
+                  return (
+                    <Route
+                      key={link}
+                      exact
+                      path={`${match.url}${link}`}
+                      component={component}
+
+                    /> 
+                  );
+                })}
+            
+               </IonRouterOutlet>
+               </IonContent>
             </IonRouterOutlet>
           </IonContent>
         </IonPage>
       </IonSplitPane>
     </IonContent>
+    
   );
 };
 

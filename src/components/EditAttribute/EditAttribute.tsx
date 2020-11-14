@@ -139,7 +139,7 @@ const AddProduct: React.FC = () => {
           <IonCol size="6">
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Product Name</IonLabel>
-              <IonInput value={name} name="name" onIonChange={handleChange} required/>
+              <IonInput value={name} name="name" onIonChange={handleChange} disabled/>
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="stacked">SKU</IonLabel>
@@ -198,6 +198,7 @@ const AddProduct: React.FC = () => {
                 fileIput.current.click();
               }}
               className="ion-margin"
+              disabled
             >
               Upload image
             </IonButton>
@@ -206,6 +207,9 @@ const AddProduct: React.FC = () => {
                 e.preventDefault();
                 submit();
               }}
+              disabled
+
+
             >
               Add Product
             </IonButton>
