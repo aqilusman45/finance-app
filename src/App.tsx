@@ -1,7 +1,6 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { IonApp } from '@ionic/react';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -27,12 +26,12 @@ import './theme/variables.css';
 
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
+    <Router>
+      <Switch>
         <Route path="/home" component={Home} />
         <Route exact path="/" component={SignIn} />
-      </IonRouterOutlet>
-    </IonReactRouter>
+      </Switch>
+    </Router>
   </IonApp>
 );
 

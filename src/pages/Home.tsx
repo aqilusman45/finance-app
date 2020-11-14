@@ -6,7 +6,6 @@ import {
   IonToolbar,
   IonMenu,
   IonSplitPane,
-  IonRouterOutlet,
   IonItemDivider,
   IonLabel,
   IonItem,
@@ -14,8 +13,8 @@ import {
   IonButtons,
   IonButton,
 } from "@ionic/react";
-import { match, Route } from "react-router-dom";
-import { routes } from "../constants/routes";
+import { match, Route, Switch } from "react-router-dom";
+import { nonMenuRoutes, routes } from "../constants/routes";
 import React from "react";
 
 const Home: React.FC<{
@@ -82,7 +81,7 @@ const Home: React.FC<{
             </IonToolbar>
           </IonHeader>
           <IonContent>
-            <IonRouterOutlet>
+            <Switch>
               {routes.map(({ subMenuLinks }) =>
                 subMenuLinks.map(({ component, link }) => {
                   return (
@@ -95,7 +94,17 @@ const Home: React.FC<{
                   );
                 })
               )}
-            </IonRouterOutlet>
+              {nonMenuRoutes.map(({ component, link }) => {
+                  return (
+                    <Route
+                      key={link}
+                      exact
+                      path={`${match.url}${link}`}
+                      component={component}
+                    />
+                  );
+              })}
+            </Switch>
           </IonContent>
         </IonPage>
       </IonSplitPane>
