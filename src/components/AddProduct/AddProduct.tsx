@@ -25,6 +25,7 @@ import { encodeImageFileAsURL } from "../../utils/toBase64";
 import { IImages } from "../../lib/products";
 import { IOption } from "../../lib/attributes";
 import { useHistory } from "react-router";
+import { useForm } from "react-hook-form";
 
 const INITIAL_STATE = {
   name: "",
@@ -43,6 +44,8 @@ const AddProduct: React.FC = () => {
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
   const [images, setImages] = useState<IImages[]>([]);
   const [selectedAttrs, setAttributes] = useState<any>({});
+  const [errors,setErrors] = useState<any>({});
+
 
   const { push } = useHistory();
   const dispatch = useDispatch();
@@ -62,6 +65,8 @@ const AddProduct: React.FC = () => {
   };
 
   const handleChange = (e: any) => {
+    console.log(e.target.value);
+        
     setFormFields((prevField) => ({
       ...prevField,
       [e.currentTarget.name]: e.currentTarget.value,
@@ -74,6 +79,72 @@ const AddProduct: React.FC = () => {
     });
   };
 
+
+  const Example = () => {
+    const { handleSubmit, register, errors } = useForm();
+
+    const onSubmit = (values:any) => console.log(values);
+  
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input
+          name="email"
+          ref={register({
+            required: "Required",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "invalid email address"
+            }
+          })}
+        />
+        {errors.email && errors.email.message}
+  
+        <input
+          name="username"
+          ref={register({
+            validate: value => value !== "admin" || "Nice try!"
+          })}
+        />
+        {errors.username && errors.username.message}
+  
+        <button type="submit">Submit</button>
+      </form>
+    );
+  };
+
+  // const valid = (e: any)=>{
+  //   const {name, value} = e.target;
+  //   switch(name){
+  //     case 'productname':
+  //       errors.name = 
+  //       value.length < 5
+  //         ? 'Full Name must be 8 characters long!'
+  //         : '';
+  //     break;
+  //   case 'SKU': 
+  //     errors.name = 
+  //       value.length < 8
+  //         ? 'SKU must be 8characters long!'
+  //         : '';
+  //     break;
+  //   case 'Price': 
+  //     errors.name = 
+  //       value.length < 8
+  //         ? 'SKU must be 8characters long!'
+  //         : '';
+  //     break;
+  //   case 'Cost': 
+  //     errors.name = 
+  //       value.length < 8
+  //         ? 'SKU must be 8characters long!'
+  //         : '';
+  //     break;
+  //   default:
+  //     break;
+  //   }
+  // }
+
+
   const handleAttributes = (options: IOption[], uid: string) => {
     setAttributes((prevState: any) => {
       return {
@@ -84,35 +155,38 @@ const AddProduct: React.FC = () => {
   };
 
   const submit = () => {
-    const attrs = Object.keys(selectedAttrs).map((uid) => {
-      return {
-        attributeRef: uid,
-        options: selectedAttrs[uid],
+    // if(!valid){
+        const attrs = Object.keys(selectedAttrs).map((uid) => {
+        return {
+          attributeRef: uid,
+          options: selectedAttrs[uid],
+        };
+      });
+      const product = {
+        name,
+        uid: uuidv4(),
+        quantity: parseInt(`${quantity}`),
+        price: parseInt(`${price}`),
+        sku,
+        cost,
+        description,
+        enabled: true,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        attributes: attrs,
+        images: images.map(({ name }) => ({ name })),
       };
-    });
-    const product = {
-      name,
-      uid: uuidv4(),
-      quantity: parseInt(`${quantity}`),
-      price: parseInt(`${price}`),
-      sku,
-      cost,
-      description,
-      enabled: true,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      attributes: attrs,
-      images: images.map(({ name }) => ({ name })),
+      dispatch(
+        insertProduct(product as any, images, () => {
+          push("/home/manage-products");
+        })
+      );
     };
-    dispatch(
-      insertProduct(product as any, images, () => {
-        push("/home/manage-products");
-      })
-    );
-  };
+    // }
 
   return (
     <IonContent>
+      <Example />
       <IonLoading isOpen={isLoading} message={"Please wait..."} />
       <IonGrid className="ion-padding">
         <IonRow className="ion-justify-content-between">
