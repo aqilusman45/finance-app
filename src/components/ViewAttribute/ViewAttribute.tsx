@@ -46,7 +46,6 @@ export const AttributeModal: React.FC<IAttributeModalProps> = ({
     required,
     uid
   } = attribute;
-  // let history = useHistory();
   
   return (
     
