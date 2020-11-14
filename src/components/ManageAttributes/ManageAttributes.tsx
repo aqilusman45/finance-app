@@ -87,7 +87,7 @@ const ManageAttributes: React.FC = () => {
                                 );
                               } else if (Array.isArray(attributeKey)) {
                                 return (
-                                  <td key={attributeKey[0].label}>
+                                  <td key={attributeKey[0]}>
                                     {attributeKey.map(({ label }, idx) => {
                                       if (idx < 2) {
                                         return (
