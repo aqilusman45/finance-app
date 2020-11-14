@@ -11,6 +11,7 @@ import {
   IonInput,
   IonButton
 } from "@ionic/react";
+import { Link } from "react-router-dom";
 
 const SignIn: React.FC = () => {
   return (
@@ -39,14 +40,15 @@ const SignIn: React.FC = () => {
                 </IonLabel>
               </IonItem>
               <IonItemDivider />
-              <IonButton
-                routerLink="/home"
-                size="large"
-                expand="block"
-                color="primary"
-              >
-                Sign In
-              </IonButton>
+              <Link to="/home">
+                <IonButton
+                  size="large"
+                  expand="block"
+                  color="primary"
+                >
+                  Sign In
+                </IonButton>
+              </Link>
             </IonItemGroup>
           </IonCol>
         </IonRow>

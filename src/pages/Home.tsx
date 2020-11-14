@@ -13,7 +13,7 @@ import {
   IonButtons,
   IonButton,
 } from "@ionic/react";
-import { match, Route, Switch } from "react-router-dom";
+import { Link, match, Route, Switch } from "react-router-dom";
 import { nonMenuRoutes, routes } from "../constants/routes";
 import React from "react";
 
@@ -48,9 +48,11 @@ const Home: React.FC<{
                     </IonItemDivider>
                     {subMenuLinks.map(({ text, link }) => {
                       return (
-                        <IonItem routerLink={`${match.url}${link}`} key={link}>
-                          {text}
-                        </IonItem>
+                        <Link to={`${match.url}${link}`}>
+                          <IonItem key={link}>
+                            {text}
+                          </IonItem>
+                        </Link>
                       );
                     })}
                   </div>
@@ -69,14 +71,15 @@ const Home: React.FC<{
                   .toUpperCase()}
               </IonTitle>
               <IonButtons slot="primary">
-                <IonButton
-                  routerLink="/"
-                  fill="solid"
-                  size="large"
-                  color="primary"
-                >
-                  Log out
-                </IonButton>
+                <Link to="/">
+                  <IonButton
+                    fill="solid"
+                    size="large"
+                    color="primary"
+                  >
+                    Log out
+                  </IonButton>
+                </Link>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
