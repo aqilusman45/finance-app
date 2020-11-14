@@ -5,6 +5,7 @@ import {
   AddAttributes,
   ManageAttributes,
 } from "../components/index";
+import EditAttribute from "../components/EditAttribute/EditAttribute";
 
 export const routes = [
   {
@@ -90,4 +91,7 @@ export const routes = [
 export const nonMenuRoutes = [{
   link: '/manage-products/:id',
   component: ExploreContainer,
+},{
+  link: '/edit-attribute/:id',
+  component: EditAttribute,
 }]

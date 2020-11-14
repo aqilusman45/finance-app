@@ -5,7 +5,7 @@ import {
   RxJsonSchema,
   RxDocument,
 } from "rxdb";
-import { IAttributeDocument } from "../lib/attributes";
+import { IAttribute, IAttributeDocument } from "../lib/attributes";
 import { MyDatabaseCollections } from "../lib/collections";
 import { IProductDocument } from "../lib/products";
 import { IUserDocument } from "../lib/users";
@@ -125,4 +125,15 @@ export const getAttatchment = async <T>(
   fileName: string
 ) => {
   return doc?.getAttachment(fileName);
+};
+
+export const updateAttributeMutation = async (attribute: IAttribute) => {
+  const db = await get();
+  const { attributes } = db.collections;
+  const attr = await attributes.findOne().where('uid').eq(attribute.uid).exec()
+  await attr?.atomicUpdate((oldData) => {
+    oldData.options = attribute.options
+    oldData.updatedAt = attribute.updatedAt
+    return oldData
+  })
 };
