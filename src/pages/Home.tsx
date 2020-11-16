@@ -48,8 +48,8 @@ const Home: React.FC<{
                     </IonItemDivider>
                     {subMenuLinks.map(({ text, link }) => {
                       return (
-                        <Link to={`${match.url}${link}`}>
-                          <IonItem key={link}>
+                        <Link key={link} to={`${match.url}${link}`}>
+                          <IonItem>
                             {text}
                           </IonItem>
                         </Link>
