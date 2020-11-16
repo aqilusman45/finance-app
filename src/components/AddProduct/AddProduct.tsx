@@ -96,7 +96,7 @@ const AddProduct: React.FC = () => {
       quantity: parseInt(`${quantity}`),
       price: parseInt(`${price}`),
       sku,
-      cost,
+      cost: parseInt(cost),
       description,
       enabled: true,
       createdAt: Date.now(),
