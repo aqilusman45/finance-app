@@ -11,6 +11,7 @@ import {
   IonButton,
   IonThumbnail,
   IonImg,
+  IonText
 } from "@ionic/react";
 import Carousel from "react-bootstrap/Carousel";
 import CarouselItem from "react-bootstrap/CarouselItem";
@@ -26,6 +27,8 @@ import { IImages } from "../../lib/products";
 import { IOption } from "../../lib/attributes";
 import { useHistory } from "react-router";
 import { useForm } from "react-hook-form";
+import { object, string } from 'yup';
+
 
 const INITIAL_STATE = {
   name: "",
@@ -44,7 +47,7 @@ const AddProduct: React.FC = () => {
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
   const [images, setImages] = useState<IImages[]>([]);
   const [selectedAttrs, setAttributes] = useState<any>({});
-  // const [errors,setErrors] = useState<any>({});
+
 
 
   const { push } = useHistory();
@@ -80,37 +83,37 @@ const AddProduct: React.FC = () => {
   };
 
 
-  const Example = () => {
-    const { handleSubmit, register, errors } = useForm();
+  // const Example = () => {
+  //   const { handleSubmit, register, errors } = useForm();
 
-    const onSubmit = (values:any) => console.log(values);
+  //   const onSubmit = (values:any) => console.log(values);
   
-    return (
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          name="email"
-          ref={register({
-            required: "Required",
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "invalid email address"
-            }
-          })}
-        />
-        {errors.email && errors.email.message}
+  //   return (
+  //     <form onSubmit={handleSubmit(onSubmit)}>
+  //       <input
+  //         name="email"
+  //         ref={register({
+  //           required: "Required",
+  //           pattern: {
+  //             value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+  //             message: "invalid email address"
+  //           }
+  //         })}
+  //       />
+  //       {errors.email && errors.email.message}
   
-        <input
-          name="username"
-          ref={register({
-            validate: value => value !== "admin" || "Nice try!"
-          })}
-        />
-        {errors.username && errors.username.message}
+  //       <input
+  //         name="username"
+  //         ref={register({
+  //           validate: value => value !== "admin" || "Nice try!"
+  //         })}
+  //       />
+  //       {errors.username && errors.username.message}
   
-        <button type="submit">Submit</button>
-      </form>
-    );
-  };
+  //       <button type="submit">Submit</button>
+  //     </form>
+  //   );
+  // };
 
 
   const handleAttributes = (options: IOption[], uid: string) => {
@@ -137,7 +140,7 @@ const AddProduct: React.FC = () => {
         quantity: parseInt(`${quantity}`),
         price: parseInt(`${price}`),
         sku,
-        cost,
+        cost: parseInt(cost),
         description,
         enabled: true,
         createdAt: Date.now(),
@@ -152,25 +155,36 @@ const AddProduct: React.FC = () => {
       );
     };
     // }
+    // const { handleSubmit, register, errors } = useForm();
+    //  const onSubmit = (values:any) => console.log(values);
+
+    const validationSchema = object().shape({
+      email: string().required().email(),
+      fullName: string().required().min(5).max(32),
+      password: string().required().min(8),
+    });
 
   return (
+    
     <IonContent>
-      <Example />
+     {/* <form onSubmit={handleSubmit(onSubmit)}> */}
+      {/* <Example /> */}
       <IonLoading isOpen={isLoading} message={"Please wait..."} />
       <IonGrid className="ion-padding">
         <IonRow className="ion-justify-content-between">
           <IonCol size="6">
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Product Name</IonLabel>
-              <IonInput value={name} name="name" onIonChange={handleChange} />
+              <IonInput value={name} name="name" onIonChange={handleChange}/>
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="stacked">SKU</IonLabel>
               <IonInput value={sku} name="sku" onIonChange={handleChange} />
             </IonItem>
             <IonItem className="ion-margin">
-              <IonLabel position="stacked">Price</IonLabel>
-              <IonInput value={price} name="price" onIonChange={handleChange} />
+              <IonLabel position="stacked" >Price</IonLabel>
+              <IonInput value={price} name="price" onIonChange={handleChange}
+          />
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Cost</IonLabel>
@@ -203,9 +217,11 @@ const AddProduct: React.FC = () => {
                 e.preventDefault();
                 submit();
               }}
+              type="submit"
             >
               Add Product
             </IonButton>
+  
             {!!images.length && (
               <Carousel
                 slide={false}
@@ -253,12 +269,14 @@ const AddProduct: React.FC = () => {
                       uid={uid}
                       options={options}
                     />
+                    
                   </IonItem>
                 )
               )}
           </IonCol>
         </IonRow>
       </IonGrid>
+     {/* </form> */}
     </IonContent>
   );
 };
