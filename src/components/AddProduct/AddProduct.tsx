@@ -26,16 +26,14 @@ import { encodeImageFileAsURL } from "../../utils/toBase64";
 import { IImages } from "../../lib/products";
 import { IOption } from "../../lib/attributes";
 import { useHistory } from "react-router";
-import { useForm } from "react-hook-form";
-import { object, string } from 'yup';
-
+import validationSchema from '../../utils/validationSchemas';
 
 const INITIAL_STATE = {
   name: "",
-  quantity: `0`,
+  quantity: "",
   sku: "",
-  price: `0`,
-  cost: `0`,
+  price: "",
+  cost: "",
   images: [],
   description: "",
 };
@@ -47,7 +45,9 @@ const AddProduct: React.FC = () => {
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
   const [images, setImages] = useState<IImages[]>([]);
   const [selectedAttrs, setAttributes] = useState<any>({});
-
+  const [error, setError] = useState(undefined);
+  console.log(error);
+  
 
 
   const { push } = useHistory();
@@ -69,7 +69,7 @@ const AddProduct: React.FC = () => {
 
   const handleChange = (e: any) => {
     console.log(e.target.value);
-        
+
     setFormFields((prevField) => ({
       ...prevField,
       [e.currentTarget.name]: e.currentTarget.value,
@@ -83,37 +83,6 @@ const AddProduct: React.FC = () => {
   };
 
 
-  // const Example = () => {
-  //   const { handleSubmit, register, errors } = useForm();
-
-  //   const onSubmit = (values:any) => console.log(values);
-  
-  //   return (
-  //     <form onSubmit={handleSubmit(onSubmit)}>
-  //       <input
-  //         name="email"
-  //         ref={register({
-  //           required: "Required",
-  //           pattern: {
-  //             value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-  //             message: "invalid email address"
-  //           }
-  //         })}
-  //       />
-  //       {errors.email && errors.email.message}
-  
-  //       <input
-  //         name="username"
-  //         ref={register({
-  //           validate: value => value !== "admin" || "Nice try!"
-  //         })}
-  //       />
-  //       {errors.username && errors.username.message}
-  
-  //       <button type="submit">Submit</button>
-  //     </form>
-  //   );
-  // };
 
 
   const handleAttributes = (options: IOption[], uid: string) => {
@@ -126,56 +95,60 @@ const AddProduct: React.FC = () => {
 
   };
 
-  const submit = () => {
-   
-        const attrs = Object.keys(selectedAttrs).map((uid) => {
-        return {
-          attributeRef: uid,
-          options: selectedAttrs[uid],
-        };
-      });
-      const product = {
-        name,
-        uid: uuidv4(),
-        quantity: parseInt(`${quantity}`),
-        price: parseInt(`${price}`),
-        sku,
-        cost: parseInt(cost),
-        description,
-        enabled: true,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        attributes: attrs,
-        images: images.map(({ name }) => ({ name })),
-      };
-      dispatch(
-        insertProduct(product as any, images, () => {
-          push("/home/manage-products");
-        })
-      );
-    };
-    // }
-    // const { handleSubmit, register, errors } = useForm();
-    //  const onSubmit = (values:any) => console.log(values);
+  const submit = async () => {
 
-    const validationSchema = object().shape({
-      email: string().required().email(),
-      fullName: string().required().min(5).max(32),
-      password: string().required().min(8),
+    const attrs = Object.keys(selectedAttrs).map((uid) => {
+      return {
+        attributeRef: uid,
+        options: selectedAttrs[uid],
+      };
     });
+    const product = {
+      name,
+      uid: uuidv4(),
+      quantity: parseInt(`${quantity}`),
+      price: parseInt(`${price}`),
+      sku,
+      cost: parseInt(cost),
+      description,
+      enabled: true,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      attributes: attrs,
+      images: images.map(({ name }) => ({ name })),
+    };
+    try {
+      await validationSchema.validate(product)
+    } catch (error) {
+      console.log('error',error);
+      console.log('error',error.name);
+      setError(error.name);
+      
+      alert(error)
+      return
+    }
+
+    dispatch(
+      insertProduct(product as any, images, () => {
+        push("/home/manage-products");
+      })
+    );
+  };
+
+
 
   return (
-    
+
     <IonContent>
-     {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-      {/* <Example /> */}
+
       <IonLoading isOpen={isLoading} message={"Please wait..."} />
       <IonGrid className="ion-padding">
         <IonRow className="ion-justify-content-between">
           <IonCol size="6">
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Product Name</IonLabel>
-              <IonInput value={name} name="name" onIonChange={handleChange}/>
+
+              <IonInput value={name} name="name" onIonChange={handleChange} />
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="stacked">SKU</IonLabel>
@@ -184,7 +157,7 @@ const AddProduct: React.FC = () => {
             <IonItem className="ion-margin">
               <IonLabel position="stacked" >Price</IonLabel>
               <IonInput value={price} name="price" onIonChange={handleChange}
-          />
+              />
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Cost</IonLabel>
@@ -197,13 +170,16 @@ const AddProduct: React.FC = () => {
                 name="description"
                 onIonChange={handleChange}
               />
+
             </IonItem>
+               <p style={{color: 'red'}}>{error}</p>
             <input
               ref={fileIput}
               onChange={onFileSelect}
               style={{ display: "none" }}
               type="file"
             />
+            
             <IonButton
               onClick={() => {
                 fileIput.current.click();
@@ -215,13 +191,12 @@ const AddProduct: React.FC = () => {
             <IonButton
               onClick={(e) => {
                 e.preventDefault();
-                submit();
+                  submit()
               }}
-              type="submit"
+              
             >
               Add Product
             </IonButton>
-  
             {!!images.length && (
               <Carousel
                 slide={false}
@@ -261,22 +236,22 @@ const AddProduct: React.FC = () => {
                   attributeType,
                   uid,
                 }) => (
-                  <IonItem key={key} className="ion-margin">
-                    <CheckBox
-                      handleChange={handleAttributes}
-                      multiple={attributeType === AttributeType.CHECKBOXES}
-                      label={name}
-                      uid={uid}
-                      options={options}
-                    />
-                    
-                  </IonItem>
-                )
+                    <IonItem key={key} className="ion-margin">
+                      <CheckBox
+                        handleChange={handleAttributes}
+                        multiple={attributeType === AttributeType.CHECKBOXES}
+                        label={name}
+                        uid={uid}
+                        options={options}
+                      />
+
+                    </IonItem>
+                  )
               )}
           </IonCol>
         </IonRow>
       </IonGrid>
-     {/* </form> */}
+
     </IonContent>
   );
 };
