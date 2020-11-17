@@ -10,7 +10,7 @@ export interface IProduct {
   enabled: boolean;
   createdAt: number;
   updatedAt: number;
-  price: string;
+  price: number;
   attributes: IProductAttributes[];
   images: IImages[];
 }
