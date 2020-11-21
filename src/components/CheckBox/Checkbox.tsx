@@ -36,7 +36,7 @@ const CheckBox = ({
           handleChange(optionsArr, uid);
         }}
         multiple={multiple}
-        placeholder="Select One"
+        placeholder={multiple ? "Select Multiple" : "Select One"}
       >
         {options.map(({ value, label }) => (
           <IonSelectOption key={value} value={value}>

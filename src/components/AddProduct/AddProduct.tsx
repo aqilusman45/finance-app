@@ -11,6 +11,7 @@ import {
   IonButton,
   IonThumbnail,
   IonImg,
+  IonToast
 } from "@ionic/react";
 import Carousel from "react-bootstrap/Carousel";
 import CarouselItem from "react-bootstrap/CarouselItem";
@@ -25,6 +26,8 @@ import { encodeImageFileAsURL } from "../../utils/toBase64";
 import { IImages } from "../../lib/products";
 import { IOption } from "../../lib/attributes";
 import { useHistory } from "react-router";
+import { productAttributesCheck, productSchema } from "../../helpers/validations";
+import { ValidationError } from "yup";
 
 const INITIAL_STATE = {
   name: "",
@@ -42,6 +45,7 @@ const AddProduct: React.FC = () => {
   const [index, setIndex] = useState(0);
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
   const [images, setImages] = useState<IImages[]>([]);
+  const [errors, setErrors] = useState<ValidationError | undefined>();
   const [selectedAttrs, setAttributes] = useState<any>({});
 
   const { push } = useHistory();
@@ -83,7 +87,7 @@ const AddProduct: React.FC = () => {
     });
   };
 
-  const submit = () => {
+  const submit = async () => {
     const attrs = Object.keys(selectedAttrs).map((uid) => {
       return {
         attributeRef: uid,
@@ -104,16 +108,36 @@ const AddProduct: React.FC = () => {
       attributes: attrs,
       images: images.map(({ name }) => ({ name })),
     };
-    dispatch(
-      insertProduct(product as any, images, () => {
-        push("/home/manage-products");
-      })
-    );
+    try {
+      await productSchema.validate(product)
+      await productAttributesCheck(attributes, product.attributes)
+      dispatch(
+        insertProduct(product as any, images, () => {
+          push("/home/manage-products");
+        })
+      );
+    } catch (error) {
+      setErrors(error)
+    }
   };
 
   return (
     <IonContent>
       <IonLoading isOpen={isLoading} message={"Please wait..."} />
+      <IonToast
+        isOpen={!!errors}
+        message={errors && errors.message}
+        position="bottom"
+        color="danger"
+        duration={2000}
+        onDidDismiss={()=>{
+          setErrors(undefined)
+        }}
+        buttons={[{
+          text: 'Cancel',
+          role: 'cancel',
+        }]}
+      />
       <IonGrid className="ion-padding">
         <IonRow className="ion-justify-content-between">
           <IonCol size="6">
