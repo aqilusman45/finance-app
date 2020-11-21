@@ -89,7 +89,7 @@ export const routes = [
 ];
 
 export const nonMenuRoutes = [{
-  link: '/edit-product/:id',
+  link: '/manage-products/:id',
   component: ExploreContainer,
 },{
   link: '/edit-attribute/:id',
