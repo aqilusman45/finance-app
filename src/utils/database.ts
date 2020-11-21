@@ -7,7 +7,7 @@ import {
 } from "rxdb";
 import { IAttribute, IAttributeDocument } from "../lib/attributes";
 import { MyDatabaseCollections } from "../lib/collections";
-import { IProductDocument } from "../lib/products";
+import { IImages, IProduct, IProductDocument } from "../lib/products";
 import { IUserDocument } from "../lib/users";
 import { userSchema } from "../schema";
 import { attributeSchema } from "../schema/attributes";
@@ -125,6 +125,21 @@ export const getAttatchment = async <T>(
   fileName: string
 ) => {
   return doc?.getAttachment(fileName);
+};
+
+export const getProductAttatchments = async ({ uid, images }: IProduct) => {
+  const rxDoc = await findProduct(uid);
+  const imagesWithBase64 = await Promise.all(
+    images.map(async ({ name, type }: IImages) => {
+      const base64 = await (await getAttatchment(rxDoc, name))?.getStringData();
+      return {
+        name,
+        base64,
+        type
+      };
+    })
+  );
+  return imagesWithBase64;
 };
 
 export const updateAttributeMutation = async (attribute: IAttribute) => {
