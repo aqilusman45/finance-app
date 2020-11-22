@@ -70,6 +70,12 @@ const AddProduct: React.FC = () => {
     });
   };
 
+  const removeImage = (idx: number) => {
+    const newImages = images.filter((node, index)=> idx !== index)
+    setIndex(0)
+    setImages(newImages)
+  }
+
   const submit = async () => {
     const attrs = Object.keys(selectedAttrs).map((uid) => {
       return {
@@ -106,6 +112,7 @@ const AddProduct: React.FC = () => {
 
   return (
     <AddProductForm 
+      removeImage={removeImage}
       attributes={attributes}
       cost={cost}
       description={description}

@@ -12,7 +12,9 @@ import {
   IonThumbnail,
   IonImg,
   IonToast,
+  IonIcon
 } from "@ionic/react";
+import { closeCircle } from "ionicons/icons";
 import Carousel from "react-bootstrap/Carousel";
 import CarouselItem from "react-bootstrap/CarouselItem";
 import CheckBox from "../CheckBox/Checkbox";
@@ -33,6 +35,7 @@ interface AddProductFormProps {
     attributes: IAttribute[] | null;
     handleAttributes: (options: IOption[], uid: string) => void;
     handleSelect: (idx: number) => void;
+    removeImage: (idx: number) => void;
     index: number;
     sku: string;
     price: string;
@@ -60,7 +63,8 @@ const AddProductForm = ({
     description,
     cost,
     quantity,
-    name
+    name,
+    removeImage
 }: AddProductFormProps) => {
   return (
     <IonContent>
@@ -136,8 +140,21 @@ const AddProductForm = ({
                 activeIndex={index}
                 onSelect={handleSelect}
               >
-                {images.map(({ base64, name }) => (
+                {images.map(({ base64, name }, idx) => (
                   <CarouselItem key={name}>
+                    <IonIcon
+                      onClick={() => {
+                        removeImage(idx);
+                      }}
+                      style={{
+                        fontSize: "30px",
+                        color: "black",
+                        position: "absolute",
+                        zIndex: "99999999999",
+                        cursor: "pointer",
+                      }}
+                      icon={closeCircle}
+                    />
                     <IonThumbnail
                       key={name}
                       style={{

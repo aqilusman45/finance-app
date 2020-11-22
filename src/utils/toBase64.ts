@@ -3,6 +3,7 @@ export const encodeImageFileAsURL = (
   cb: ({ base64, name }: any) => void
 ) => {
   const file = element.files[0];
+  if (!file) return
   const reader = new FileReader();
   reader.readAsDataURL(file);
   reader.onloadend = () => {
