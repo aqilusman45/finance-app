@@ -11,6 +11,7 @@ export const encodeImageFileAsURL = (
       base64: reader.result,
       name: file.name,
       type: file.type,
+      file
     });
   };
 };

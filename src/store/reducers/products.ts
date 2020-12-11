@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "..";
 import { IImages, IProduct, IProductDocument } from "../../lib/products";
 import { insertProductMutation, productsQuery } from "../../utils/database";
+import { saveFile } from "../../utils/files";
 import { transformProduct } from "../../utils/transform";
 
 interface IInitialState {
@@ -65,12 +66,9 @@ export const insertProduct = (
   try {
     dispatch(startLoading());
     const doc = await insertProductMutation(product);
-    images.forEach(async ({ base64, name, type }) => {
-      await doc.putAttachment({
-        data: base64,
-        id: name,
-        type,
-      });
+    images.forEach(async ({ file, name }) => {
+      const res = await saveFile(name, file);
+      console.log(res);
     });
     dispatch(addProduct(product));
     cb();

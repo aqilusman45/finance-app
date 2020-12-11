@@ -19,6 +19,7 @@ export interface IImages {
   base64: string;
   name: string;
   type: string;
+  file: File
 }
 export interface IProductAttributes {
   attributeRef: string;

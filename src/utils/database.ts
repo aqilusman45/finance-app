@@ -14,6 +14,7 @@ import { attributeSchema } from "../schema/attributes";
 import { productSchema } from "../schema/products";
 import { RxDBEncryptionPlugin } from "rxdb/plugins/encryption";
 import { RxDBValidatePlugin } from "rxdb/plugins/validate";
+import { getFile } from "./files";
 addRxPlugin(RxDBValidatePlugin);
 addRxPlugin(RxDBEncryptionPlugin);
 addRxPlugin(require("pouchdb-adapter-idb"));
@@ -131,7 +132,8 @@ export const getProductAttatchments = async ({ uid, images }: IProduct) => {
   const rxDoc = await findProduct(uid);
   const imagesWithBase64 = await Promise.all(
     images.map(async ({ name, type }: IImages) => {
-      const base64 = await (await getAttatchment(rxDoc, name))?.getStringData();
+      const base64 = await getFile(rxDoc?.uid || "", name)
+      console.log(base64);
       return {
         name,
         base64,
