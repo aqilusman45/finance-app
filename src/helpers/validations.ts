@@ -35,3 +35,13 @@ export const productAttributesCheck = async (
     throw errors[0];
   }
 };
+
+export const accountSchema = yup.object().shape({
+  name: yup.string().required(),
+  email: yup.string().email(),
+  phone: yup.string().required(),
+  accountNumber: yup.string(),
+  accountTitle: yup.string(),
+  balance: yup.number().required(),
+  description: yup.string(),
+});

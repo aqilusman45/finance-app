@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from "uuid";
 import { useHistory } from "react-router";
 import { ValidationError } from "yup";
 import OpenAccountView from "../OpenAccountView/OpenAccountView";
+import { addAccount } from "../../store/reducers/accounts";
+import { accountSchema } from "../../helpers/validations";
 
 const INITIAL_STATE = {
   name: "",
@@ -12,8 +14,17 @@ const INITIAL_STATE = {
   description: "",
   accountNumber: "",
   accountTitle: "",
-  balance: 0,
+  balance: "0",
   accountType: "",
+};
+
+export const accountTypeCheck = async (
+  account: any,
+) => {
+  if (!account) return;
+  if (!account.accountType) {
+    throw new Error(`Account type is a required field`);
+  }
 };
 
 const OpenAccount: React.FC = () => {
@@ -22,8 +33,7 @@ const OpenAccount: React.FC = () => {
 
   const { push } = useHistory();
   const dispatch = useDispatch();
-  console.log(push, dispatch);
-  
+
   const handleChange = (e: any) => {
     setFormFields((prevField) => ({
       ...prevField,
@@ -34,13 +44,18 @@ const OpenAccount: React.FC = () => {
   const submit = async () => {
     const account = {
       ...formFields,
+      balance: parseInt(formFields.balance),
       uid: uuidv4(),
       enabled: true,
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
-    console.log(account);
     try {
+      await accountSchema.validate(account)
+      await accountTypeCheck(account);
+      dispatch(addAccount(account as any, () => {
+        push('/home/manage-accounts')
+      }))
     } catch (error) {
       setErrors(error)
     }

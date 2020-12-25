@@ -9,11 +9,12 @@ import { IAttribute, IAttributeDocument } from "../lib/attributes";
 import { MyDatabaseCollections } from "../lib/collections";
 import { IImages, IProduct, IProductDocument } from "../lib/products";
 import { IUserDocument } from "../lib/users";
-import { userSchema } from "../schema";
+import { userSchema, userAccountsSchema } from "../schema";
 import { attributeSchema } from "../schema/attributes";
 import { productSchema } from "../schema/products";
 import { RxDBEncryptionPlugin } from "rxdb/plugins/encryption";
 import { RxDBValidatePlugin } from "rxdb/plugins/validate";
+import { IAccountDocument } from "../lib/accounts";
 addRxPlugin(RxDBValidatePlugin);
 addRxPlugin(RxDBEncryptionPlugin);
 addRxPlugin(require("pouchdb-adapter-idb"));
@@ -29,6 +30,7 @@ const _create = async () => {
   await createCollection(db, userSchema, "users");
   await createCollection(db, productSchema, "products");
   await createCollection(db, attributeSchema, "attributes");
+  await createCollection(db, userAccountsSchema, "accounts");
   return db;
 };
 
@@ -150,5 +152,13 @@ export const updateAttributeMutation = async (attribute: IAttribute) => {
     oldData.options = attribute.options
     oldData.updatedAt = attribute.updatedAt
     return oldData
+  })
+};
+
+export const addAccountMutation = async (account: IAccountDocument) => {
+  const db = await get();
+  const { accounts } = db.collections;
+  return accounts.insert({
+    ...account
   })
 };
