@@ -115,6 +115,7 @@ const OpenAccountForm = ({
                 e.preventDefault();
                 submit();
               }}
+              className="ion-margin"
             >
               Open Account
             </IonButton>
