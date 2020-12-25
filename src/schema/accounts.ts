@@ -1,4 +1,5 @@
 import { RxJsonSchema } from "rxdb";
+import { AccountTypes } from "../lib/enum";
 
 export const userAccountsSchema: RxJsonSchema = {
   title: "user accounts schema",
@@ -25,6 +26,10 @@ export const userAccountsSchema: RxJsonSchema = {
     phone: {
       type: "string",
     },
+    enabled: {
+      type: "boolean",
+      default: true,
+    },
     description: {
       type: "string",
     },
@@ -34,13 +39,21 @@ export const userAccountsSchema: RxJsonSchema = {
     accountTitle: {
       type: "string",
     },
-    balance:  {
+    balance: {
       type: "number",
     },
     accountType: {
-      type: "string",
-      enum: ["SALES", "PURCHASE", "BANK", "EXPENSES"]
+      type: "object",
+      properties: {
+        value: {
+          type: "string",
+          enum: [AccountTypes.BANK, AccountTypes.CUSTOMER, AccountTypes.EXPENSES, AccountTypes.PURCHASE, AccountTypes.SALES]
+        },
+        label: {
+          type: "string",
+        }
+      },
     }
   },
-  required: ["uid", "name", "email", "phone", "description", "balance", "accountType"],
+  required: ["uid", "name", "phone", "balance", "accountType"],
 };

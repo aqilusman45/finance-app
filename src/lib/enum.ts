@@ -7,5 +7,6 @@ export enum AccountTypes {
     SALES = "SALES",
     PURCHASE = "PURCHASE", 
     BANK = "BANK",
-    EXPENSES = "EXPENSES"
+    EXPENSES = "EXPENSES",
+    CUSTOMER = "CUSTOMER"
 }

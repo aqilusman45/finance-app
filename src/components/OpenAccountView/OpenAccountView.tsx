@@ -14,6 +14,7 @@ import {
 } from "@ionic/react";
 import { ValidationError } from "yup";
 import { IOption } from "../../lib/attributes";
+import { AccountTypes } from "../../lib/enum";
 
 interface OpenAccountViewProps {
   errors: ValidationError | undefined;
@@ -27,21 +28,27 @@ interface OpenAccountViewProps {
     description: string;
     accountNumber: string;
     accountTitle: string;
-    balance: number;
+    balance: string;
     accountType: string;
   }
 }
 
 
 const options: IOption[] = [{
-  value: "customer",
+  value: AccountTypes.CUSTOMER,
   label: "Customer"
 }, {
-  value: "purchasing",
-  label: "Purchasing"
+  value: AccountTypes.PURCHASE,
+  label: "Purchase"
 }, {
-  value: "bank",
+  value: AccountTypes.BANK,
   label: "Bank"
+}, {
+  value: AccountTypes.EXPENSES,
+  label: "Expenses"
+}, {
+  value: AccountTypes.SALES,
+  label: "Sales"
 }]
 
 const OpenAccountForm = ({
