@@ -4,7 +4,8 @@ import {
   ManageProduct,
   AddAttributes,
   ManageAttributes,
-  OpenAccount
+  OpenAccount,
+  ManageAccounts
 } from "../components/index";
 import EditAttribute from "../components/EditAttribute/EditAttribute";
 
@@ -83,7 +84,7 @@ export const routes = [
         link: "/manage-accounts",
         text: "Manage Accounts",
         icon: "",
-        component: ExploreContainer,
+        component: ManageAccounts,
       },
     ],
   },

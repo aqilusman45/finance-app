@@ -8,6 +8,7 @@ export interface IAccount {
     name: string;
     email: string;
     phone: string;
+    enabled: boolean;
     description: string;
     accountNumber: string;
     accountTitle: string;

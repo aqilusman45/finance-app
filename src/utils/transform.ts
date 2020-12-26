@@ -30,6 +30,10 @@ export function transformAccount(doc: IAccountDocument): IAccount {
   }
 }
 
+export function transformAccounts(doc: IAccountDocument[]): IAccount[] {
+  return doc.map((node) => transformAccount(node));
+}
+
 export function transformProduct(doc: IProductDocument): IProduct {
   const {
     uid,
