@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addAccountMutation } from "../../utils/database";
+import { addAccountMutation, accountsQuery } from "../../utils/database";
 import { AppThunk } from "..";
 import { IAccount, IAccountDocument } from "../../lib/accounts";
-import { transformAccount } from "../../utils/transform";
+import { transformAccount, transformAccounts } from "../../utils/transform";
 
 interface IInitialState {
     accounts: IAccount[] | null;
@@ -30,8 +30,8 @@ const accountsSlice = createSlice({
             state.isLoading = false;
         },
         addNewAccount: (state, action: PayloadAction<IAccountDocument>) => {
-            const accounts = action.payload;
-            state.accounts?.unshift(transformAccount(accounts));
+            const account = action.payload;
+            state.accounts?.unshift(transformAccount(account));
             state.isLoading = false;
         },
         updateAccounts: (state, action: PayloadAction<IAccountDocument>) => {
@@ -60,7 +60,18 @@ export const addAccount = (
         await addAccountMutation(account as any);
         dispatch(addNewAccount(account as any));
         cb();
-        dispatch(doneLoading);
+        dispatch(doneLoading());
+    } catch (error) {
+        throw error
+    }
+}
+
+export const fetchAccounts = (): AppThunk => async dispatch => {
+    try {
+        dispatch(startLoading());
+        const accounts = await accountsQuery();
+        dispatch(getAccounts(transformAccounts(accounts)));
+        dispatch(doneLoading());
     } catch (error) {
         throw error
     }

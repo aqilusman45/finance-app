@@ -162,3 +162,9 @@ export const addAccountMutation = async (account: IAccountDocument) => {
     ...account
   })
 };
+
+export const accountsQuery = async () => {
+  const db = await get();
+  const { accounts } = db.collections;
+  return accounts.find().exec();
+};
