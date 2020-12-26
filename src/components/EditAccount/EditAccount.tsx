@@ -68,6 +68,8 @@ const OpenAccount: React.FC = () => {
   };
 
   const submit = async () => {
+    // @ts-ignore
+    delete formFields._rev
     const account = {
       ...formFields,
       balance: parseInt(formFields.balance),
