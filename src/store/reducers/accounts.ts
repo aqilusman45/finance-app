@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addAccountMutation, accountsQuery } from "../../utils/database";
+import { addAccountMutation, accountsQuery, updateAccountMutation } from "../../utils/database";
 import { AppThunk } from "..";
 import { IAccount, IAccountDocument } from "../../lib/accounts";
 import { transformAccount, transformAccounts } from "../../utils/transform";
@@ -34,11 +34,11 @@ const accountsSlice = createSlice({
             state.accounts?.unshift(transformAccount(account));
             state.isLoading = false;
         },
-        updateAccounts: (state, action: PayloadAction<IAccountDocument>) => {
-            const accounts = action.payload;
+        updateAccount: (state, action: PayloadAction<IAccountDocument>) => {
+            const account = action.payload;
             state.accounts?.forEach((item, idx) => {
-                if (item.uid === accounts.uid && state.accounts) {
-                    state.accounts[idx] = accounts
+                if (item.uid === account.uid && state.accounts) {
+                    state.accounts[idx] = account
                 }
             })
             return state
@@ -46,7 +46,7 @@ const accountsSlice = createSlice({
     }
 })
 
-export const { addNewAccount, doneLoading, getAccounts, startLoading, updateAccounts } = accountsSlice.actions;
+export const { addNewAccount, doneLoading, getAccounts, startLoading, updateAccount } = accountsSlice.actions;
 
 export default accountsSlice.reducer;
 
@@ -56,7 +56,6 @@ export const addAccount = (
 ): AppThunk => async dispatch => {
     try {
         dispatch(startLoading());
-        console.log(account);
         await addAccountMutation(account as any);
         dispatch(addNewAccount(account as any));
         cb();
@@ -65,6 +64,21 @@ export const addAccount = (
         throw error
     }
 }
+
+export const updateAccountAsync = (
+  account: IAccountDocument,
+  cb: () => void
+): AppThunk => async (dispatch) => {
+  try {
+    dispatch(startLoading());
+    await updateAccountMutation(account);
+    dispatch(updateAccount(account));
+    cb();
+    dispatch(doneLoading());
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const fetchAccounts = (): AppThunk => async dispatch => {
     try {

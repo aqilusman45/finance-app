@@ -4,3 +4,4 @@ export {default as AddAttributes} from './AddAttributes/AddAttributes'
 export {default as ManageAttributes} from './ManageAttributes/ManageAttributes'
 export {default as OpenAccount} from "./OpenAccount/OpenAccount"
 export {default as ManageAccounts} from "./ManageAccounts/ManageAccounts"
+export {default as EditAccount} from "./EditAccount/EditAccount"
