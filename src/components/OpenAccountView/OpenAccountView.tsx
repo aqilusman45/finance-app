@@ -29,8 +29,11 @@ interface OpenAccountViewProps {
     accountNumber: string;
     accountTitle: string;
     balance: string;
-    accountType: string;
-  }
+    accountType: {
+      value: string;
+      label: string;
+    };
+  };
 }
 
 
@@ -59,7 +62,7 @@ const OpenAccountForm = ({
   state
 }: OpenAccountViewProps) => {
 
-  const { name, description, accountNumber, accountTitle, balance, email, phone } = state;
+  const { name, description, accountNumber, accountTitle, balance, email, phone, accountType } = state;
 
   return (
     <IonContent>
@@ -144,6 +147,7 @@ const OpenAccountForm = ({
                     }
                   })
                 }}
+                value={accountType.value}
                 name="accountType"
                 multiple={false}
                 placeholder="Account Type"

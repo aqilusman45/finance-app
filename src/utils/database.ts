@@ -14,7 +14,7 @@ import { attributeSchema } from "../schema/attributes";
 import { productSchema } from "../schema/products";
 import { RxDBEncryptionPlugin } from "rxdb/plugins/encryption";
 import { RxDBValidatePlugin } from "rxdb/plugins/validate";
-import { IAccountDocument } from "../lib/accounts";
+import { IAccount, IAccountDocument } from "../lib/accounts";
 addRxPlugin(RxDBValidatePlugin);
 addRxPlugin(RxDBEncryptionPlugin);
 addRxPlugin(require("pouchdb-adapter-idb"));
@@ -152,6 +152,17 @@ export const updateAttributeMutation = async (attribute: IAttribute) => {
     oldData.options = attribute.options
     oldData.updatedAt = attribute.updatedAt
     return oldData
+  })
+};
+
+export const updateAccountMutation = async (account: IAccount) => {
+  const db = await get();
+  const { accounts } = db.collections;
+  const acc = await accounts.findOne().where('uid').eq(account.uid).exec()
+  await acc?.update({
+    $set: {
+      ...account
+    }
   })
 };
 

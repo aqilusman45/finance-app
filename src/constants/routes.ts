@@ -5,7 +5,8 @@ import {
   AddAttributes,
   ManageAttributes,
   OpenAccount,
-  ManageAccounts
+  ManageAccounts,
+  EditAccount
 } from "../components/index";
 import EditAttribute from "../components/EditAttribute/EditAttribute";
 
@@ -96,4 +97,7 @@ export const nonMenuRoutes = [{
 },{
   link: '/edit-attribute/:id',
   component: EditAttribute,
+},{
+  link: '/edit-account/:id',
+  component: EditAccount,
 }]
