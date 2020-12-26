@@ -20,6 +20,7 @@ interface OpenAccountViewProps {
   errors: ValidationError | undefined;
   setErrors: (value: ValidationError | undefined) => void;
   handleChange: (e: any) => void;
+  isEdit?: boolean;
   submit: () => void;
   state: {
     name: string;
@@ -59,7 +60,8 @@ const OpenAccountForm = ({
   setErrors,
   handleChange,
   submit,
-  state
+  state,
+  isEdit
 }: OpenAccountViewProps) => {
 
   const { name, description, accountNumber, accountTitle, balance, email, phone, accountType } = state;
@@ -120,7 +122,7 @@ const OpenAccountForm = ({
               }}
               className="ion-margin"
             >
-              Open Account
+              {isEdit ? "Update Account" : "Open Account"}
             </IonButton>
           </IonCol>
           <IonCol size="6">

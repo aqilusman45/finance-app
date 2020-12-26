@@ -95,6 +95,7 @@ const OpenAccount: React.FC = () => {
       setErrors={setErrors}
       state={formFields}
       submit={submit}
+      isEdit
     />
   );
 };
