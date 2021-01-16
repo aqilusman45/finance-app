@@ -10,6 +10,8 @@ export interface IAccount {
     phone: string;
     enabled: boolean;
     description: string;
+    address: string;
+    companyName: string;
     accountNumber: string;
     accountTitle: string;
     balance: number;

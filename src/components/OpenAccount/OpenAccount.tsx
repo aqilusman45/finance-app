@@ -14,6 +14,8 @@ const INITIAL_STATE = {
   description: "",
   accountNumber: "",
   accountTitle: "",
+  address: "",
+  companyName: "",
   balance: "0",
   accountType: {
     value: "",

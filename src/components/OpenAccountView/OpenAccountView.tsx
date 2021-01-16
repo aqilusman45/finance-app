@@ -29,6 +29,8 @@ interface OpenAccountViewProps {
     description: string;
     accountNumber: string;
     accountTitle: string;
+    address: string;
+    companyName: string;
     balance: string;
     accountType: {
       value: string;
@@ -64,7 +66,7 @@ const OpenAccountForm = ({
   isEdit
 }: OpenAccountViewProps) => {
 
-  const { name, description, accountNumber, accountTitle, balance, email, phone, accountType } = state;
+  const { name, description, accountNumber, accountTitle, balance, email, phone, accountType, companyName, address } = state;
 
   return (
     <IonContent>
@@ -112,6 +114,22 @@ const OpenAccountForm = ({
               <IonInput
                 value={description}
                 name="description"
+                onIonChange={handleChange}
+              />
+            </IonItem>
+            <IonItem className="ion-margin">
+              <IonLabel position="stacked">Company Name</IonLabel>
+              <IonInput
+                value={companyName}
+                name="companyName"
+                onIonChange={handleChange}
+              />
+            </IonItem>
+            <IonItem className="ion-margin">
+              <IonLabel position="stacked">Address</IonLabel>
+              <IonInput
+                value={address}
+                name="address"
                 onIonChange={handleChange}
               />
             </IonItem>
