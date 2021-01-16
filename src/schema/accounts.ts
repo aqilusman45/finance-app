@@ -23,6 +23,14 @@ export const userAccountsSchema: RxJsonSchema = {
     email: {
       type: "string",
     },
+    address: {
+      type: "string",
+      default: ""
+    },
+    companyName: {
+      type: "string",
+      default: ""
+    },
     phone: {
       type: "string",
     },

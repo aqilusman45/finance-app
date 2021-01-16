@@ -11,7 +11,7 @@ import {
   IonIcon,
   IonLabel,
 } from "@ionic/react";
-import { mail, text, checkmark, close, cash, cube } from "ionicons/icons";
+import { mail, text, checkmark, close, cash, cube, phoneLandscape } from "ionicons/icons";
 import { Link } from "react-router-dom";
 import Badge from "react-bootstrap/esm/Badge";
 
@@ -38,6 +38,8 @@ export const AccountModal: React.FC<IAccountModalProps> = ({
     description,
     email,
     enabled,
+    companyName,
+    address,
     phone,
   } = account;
 
@@ -55,8 +57,16 @@ export const AccountModal: React.FC<IAccountModalProps> = ({
               <IonLabel>Email: {email}</IonLabel>
             </IonItem>
             <IonItem>
-              <IonIcon icon={mail} slot="start" />
+              <IonIcon icon={phoneLandscape} slot="start" />
               <IonLabel>Phone: {phone}</IonLabel>
+            </IonItem>
+            <IonItem>
+              <IonIcon icon={cube} slot="start" />
+              <IonLabel>Company: {companyName}</IonLabel>
+            </IonItem>
+            <IonItem>
+              <IonIcon icon={cube} slot="start" />
+              <IonLabel>Address: {address}</IonLabel>
             </IonItem>
             <IonItem>
               <IonIcon icon={cash} slot="start" />

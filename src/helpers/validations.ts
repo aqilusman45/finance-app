@@ -40,6 +40,8 @@ export const accountSchema = yup.object().shape({
   name: yup.string().required(),
   email: yup.string().email(),
   phone: yup.string().required(),
+  address: yup.string(),
+  companyName: yup.string(),
   accountNumber: yup.string(),
   accountTitle: yup.string(),
   balance: yup.number().required(),
