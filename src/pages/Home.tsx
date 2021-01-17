@@ -23,6 +23,7 @@ const Home: React.FC<{
     pathname: string;
   };
 }> = ({ match, location }) => {
+  
   return (
     <IonContent>
       <IonSplitPane when="lg" contentId="main">

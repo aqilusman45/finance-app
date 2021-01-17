@@ -6,7 +6,9 @@ import {
   ManageAttributes,
   OpenAccount,
   ManageAccounts,
-  EditAccount
+  EditAccount,
+  Entry,
+  EditEntry,
 } from "../components/index";
 import EditAttribute from "../components/EditAttribute/EditAttribute";
 
@@ -38,6 +40,18 @@ export const routes = [
         text: "Manage Attributes",
         icon: "",
         component: ManageAttributes,
+      },
+    ],
+  },
+  {
+    menuItem: "LEDGER",
+    icon: "",
+    subMenuLinks: [
+      {
+        link: "/entries",
+        text: "Entries",
+        icon: "",
+        component: Entry,
       },
     ],
   },
@@ -91,13 +105,21 @@ export const routes = [
   },
 ];
 
-export const nonMenuRoutes = [{
-  link: '/edit-product/:id',
-  component: ExploreContainer,
-},{
-  link: '/edit-attribute/:id',
-  component: EditAttribute,
-},{
-  link: '/edit-account/:id',
-  component: EditAccount,
-}]
+export const nonMenuRoutes = [
+  {
+    link: "/edit-product/:id",
+    component: ExploreContainer,
+  },
+  {
+    link: "/edit-attribute/:id",
+    component: EditAttribute,
+  },
+  {
+    link: "/edit-account/:id",
+    component: EditAccount,
+  },
+  {
+    link: "/home/edit-entry/:id",
+    component: EditEntry,
+  },
+];
