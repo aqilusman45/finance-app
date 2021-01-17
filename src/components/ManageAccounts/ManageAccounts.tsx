@@ -24,6 +24,7 @@ const ManageAccounts: React.FC = () => {
   const { isLoading, accounts } = useSelector((state: RootState) => {
     return state.accounts;
   });
+console.log("account", account);
 
   useEffect(() => {
     if (!accounts) {
@@ -66,6 +67,8 @@ const ManageAccounts: React.FC = () => {
                           onClick={() => {
                             setAccount(() =>
                               accounts.find((acc) => acc.uid === account.uid)
+                              
+                              
                             );
                             setShowModal(!showModal);
                           }}
@@ -75,8 +78,10 @@ const ManageAccounts: React.FC = () => {
                           {Object.keys(account).map((key) => {
                             // @ts-ignore
                             const accountKey = account[key];
+                            
                             if (headers.includes(key)) {
                               if (typeof accountKey !== "object") {
+                                
                                 return (
                                   <td
                                     key={`${accountKey}`}
@@ -84,6 +89,7 @@ const ManageAccounts: React.FC = () => {
                                 );
                               } else {
                                 const { label } = accountKey;
+                                
                                 return (
                                   <td key={accountKey}>
                                     <Badge
