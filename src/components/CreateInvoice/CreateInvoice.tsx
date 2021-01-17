@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import InvoiceView from "./../InvoiceView/InvoiceView";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
-import * as JsSearch from "js-search";
 import { fetchAccounts } from "./../../store/reducers/accounts";
 const product1 = {
   productName: "product1",

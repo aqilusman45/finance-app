@@ -91,42 +91,14 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
           <IonRow>
             <IonCol size="12">
               <IonItem className="ion-margin">
-              <IonSearchbar 
-                value={currentUser.name}
-                placeholder="Select User"
-                onClick={() => setShowModal(!showModal)}
-                
-              />
-            
-            </IonItem>
-              {/* {currentUser.name} */}
-              {/* {userData?.length ? (
-                <div className="filteredUser">
-                  <IonList>
-                    {userData?.map((item: any) => {
-                      return (
-                        <IonItem key={item.uid}>
-                          <IonLabel
-                            onClick={() => {
-                              setUserData("");
-                              setSearchText();
-                              // setCurrentUser(() =>
-                              //   userData?.find(
-                              //     (filter: any) => filter.uid === item.uid
-                              //   )
-                              // );
-                            }}
-                          >
-                            {item.name}
-                          </IonLabel>
-                        </IonItem>
-                      );
-                    })}
-                  </IonList>
-                </div>
-              ) : (
-                ""
-              )} */}
+                <IonSearchbar
+                  showCancelButton="focus"
+                  debounce={1000}
+                  value={currentUser.name}
+                  placeholder="Select User"
+                  onClick={() => setShowModal(!showModal)}
+                />
+              </IonItem>
             </IonCol>
           </IonRow>
           {products?.length ? (
@@ -156,7 +128,13 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                               className="table-row-hover"
                             >
                               <td>{index + 1}</td>
-                              <td>{product.productName}</td>
+                              <td>
+                                <input
+                                  placeholder="select Product"
+                                  className="inputStyle txtCenter"
+                                  name="productName"
+                                />
+                              </td>
                               <td className="">
                                 <input
                                   className="inputStyle txtCenter"
@@ -198,6 +176,14 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                       : ""}
                   </tbody>
                 </Table>
+                {products.length && (
+                  <IonButton
+                    onClick={() => AddProduct()}
+                    className="btnPosition"
+                  >
+                    +
+                  </IonButton>
+                )}
               </IonCol>
               <IonCol size="8"></IonCol>
               <IonCol size="4">
