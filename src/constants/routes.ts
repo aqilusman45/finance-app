@@ -7,10 +7,11 @@ import {
   OpenAccount,
   ManageAccounts,
   EditAccount,
-  Entry,
   EditEntry,
+  AddEntry
 } from "../components/index";
 import EditAttribute from "../components/EditAttribute/EditAttribute";
+import SearchEntry from "../components/SearchEntry/SearchEntry";
 
 export const routes = [
   {
@@ -51,7 +52,7 @@ export const routes = [
         link: "/entries",
         text: "Entries",
         icon: "",
-        component: Entry,
+        component: SearchEntry,
       },
     ],
   },
@@ -124,6 +125,6 @@ export const nonMenuRoutes = [
   },
   {
     link: "/add-entry/",
-    component: EditEntry,
+    component: AddEntry,
   }
 ];

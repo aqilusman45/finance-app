@@ -9,7 +9,6 @@ import {
   IonLabel,
   IonIcon,
   IonCardContent,
-  
 } from "@ionic/react";
 import { text, cube, keyOutline, callOutline } from "ionicons/icons";
 import { Link } from "react-router-dom";
@@ -25,7 +24,14 @@ const EntriesViewModel: React.FC<EntriesViewProps> = ({
   account,
 }) => {
   if (!account) return null;
-  const { name,phone, invoiceID, productID, amount, remainingAmount } = account;
+  const {
+    name,
+    phone,
+    invoiceID,
+    productID,
+    amount,
+    remainingAmount,
+  } = account;
   return (
     <IonModal isOpen={showModel} cssClass="my-custom-class">
       <IonPage>

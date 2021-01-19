@@ -39,14 +39,16 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({isEdit}) => {
               <IonItem>
                 <IonSelect
                   value={selected}
-                  placeholder="Select One"
+                  placeholder="Entry Type"
                   onIonChange={(e) => setSelected(e.detail.value)}
                 >
                   <IonSelectOption value="credit">Credit</IonSelectOption>
                   <IonSelectOption value="debit">Debit</IonSelectOption>
                 </IonSelect>
               </IonItem>
-              <IonButton className="ion-margin">{isEdit ? 'Create Entry' : "Update Entry"}</IonButton>
+              <IonButton className="ion-margin">
+                {isEdit ? "Update Entry" : "Create Entry"}
+              </IonButton>
               <IonButton className="ion-margin" color="danger">
                 Cancel
               </IonButton>
@@ -58,7 +60,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({isEdit}) => {
               </IonItem>
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Account Type</IonLabel>
-                <IonInput value="" name="accountType" />
+                <IonInput value="" name="transactionType" />
               </IonItem>
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Receivable Amount</IonLabel>
