@@ -24,7 +24,6 @@ const ManageAccounts: React.FC = () => {
   const { isLoading, accounts } = useSelector((state: RootState) => {
     return state.accounts;
   });
-console.log("account", account);
 
   useEffect(() => {
     if (!accounts) {
