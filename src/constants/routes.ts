@@ -119,7 +119,11 @@ export const nonMenuRoutes = [
     component: EditAccount,
   },
   {
-    link: "/home/edit-entry/:id",
+    link: "/edit-entry/:id",
     component: EditEntry,
   },
+  {
+    link: "/add-entry/",
+    component: EditEntry,
+  }
 ];

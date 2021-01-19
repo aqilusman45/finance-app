@@ -11,7 +11,7 @@ import {
   IonCardContent,
   
 } from "@ionic/react";
-import { text, cube, keyOutline } from "ionicons/icons";
+import { text, cube, keyOutline, callOutline } from "ionicons/icons";
 import { Link } from "react-router-dom";
 
 interface EntriesViewProps {
@@ -25,7 +25,7 @@ const EntriesViewModel: React.FC<EntriesViewProps> = ({
   account,
 }) => {
   if (!account) return null;
-  const { name, invoiceID, productID, amount, remainingAmount } = account;
+  const { name,phone, invoiceID, productID, amount, remainingAmount } = account;
   return (
     <IonModal isOpen={showModel} cssClass="my-custom-class">
       <IonPage>
@@ -34,6 +34,10 @@ const EntriesViewModel: React.FC<EntriesViewProps> = ({
             <IonItem>
               <IonIcon icon={text} slot="start" />
               <IonLabel>Name: {name}</IonLabel>
+            </IonItem>
+            <IonItem>
+              <IonIcon icon={callOutline} slot="start" />
+              <IonLabel>Phone: {phone}</IonLabel>
             </IonItem>
             <IonItem>
               <IonIcon icon={keyOutline} slot="start" />
