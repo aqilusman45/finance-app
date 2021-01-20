@@ -8,7 +8,8 @@ import {
   ManageAccounts,
   EditAccount,
   EditEntry,
-  AddEntry
+  AddEntry,
+  CreateInvoice
 } from "../components/index";
 import EditAttribute from "../components/EditAttribute/EditAttribute";
 import SearchEntry from "../components/SearchEntry/SearchEntry";
@@ -64,7 +65,7 @@ export const routes = [
         link: "/create-invoice",
         text: "Create Invoice",
         icon: "",
-        component: ExploreContainer,
+        component: CreateInvoice,
       },
       {
         link: "/manage-invoices",
