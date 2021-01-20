@@ -8,4 +8,5 @@ export {default as EditAccount} from "./EditAccount/EditAccount"
 export {default as SearchEntry} from './SearchEntry/SearchEntry'
 export {default as EditEntry} from './EditEntry/EditEntry'
 export {default as AddEntry} from './AddEntry/AddEntry'
+export {default as CreateInvoice} from './CreateInvoice/CreateInvoice'
 
