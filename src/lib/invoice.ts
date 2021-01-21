@@ -4,7 +4,8 @@ export interface IInvoice {
     unitPrict: number,
     total: number,
     productID: number,
-    invoideID: number
+    invoideID: number,
+    discount?: number
 
 
 }

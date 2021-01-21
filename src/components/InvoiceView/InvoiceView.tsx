@@ -11,54 +11,37 @@ import {
   IonIcon,
   IonList,
   IonLabel,
-  IonButton
+  IonButton,
 } from "@ionic/react";
 import { closeSharp } from "ionicons/icons";
 import Table from "react-bootstrap/Table";
 import { IInvoice } from "./../../lib/invoice";
 import "./InvoicView.css";
-const keys = ["Description", "Quantity", "Unit Price", "Total"];
-const product1 = {
-  name: "product1",
-  quantity: 100,
-  unitPrict: 1000,
-  total: 1000,
-  productID: 123,
-  invoideID: 100,
-};
-const product2 = {
-  name: "product2",
-  quantity: 10,
-  unitPrict: 100,
-  total: 1000,
-  productID: 127,
-  invoideID: 100,
-};
+const keys = ["Description", "Quantity", "Unit Price", "Total", "Discount"];
 
-const InvoiceView = () => {
-  const [products, setProducts] = useState<IInvoice[]>([product1, product2]);
+interface InvoiceViewProps {
+  RemoveItem?: any;
+  AddProduct?: any;
+  products?: any;
+  UpdateQuantity?: any;
+  calculateSubTotal?: any;
+  calculateTax?: any;
+  tax?: number;
+  isEdit?: boolean;
+  getDiscountValue?: any;
+}
 
-  const RemoveItem = (ProductID: any) => {
-    const filter = products.filter(
-      (product: any) => product.productID !== ProductID
-    );
-    setProducts(filter);
-  };
-
-  const AddProduct = () => {
-    setProducts([
-      ...products,
-      {
-        name: "product3",
-        quantity: 10,
-        unitPrict: 10,
-        total: 50,
-        productID: Math.random() * 10000000,
-        invoideID: 101,
-      },
-    ]);
-  };
-
+const InvoiceView: React.FC<InvoiceViewProps> = ({
+  RemoveItem,
+  AddProduct,
+  products,
+  isEdit,
+  UpdateQuantity,
+  calculateSubTotal,
+  calculateTax,
+  tax,
+  getDiscountValue,
+}) => {
   return (
     <IonPage>
       <IonContent>
@@ -105,20 +88,36 @@ const InvoiceView = () => {
                             >
                               <td>{index + 1}</td>
                               <td>{product.name}</td>
-                              <td>
+                              <td className="inputStyle">
                                 <IonItem>
                                   <IonInput
+                                    class="ion-text-center"
+                                    onIonChange={(e: any) => {
+                                      UpdateQuantity(
+                                        e.detail.value,
+                                        product.productID
+                                      );
+                                    }}
                                     key={product.productID}
                                     value={product.quantity}
                                   />
                                 </IonItem>
                               </td>
-                              <td>
+                              <td>{product.unitPrict}</td>
+                              <td>{product.quantity * product.unitPrict}</td>
+                              <td className="inputStyle">
                                 <IonItem>
-                                  <IonInput value={product.unitPrict} />
+                                  <IonInput
+                                    onIonChange={(e: any) => {
+                                      getDiscountValue(
+                                        e.detail.value,
+                                        product.productID
+                                      );
+                                    }}
+                                    class="ion-text-center"
+                                  />
                                 </IonItem>
                               </td>
-                              <td>{product.quantity * product.unitPrict}</td>
                               <td>
                                 <IonIcon
                                   className="iconSize"
@@ -133,13 +132,11 @@ const InvoiceView = () => {
                   </tbody>
                 </Table>
               </IonCol>
-              <IonCol size="8">
-
-              </IonCol>
+              <IonCol size="8"></IonCol>
               <IonCol size="4">
                 <IonList lines="inset">
                   <IonItem>
-                    <IonLabel>SubTotal: </IonLabel>
+                    <IonLabel>SubTotal: {calculateSubTotal()}</IonLabel>
                   </IonItem>
 
                   <IonItem>
@@ -147,6 +144,14 @@ const InvoiceView = () => {
                   </IonItem>
                   <IonItem>
                     <IonLabel>Tax: </IonLabel>
+                    <IonInput
+                      class="ion-text-center"
+                      color="danger"
+                      onIonChange={(e: any) => {
+                        calculateTax(e.detail.value);
+                      }}
+                    />
+                    {tax}
                   </IonItem>
                   <IonItem>
                     <IonLabel>Total: </IonLabel>
@@ -154,16 +159,9 @@ const InvoiceView = () => {
                 </IonList>
               </IonCol>
               <IonCol size="12">
-              <IonButton
-              color="primary"
-            >
-              Submit
-            </IonButton>
-            <IonButton
-              color="danger"
-            >
-              Cancel
-            </IonButton>
+                <IonButton color="primary">
+                  {isEdit ? "Update" : "Submit"}
+                </IonButton>
               </IonCol>
             </IonRow>
           ) : (
