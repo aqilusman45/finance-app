@@ -39,7 +39,7 @@ const keys = [
 const SearchEnteryView = () => {
   const { push } = useHistory();
 
-  const [entries, setEntries] = useState([
+  const [entries] = useState([
     { ...INITIAL_STATE },
     { ...INITIAL_STATE1 },
   ]);

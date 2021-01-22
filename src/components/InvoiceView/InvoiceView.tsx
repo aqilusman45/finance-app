@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   IonGrid,
   IonRow,
@@ -25,10 +25,12 @@ interface InvoiceViewProps {
   products?: any;
   UpdateQuantity?: any;
   calculateSubTotal?: any;
-  calculateTax?: any;
-  tax?: number;
+  handleTaxInput?: any;
   isEdit?: boolean;
   getDiscountValue?: any;
+  calculateDiscount?: any;
+  calculateTax?: any;
+  calculateTotal?: any;
 }
 
 const InvoiceView: React.FC<InvoiceViewProps> = ({
@@ -38,9 +40,11 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   isEdit,
   UpdateQuantity,
   calculateSubTotal,
-  calculateTax,
-  tax,
+  handleTaxInput,
   getDiscountValue,
+  calculateTax,
+  calculateDiscount,
+  calculateTotal,
 }) => {
   return (
     <IonPage>
@@ -91,6 +95,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                               <td className="inputStyle">
                                 <IonItem>
                                   <IonInput
+                                    name="quantity"
                                     class="ion-text-center"
                                     onIonChange={(e: any) => {
                                       UpdateQuantity(
@@ -106,8 +111,11 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                               <td>{product.unitPrict}</td>
                               <td>{product.quantity * product.unitPrict}</td>
                               <td className="inputStyle">
+                                  
                                 <IonItem>
+                                
                                   <IonInput
+                                    name="discount"
                                     onIonChange={(e: any) => {
                                       getDiscountValue(
                                         e.detail.value,
@@ -140,21 +148,24 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                   </IonItem>
 
                   <IonItem>
-                    <IonLabel>Discount: </IonLabel>
+                    <IonLabel>Discount: {calculateDiscount()} %</IonLabel>
                   </IonItem>
                   <IonItem>
                     <IonLabel>Tax: </IonLabel>
                     <IonInput
-                      class="ion-text-center"
-                      color="danger"
+                    
+                      class="ion-text-center taxInputStyle"
+                      name="tax"
                       onIonChange={(e: any) => {
-                        calculateTax(e.detail.value);
+                        handleTaxInput(e.detail.value);
                       }}
                     />
-                    {tax}
+                     
+                   
+                    <span className="spanTaxStyle">{calculateTax()} %</span>
                   </IonItem>
                   <IonItem>
-                    <IonLabel>Total: </IonLabel>
+                    <IonLabel>Total: {calculateTotal()}</IonLabel>
                   </IonItem>
                 </IonList>
               </IonCol>

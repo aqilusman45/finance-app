@@ -5,3 +5,14 @@
 .inputStyle{
     width: 11%;
 }
+
+.taxInputStyle{
+    border: 2px solid black;
+    max-width: 94px !important;
+    /* text-align: center; */
+    margin-left: 30px;
+}
+.spanTaxStyle{
+    display: block;
+    margin-left: 38px;
+}
