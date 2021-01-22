@@ -20,7 +20,7 @@ const product1 = {
   };
 
 
-const ManageInvoice = () => {
+const ManageInvoice:React.FC = () => {
   const [products, setProducts] = useState<IInvoice[]>([product1, product2]);
 
     const RemoveItem = (ProductID: any) => {

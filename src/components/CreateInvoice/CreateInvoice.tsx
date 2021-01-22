@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import InvoiceView from "./../InvoiceView/InvoiceView";
 import { IInvoice } from "./../../lib/invoice";
+import { isTemplateTail } from "typescript";
 
 const product1 = {
   name: "product1",
@@ -9,6 +10,7 @@ const product1 = {
   total: 1000,
   productID: 123,
   invoideID: 100,
+  discount: 0,
 };
 const product2 = {
   name: "product2",
@@ -17,12 +19,12 @@ const product2 = {
   total: 1000,
   productID: 127,
   invoideID: 100,
+  discount: 5,
 };
 
 const CreateInvoice = () => {
-  const [products, setProducts] = useState<any[]>([product1, product2]);
-  const [subTotal, setSubTotal] = useState<any>();
-  const [tax, setTax] = useState<number | undefined>();
+  const [products, setProducts] = useState<IInvoice[]>([product1, product2]);
+  const [taxInput, setTaxInput] = useState<any>(0);
 
   const RemoveItem = (ProductID: any) => {
     const filter = products.filter(
@@ -41,6 +43,7 @@ const CreateInvoice = () => {
         total: 50,
         productID: Math.random() * 10000000,
         invoideID: 101,
+        discount: 0,
       },
     ]);
   };
@@ -59,30 +62,46 @@ const CreateInvoice = () => {
       (index) => index.productID === productID
     );
     const updatedObject = [...products];
-    updatedObject[findIndex]["discount"] = value;
+    updatedObject[findIndex].discount = value;
   };
 
   const calculateDiscount = () => {
     let totalDiscount = 0;
-    products.map((item) => {
-      totalDiscount = item.discount / item.unitPrict / 100 + totalDiscount;
-    });
+    // products.map((item) => {
+    //   console.log("discount", totalDiscount =
+    //   totalDiscount + (item.discount * item.unitPrict) / 100);
+      
+    //   return (totalDiscount =
+    //     totalDiscount + (item.discount * item.unitPrict) / 100);
+    // });
     return totalDiscount;
   };
 
   const calculateSubTotal = () => {
     let total: number = 0;
     products.map((item) => {
-      total = total + item.quantity * item.unitPrict;
+      return (total = total + item.quantity * item.unitPrict);
     });
-    setSubTotal(total);
     return total;
   };
 
-  const calculateTax = (value: number) => {
-    const totalTax = (subTotal * value) / 100;
-    setTax(totalTax);
+  const calculateTax = () => {
+    let totalTax = 0;
+    products.map((item) => {
+      return (totalTax =
+        totalTax + (item.quantity * item.unitPrict * taxInput) / 100);
+    });
+    return totalTax;
   };
+
+  const handleTaxInput = (value: number) => {
+    setTaxInput(value);
+  };
+
+  const calculateTotal = () => {
+    return calculateSubTotal() - calculateTax();
+  };
+
   return (
     <InvoiceView
       UpdateQuantity={UpdateQuantity}
@@ -91,9 +110,11 @@ const CreateInvoice = () => {
       RemoveItem={RemoveItem}
       AddProduct={AddProduct}
       calculateSubTotal={calculateSubTotal}
-      calculateTax={calculateTax}
-      tax={tax}
+      handleTaxInput={handleTaxInput}
       getDiscountValue={getDiscountValue}
+      calculateTax={calculateTax}
+      calculateDiscount={calculateDiscount}
+      calculateTotal={calculateTotal}
     />
   );
 };

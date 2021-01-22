@@ -10,6 +10,7 @@ import {
   EditEntry,
   AddEntry,
   CreateInvoice,
+  SearcInvoice
 } from "../components/index";
 import EditAttribute from "../components/EditAttribute/EditAttribute";
 import SearchEntry from "../components/SearchEntry/SearchEntry";
@@ -71,7 +72,7 @@ export const routes = [
         link: "/manage-invoices",
         text: "Manage Invoices",
         icon: "",
-        component: ExploreContainer,
+        component: SearcInvoice,
       },
     ],
   },

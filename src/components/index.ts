@@ -10,4 +10,4 @@ export {default as EditEntry} from './EditEntry/EditEntry'
 export {default as AddEntry} from './AddEntry/AddEntry'
 export {default as CreateInvoice} from './CreateInvoice/CreateInvoice'
 export {default as ManageInvoice} from './ManageInvoice/ManageInvoice'
-
+export {default as SearcInvoice} from './SearchInvoice/SearchInvoice'
