@@ -10,7 +10,8 @@ import {
   EditEntry,
   AddEntry,
   CreateInvoice,
-  SearcInvoice
+  SearcInvoice,
+  ManageInvoice
 } from "../components/index";
 import EditAttribute from "../components/EditAttribute/EditAttribute";
 import SearchEntry from "../components/SearchEntry/SearchEntry";
@@ -128,5 +129,9 @@ export const nonMenuRoutes = [
   {
     link: "/add-entry/",
     component: AddEntry,
+  },
+  {
+    link: "/edit-invoice/:id",
+    component: ManageInvoice,
   }
 ];

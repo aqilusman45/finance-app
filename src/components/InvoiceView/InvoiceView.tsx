@@ -91,7 +91,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                               className="table-row-hover"
                             >
                               <td>{index + 1}</td>
-                              <td>{product.name}</td>
+                              <td>{product.productName}</td>
                               <td className="inputStyle">
                                 <IonItem>
                                   <IonInput
@@ -148,7 +148,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                   </IonItem>
 
                   <IonItem>
-                    <IonLabel>Discount: {calculateDiscount()} %</IonLabel>
+                    <IonLabel>Discount: {calculateDiscount()} </IonLabel>
                   </IonItem>
                   <IonItem>
                     <IonLabel>Tax: </IonLabel>
