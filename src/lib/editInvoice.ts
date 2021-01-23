@@ -1,6 +1,6 @@
 export interface IEditInvoice {
 
-  name: string,
+  userName: string,
   phone: string,
   invoideID:string,
   total: number,

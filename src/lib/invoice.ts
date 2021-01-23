@@ -1,5 +1,5 @@
 export interface IInvoice {
-    name: string,
+    productName: string,
     quantity: number,
     unitPrict: number,
     total: number,

@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import InvoiceView from "./../InvoiceView/InvoiceView";
 import { IInvoice } from "./../../lib/invoice";
-import { isTemplateTail } from "typescript";
 
 const product1 = {
-  name: "product1",
+  productName: "product1",
   quantity: 100,
   unitPrict: 1000,
   total: 1000,
@@ -13,13 +12,13 @@ const product1 = {
   discount: 0,
 };
 const product2 = {
-  name: "product2",
+  productName: "product2",
   quantity: 10,
   unitPrict: 100,
   total: 1000,
   productID: 127,
   invoideID: 100,
-  discount: 5,
+  discount: 0,
 };
 
 const CreateInvoice = () => {
@@ -37,7 +36,7 @@ const CreateInvoice = () => {
     setProducts([
       ...products,
       {
-        name: "product3",
+        productName: "product3",
         quantity: 10,
         unitPrict: 10,
         total: 50,
@@ -63,17 +62,18 @@ const CreateInvoice = () => {
     );
     const updatedObject = [...products];
     updatedObject[findIndex].discount = value;
+    setProducts(updatedObject)
   };
 
   const calculateDiscount = () => {
     let totalDiscount = 0;
-    // products.map((item) => {
-    //   console.log("discount", totalDiscount =
-    //   totalDiscount + (item.discount * item.unitPrict) / 100);
+    products.map((item) => {
+      // console.log("discount", totalDiscount =
+      // totalDiscount + (item.discount * item.unitPrict) / 100);
       
-    //   return (totalDiscount =
-    //     totalDiscount + (item.discount * item.unitPrict) / 100);
-    // });
+      return (totalDiscount =
+        totalDiscount + (item.discount * item.unitPrict) / 100);
+    });
     return totalDiscount;
   };
 
@@ -99,7 +99,7 @@ const CreateInvoice = () => {
   };
 
   const calculateTotal = () => {
-    return calculateSubTotal() - calculateTax();
+    return calculateSubTotal() + calculateTax() - calculateDiscount();
   };
 
   return (
