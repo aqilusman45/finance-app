@@ -9,6 +9,7 @@ const product1 = {
   total: 1000,
   productID: 123,
   invoideID: 100,
+  discount: 0,
 };
 const product2 = {
   productName: "product2",
@@ -17,6 +18,7 @@ const product2 = {
   total: 1000,
   productID: 127,
   invoideID: 100,
+  discount: 0,
 };
 
 const ManageInvoice: React.FC = () => {
@@ -69,13 +71,10 @@ const ManageInvoice: React.FC = () => {
 
   const calculateDiscount = () => {
     let totalDiscount = 0;
-    // products.map((item) => {
-    //   console.log("discount", totalDiscount =
-    //   totalDiscount + (item.discount * item.unitPrict) / 100);
-
-    //   return (totalDiscount =
-    //     totalDiscount + (item.discount * item.unitPrict) / 100);
-    // });
+    products.map((item: any) => {
+      return (totalDiscount =
+        totalDiscount + (item.discount * item.unitPrict) / 100);
+    });
     return totalDiscount;
   };
 
