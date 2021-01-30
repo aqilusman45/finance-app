@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import InvoiceView from "./../InvoiceView/InvoiceView";
 import { IInvoice } from "./../../lib/invoice";
-
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/rootReducer";
+import { fetchAccounts } from "./../../store/reducers/accounts";
 const product1 = {
   productName: "product1",
   quantity: 100,
@@ -24,6 +26,16 @@ const product2 = {
 const CreateInvoice = () => {
   const [products, setProducts] = useState<any[]>([product1, product2]);
   const [taxInput, setTaxInput] = useState<any>(0);
+  const dispatch = useDispatch();
+
+  const { accounts } = useSelector((state: RootState) => {
+    return state.accounts;
+  });
+  useEffect(() => {
+    if (!accounts) {
+      dispatch(fetchAccounts);
+    }
+  }, [accounts]);
 
   const RemoveItem = (ProductID: any) => {
     const filter = products.filter(
@@ -62,7 +74,7 @@ const CreateInvoice = () => {
     );
     const updatedObject = [...products];
     updatedObject[findIndex].discount = value;
-    setProducts(updatedObject)
+    setProducts(updatedObject);
   };
 
   const calculateDiscount = () => {
@@ -70,7 +82,7 @@ const CreateInvoice = () => {
     products.map((item) => {
       // console.log("discount", totalDiscount =
       // totalDiscount + (item.discount * item.unitPrict) / 100);
-      
+
       return (totalDiscount =
         totalDiscount + (item.discount * item.unitPrict) / 100);
     });
