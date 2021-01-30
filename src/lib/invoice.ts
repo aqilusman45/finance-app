@@ -3,6 +3,8 @@ import { AccountTypes } from "./enum";
 
 interface IProducts  {
     product: string;
+    quantity: number;
+    unitPrice: number
 }
 
 export interface IInvoice {
