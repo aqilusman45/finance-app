@@ -22,7 +22,7 @@ const product2 = {
 };
 
 const CreateInvoice = () => {
-  const [products, setProducts] = useState<IInvoice[]>([product1, product2]);
+  const [products, setProducts] = useState<any[]>([product1, product2]);
   const [taxInput, setTaxInput] = useState<any>(0);
 
   const RemoveItem = (ProductID: any) => {

@@ -84,7 +84,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                   </thead>
                   <tbody>
                     {products.length
-                      ? products.map((product: IInvoice, index: number) => {
+                      ? products.map((product: any, index: number) => {
                           return (
                             <tr
                               key={product.productID}

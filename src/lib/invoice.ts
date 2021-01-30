@@ -1,12 +1,43 @@
-export interface IInvoice {
-    productName: string,
-    quantity: number,
-    unitPrict: number,
-    total: number,
-    productID: number,
-    invoideID: number,
-    discount?: any,
-    
+import { RxCollection, RxDocument } from "rxdb";
+import { AccountTypes } from "./enum";
 
-
+interface IProducts  {
+    product: string;
 }
+
+export interface IInvoice {
+  uid: string;
+  invoiceNumber: string;
+  date: string;
+  paymentOption: {
+    value: AccountTypes;
+    label: string;
+  };
+  detail: {
+    name: string;
+    companyName: string;
+    shippingAddress: string;
+    phone: string;
+    address: string;
+    email: string;
+  };
+  products: IProducts[];
+  discount: number;
+  taxRate: number;
+  shipping: number;
+  currentBalance: number;
+  total: number;
+  remarks: string;
+  accountRef: string;
+  createdAt: number;
+  updatedAt: number;
+  // productName: string;
+  // quantity: number;
+  // unitPrict: number;
+  // productID: number;
+  // invoideID: number
+}
+
+
+export interface IInvoiceDocument extends RxDocument<IInvoice> {}
+export interface IInvoiceCollection extends RxCollection<IInvoiceDocument> {}
