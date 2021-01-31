@@ -3,6 +3,7 @@ import InvoiceView from "./../InvoiceView/InvoiceView";
 import { IInvoice } from "./../../lib/invoice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
+import * as JsSearch from "js-search";
 import { fetchAccounts } from "./../../store/reducers/accounts";
 const product1 = {
   productName: "product1",
@@ -26,6 +27,8 @@ const product2 = {
 const CreateInvoice = () => {
   const [products, setProducts] = useState<any[]>([product1, product2]);
   const [taxInput, setTaxInput] = useState<any>(0);
+  const [userData, setUserData] = useState<any>();
+  const [currentUser, setCurrentUser] = useState()
   const dispatch = useDispatch();
 
   const { accounts } = useSelector((state: RootState) => {
@@ -35,7 +38,22 @@ const CreateInvoice = () => {
     if (!accounts) {
       dispatch(fetchAccounts);
     }
-  }, [accounts]);
+  }, [accounts, dispatch]);
+
+  // js-search code start here
+  var search = new JsSearch.Search("name");
+  search.addIndex("name");
+  search.addIndex("phone");
+  search.addIndex("email");
+  search.addIndex("accountNumber");
+  search.addDocuments(accounts!);
+
+  // js-search code end here
+  const searchUser = (input: any) => {
+    search.search(input);
+    setUserData(search.search(input));
+  };
+console.log("userData", userData);
 
   const RemoveItem = (ProductID: any) => {
     const filter = products.filter(
@@ -127,6 +145,10 @@ const CreateInvoice = () => {
       calculateTax={calculateTax}
       calculateDiscount={calculateDiscount}
       calculateTotal={calculateTotal}
+      searchUser={searchUser}
+      userData={userData}
+      currentUser={currentUser}
+      setCurrentUser={setCurrentUser}
     />
   );
 };

@@ -31,6 +31,10 @@ interface InvoiceViewProps {
   calculateDiscount?: any;
   calculateTax?: any;
   calculateTotal?: any;
+  searchUser?: any;
+  userData?: any;
+  currentUser?: any;
+  setCurrentUser?: any;
 }
 
 const InvoiceView: React.FC<InvoiceViewProps> = ({
@@ -45,6 +49,10 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   calculateTax,
   calculateDiscount,
   calculateTotal,
+  searchUser,
+  userData,
+  currentUser,
+  setCurrentUser,
 }) => {
   return (
     <IonPage>
@@ -56,7 +64,31 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                 placeholder="Search User"
                 showCancelButton="focus"
                 debounce={1000}
+                onIonChange={(e) => searchUser(e.detail.value!)}
               />
+              {userData?.length ? (
+                <IonList>
+                  {userData?.map((item: any) => {
+                    return (
+                      <IonItem key={item.uid}>
+                        <IonLabel
+                          onClick={() => {
+                            setCurrentUser(() =>
+                              userData?.find(
+                                (filter: any) => filter.uid === item.uid
+                              )
+                            );
+                          }}
+                        >
+                          {item.name}
+                        </IonLabel>
+                      </IonItem>
+                    );
+                  })}
+                </IonList>
+              ) : (
+                ""
+              )}
             </IonCol>
             <IonCol size="5">
               <IonSearchbar
@@ -111,9 +143,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                               <td>{product.unitPrict}</td>
                               <td>{product.quantity * product.unitPrict}</td>
                               <td className="inputStyle">
-                                  
                                 <IonItem>
-                                
                                   <IonInput
                                     name="discount"
                                     onIonChange={(e: any) => {
@@ -153,15 +183,13 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                   <IonItem>
                     <IonLabel>Tax: </IonLabel>
                     <IonInput
-                    
                       class="ion-text-center taxInputStyle"
                       name="tax"
                       onIonChange={(e: any) => {
                         handleTaxInput(e.detail.value);
                       }}
                     />
-                     
-                   
+
                     <span className="spanTaxStyle">{calculateTax()} %</span>
                   </IonItem>
                   <IonItem>
