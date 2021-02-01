@@ -16,3 +16,12 @@
     display: block;
     margin-left: 38px;
 }
+.filteredUser{
+    position: relative;
+    top: -3px;
+    z-index: 999;
+}
+.productsTable{
+    position: fixed;
+    top: 133px;
+}

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import InvoiceView from "./../InvoiceView/InvoiceView";
-import { IInvoice } from "./../../lib/invoice";
 import { useParams } from "react-router";
 const product1 = {
   productName: "product1",

@@ -15,7 +15,6 @@ import {
 } from "@ionic/react";
 import { closeSharp } from "ionicons/icons";
 import Table from "react-bootstrap/Table";
-import { IInvoice } from "./../../lib/invoice";
 import "./InvoicView.css";
 const keys = ["Description", "Quantity", "Unit Price", "Total", "Discount"];
 
@@ -33,8 +32,9 @@ interface InvoiceViewProps {
   calculateTotal?: any;
   searchUser?: any;
   userData?: any;
-  currentUser?: any;
   setCurrentUser?: any;
+  searchText?: any;
+  setSearchText?: any;
 }
 
 const InvoiceView: React.FC<InvoiceViewProps> = ({
@@ -51,9 +51,11 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   calculateTotal,
   searchUser,
   userData,
-  currentUser,
   setCurrentUser,
+  searchText,
+  setSearchText
 }) => {
+
   return (
     <IonPage>
       <IonContent>
@@ -61,31 +63,37 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
           <IonRow>
             <IonCol size="5">
               <IonSearchbar
+              value={searchText}
                 placeholder="Search User"
                 showCancelButton="focus"
                 debounce={1000}
-                onIonChange={(e) => searchUser(e.detail.value!)}
+                onIonChange={(e) => {searchUser(e.detail.value!)
+                  setSearchText(e.detail.value!)
+                }}
               />
               {userData?.length ? (
-                <IonList>
-                  {userData?.map((item: any) => {
-                    return (
-                      <IonItem key={item.uid}>
-                        <IonLabel
-                          onClick={() => {
-                            setCurrentUser(() =>
-                              userData?.find(
-                                (filter: any) => filter.uid === item.uid
-                              )
-                            );
-                          }}
-                        >
-                          {item.name}
-                        </IonLabel>
-                      </IonItem>
-                    );
-                  })}
-                </IonList>
+                <div className="filteredUser">
+                  <IonList>
+                    {userData?.map((item: any) => {
+                      return (
+                        <IonItem key={item.uid}>
+                          <IonLabel
+                            onClick={() => {
+                             
+                              setCurrentUser(() =>
+                                userData?.find(
+                                  (filter: any) => filter.uid === item.uid
+                                )
+                              );
+                            }}
+                          >
+                            {item.name}
+                          </IonLabel>
+                        </IonItem>
+                      );
+                    })}
+                  </IonList>
+                </div>
               ) : (
                 ""
               )}
@@ -103,7 +111,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
             <IonCol size="2"></IonCol>
           </IonRow>
           {products?.length ? (
-            <IonRow>
+            <IonRow className="productsTable">
               <IonCol size="12">
                 <Table striped hover variant="dark" responsive="sm">
                   <thead>

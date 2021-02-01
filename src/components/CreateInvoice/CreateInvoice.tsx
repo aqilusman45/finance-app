@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import InvoiceView from "./../InvoiceView/InvoiceView";
-import { IInvoice } from "./../../lib/invoice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import * as JsSearch from "js-search";
@@ -28,7 +27,8 @@ const CreateInvoice = () => {
   const [products, setProducts] = useState<any[]>([product1, product2]);
   const [taxInput, setTaxInput] = useState<any>(0);
   const [userData, setUserData] = useState<any>();
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState<any>('');
+  const [searchText, setSearchText] = useState('')
   const dispatch = useDispatch();
 
   const { accounts } = useSelector((state: RootState) => {
@@ -147,8 +147,9 @@ console.log("accounts", accounts);
       calculateTotal={calculateTotal}
       searchUser={searchUser}
       userData={userData}
-      currentUser={currentUser}
       setCurrentUser={setCurrentUser}
+      searchText={searchText}
+      setSearchText={setSearchText}
     />
   );
 };
