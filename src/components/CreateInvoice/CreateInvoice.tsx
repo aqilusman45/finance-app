@@ -101,7 +101,6 @@ console.log("accounts", accounts);
     products.map((item) => {
       // console.log("discount", totalDiscount =
       // totalDiscount + (item.discount * item.unitPrict) / 100);
-
       return (totalDiscount =
         totalDiscount + (item.discount * item.unitPrict) / 100);
     });

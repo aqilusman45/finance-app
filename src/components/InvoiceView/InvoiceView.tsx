@@ -189,7 +189,6 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                         handleTaxInput(e.detail.value);
                       }}
                     />
-
                     <span className="spanTaxStyle">{calculateTax()} %</span>
                   </IonItem>
                   <IonItem>
