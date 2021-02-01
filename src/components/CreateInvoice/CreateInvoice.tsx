@@ -28,7 +28,7 @@ const CreateInvoice = () => {
   const [products, setProducts] = useState<any[]>([product1, product2]);
   const [taxInput, setTaxInput] = useState<any>(0);
   const [userData, setUserData] = useState<any>();
-  const [currentUser, setCurrentUser] = useState()
+  const [currentUser, setCurrentUser] = useState();
   const dispatch = useDispatch();
 
   const { accounts } = useSelector((state: RootState) => {
@@ -47,13 +47,14 @@ const CreateInvoice = () => {
   search.addIndex("email");
   search.addIndex("accountNumber");
   search.addDocuments(accounts!);
+console.log("accounts", accounts);
 
   // js-search code end here
   const searchUser = (input: any) => {
     search.search(input);
     setUserData(search.search(input));
   };
-console.log("userData", userData);
+  console.log("userData", userData);
 
   const RemoveItem = (ProductID: any) => {
     const filter = products.filter(
