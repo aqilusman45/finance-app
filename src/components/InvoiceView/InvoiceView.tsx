@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   IonGrid,
   IonRow,
@@ -13,9 +13,16 @@ import {
   IonLabel,
   IonButton,
 } from "@ionic/react";
+import { useSelector, useDispatch } from "react-redux";
+
 import { closeSharp } from "ionicons/icons";
+import UserSearchModel from "./../UserSearchModel/UserSearchModel";
 import Table from "react-bootstrap/Table";
 import "./InvoicView.css";
+import { RootState } from "../../store/rootReducer";
+import { IonLoading } from "@ionic/react";
+import { fetchAccounts } from "../../store/reducers/accounts";
+
 const keys = ["Description", "Quantity", "Unit Price", "Total", "Discount"];
 
 interface InvoiceViewProps {
@@ -59,9 +66,26 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   setUserData,
   currentUser,
 }) => {
+  const [showModal, setShowModal] = useState(false);
+  const dispatch = useDispatch();
+
+  const { isLoading, accounts } = useSelector((state: RootState) => {
+    return state.accounts;
+  });
+  useEffect(() => {
+    if (!accounts) {
+      dispatch(fetchAccounts());
+    }
+  }, [accounts, dispatch]);
   return (
     <IonPage>
       <IonContent>
+        <IonLoading isOpen={isLoading} message={"Please wait..."} />
+        <UserSearchModel
+          accounts={accounts}
+          showModal={showModal}
+          setShowModal={setShowModal}
+        />
         <IonGrid>
           <IonRow>
             <IonCol size="12">
@@ -70,6 +94,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                 placeholder="Search User"
                 showCancelButton="focus"
                 debounce={1000}
+                onClick={() => setShowModal(!showModal)}
                 onIonChange={(e) => {
                   searchUser(e.detail.value!);
                   setSearchText(e.detail.value!);
@@ -104,7 +129,6 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                 ""
               )}
             </IonCol>
-   
           </IonRow>
           {products?.length ? (
             <IonRow className="productsTable">

@@ -47,7 +47,7 @@ const CreateInvoice = () => {
   search.addIndex("email");
   search.addIndex("accountNumber");
 
-  search.addDocuments(accounts!);
+  // search.addDocuments(accounts!);
 
 
   // js-search code end here
