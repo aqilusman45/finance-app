@@ -2,7 +2,7 @@
     font-size: 30px;
 }
 
-.inputStyle{
+.inputStyle1{
     width: 11%;
 }
 
@@ -24,4 +24,16 @@
 .productsTable{
     position: fixed;
     top: 133px;
+}
+.inputStyle2{
+    color: black;
+    text-align: center;
+    width: 94px;
+}
+.txtCenter{
+    text-align: center;
+}
+.inputStyle{
+    background-color: transparent;
+    border: none;
 }

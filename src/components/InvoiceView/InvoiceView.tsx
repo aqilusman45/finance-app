@@ -35,6 +35,8 @@ interface InvoiceViewProps {
   setCurrentUser?: any;
   searchText?: any;
   setSearchText?: any;
+  setUserData?: any;
+  currentUser?: any;
 }
 
 const InvoiceView: React.FC<InvoiceViewProps> = ({
@@ -53,24 +55,27 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   userData,
   setCurrentUser,
   searchText,
-  setSearchText
+  setSearchText,
+  setUserData,
+  currentUser,
 }) => {
-
   return (
     <IonPage>
       <IonContent>
         <IonGrid>
           <IonRow>
-            <IonCol size="5">
+            <IonCol size="12">
               <IonSearchbar
-              value={searchText}
+                value={searchText}
                 placeholder="Search User"
                 showCancelButton="focus"
                 debounce={1000}
-                onIonChange={(e) => {searchUser(e.detail.value!)
-                  setSearchText(e.detail.value!)
+                onIonChange={(e) => {
+                  searchUser(e.detail.value!);
+                  setSearchText(e.detail.value!);
                 }}
               />
+              {currentUser.name}
               {userData?.length ? (
                 <div className="filteredUser">
                   <IonList>
@@ -79,7 +84,8 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                         <IonItem key={item.uid}>
                           <IonLabel
                             onClick={() => {
-                             
+                              setUserData("");
+                              setSearchText();
                               setCurrentUser(() =>
                                 userData?.find(
                                   (filter: any) => filter.uid === item.uid
@@ -98,22 +104,18 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                 ""
               )}
             </IonCol>
-            <IonCol size="5">
-              <IonSearchbar
-                onClick={() => {
-                  AddProduct();
-                }}
-                placeholder="Search Product"
-                showCancelButton="focus"
-                debounce={1000}
-              />
-            </IonCol>
-            <IonCol size="2"></IonCol>
+   
           </IonRow>
           {products?.length ? (
             <IonRow className="productsTable">
               <IonCol size="12">
-                <Table striped hover variant="dark" responsive="sm">
+                <Table
+                  striped
+                  hover
+                  variant="dark"
+                  responsive="sm"
+                  className="txtCenter"
+                >
                   <thead>
                     <tr>
                       <th>#</th>
@@ -132,41 +134,37 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                             >
                               <td>{index + 1}</td>
                               <td>{product.productName}</td>
-                              <td className="inputStyle">
-                                <IonItem>
-                                  <IonInput
-                                    name="quantity"
-                                    class="ion-text-center"
-                                    onIonChange={(e: any) => {
-                                      UpdateQuantity(
-                                        e.detail.value,
-                                        product.productID
-                                      );
-                                    }}
-                                    key={product.productID}
-                                    value={product.quantity}
-                                  />
-                                </IonItem>
+                              <td className="">
+                                <input
+                                  className="inputStyle txtCenter"
+                                  name="quantity"
+                                  onChange={(e: any) => {
+                                    UpdateQuantity(
+                                      e.target.value,
+                                      product.productID
+                                    );
+                                  }}
+                                  key={product.productID}
+                                  value={product.quantity}
+                                />
                               </td>
                               <td>{product.unitPrict}</td>
                               <td>{product.quantity * product.unitPrict}</td>
-                              <td className="inputStyle">
-                                <IonItem>
-                                  <IonInput
-                                    name="discount"
-                                    onIonChange={(e: any) => {
-                                      getDiscountValue(
-                                        e.detail.value,
-                                        product.productID
-                                      );
-                                    }}
-                                    class="ion-text-center"
-                                  />
-                                </IonItem>
+                              <td className="">
+                                <input
+                                  className="inputStyle txtCenter"
+                                  name="discount"
+                                  value={product.discount}
+                                  onChange={(e: any) => {
+                                    getDiscountValue(
+                                      e.target.value,
+                                      product.productID
+                                    );
+                                  }}
+                                />
                               </td>
                               <td>
                                 <IonIcon
-                                  className="iconSize"
                                   onClick={() => RemoveItem(product.productID)}
                                   icon={closeSharp}
                                 />

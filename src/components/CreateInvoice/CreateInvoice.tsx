@@ -27,18 +27,18 @@ const CreateInvoice = () => {
   const [products, setProducts] = useState<any[]>([product1, product2]);
   const [taxInput, setTaxInput] = useState<any>(0);
   const [userData, setUserData] = useState<any>();
-  const [currentUser, setCurrentUser] = useState<any>('');
-  const [searchText, setSearchText] = useState('')
+  const [currentUser, setCurrentUser] = useState<any>({});
+  const [searchText, setSearchText] = useState("");
   const dispatch = useDispatch();
-
   const { accounts } = useSelector((state: RootState) => {
     return state.accounts;
   });
+
   useEffect(() => {
     if (!accounts) {
       dispatch(fetchAccounts);
     }
-  }, [accounts, dispatch]);
+  }, []);
 
   // js-search code start here
   var search = new JsSearch.Search("name");
@@ -46,8 +46,9 @@ const CreateInvoice = () => {
   search.addIndex("phone");
   search.addIndex("email");
   search.addIndex("accountNumber");
+
   search.addDocuments(accounts!);
-console.log("accounts", accounts);
+
 
   // js-search code end here
   const searchUser = (input: any) => {
@@ -133,24 +134,29 @@ console.log("accounts", accounts);
   };
 
   return (
-    <InvoiceView
-      UpdateQuantity={UpdateQuantity}
-      isEdit={false}
-      products={products}
-      RemoveItem={RemoveItem}
-      AddProduct={AddProduct}
-      calculateSubTotal={calculateSubTotal}
-      handleTaxInput={handleTaxInput}
-      getDiscountValue={getDiscountValue}
-      calculateTax={calculateTax}
-      calculateDiscount={calculateDiscount}
-      calculateTotal={calculateTotal}
-      searchUser={searchUser}
-      userData={userData}
-      setCurrentUser={setCurrentUser}
-      searchText={searchText}
-      setSearchText={setSearchText}
-    />
+    <>
+    
+      <InvoiceView
+        UpdateQuantity={UpdateQuantity}
+        isEdit={false}
+        products={products}
+        RemoveItem={RemoveItem}
+        AddProduct={AddProduct}
+        calculateSubTotal={calculateSubTotal}
+        handleTaxInput={handleTaxInput}
+        getDiscountValue={getDiscountValue}
+        calculateTax={calculateTax}
+        calculateDiscount={calculateDiscount}
+        calculateTotal={calculateTotal}
+        searchUser={searchUser}
+        userData={userData}
+        setCurrentUser={setCurrentUser}
+        currentUser={currentUser}
+        searchText={searchText}
+        setSearchText={setSearchText}
+        setUserData={setUserData}
+      />
+    </>
   );
 };
 
