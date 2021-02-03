@@ -14,21 +14,21 @@ import {
   IonSearchbar,
 } from "@ionic/react";
 import { useSelector, useDispatch } from "react-redux";
-
 import { closeSharp } from "ionicons/icons";
 import UserSearchModel from "./../UserSearchModel/UserSearchModel";
 import Table from "react-bootstrap/Table";
 import "./InvoicView.css";
 import { RootState } from "../../store/rootReducer";
 import { IonLoading } from "@ionic/react";
+import { fetchProducts } from "../../store/reducers/products";
 import { fetchAccounts } from "../../store/reducers/accounts";
-
+import ProductSearchModel from '../ProductSearchModel/ProductSearchModel';
 const keys = ["Description", "Quantity", "Unit Price", "Total", "Discount"];
 
 interface InvoiceViewProps {
   RemoveItem?: any;
   AddProduct?: any;
-  products?: any;
+  selectedProducts?: any;
   UpdateQuantity?: any;
   calculateSubTotal?: any;
   handleTaxInput?: any;
@@ -48,7 +48,7 @@ interface InvoiceViewProps {
 const InvoiceView: React.FC<InvoiceViewProps> = ({
   RemoveItem,
   AddProduct,
-  products,
+  selectedProducts,
   isEdit,
   UpdateQuantity,
   calculateSubTotal,
@@ -65,16 +65,27 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   currentUser,
 }) => {
   const [showModal, setShowModal] = useState(false);
+  const [showProductModal, setShowProductModal] = useState(false);
   const dispatch = useDispatch();
 
   const { isLoading, accounts } = useSelector((state: RootState) => {
     return state.accounts;
   });
+  const {products}  = useSelector((state: RootState) => {
+    return state.products;
+  });
+
+  console.log("products", products);
+  
   useEffect(() => {
     if (!accounts) {
       dispatch(fetchAccounts());
     }
-  }, [accounts, dispatch]);
+
+    if (!products) {
+      dispatch(fetchProducts());
+    }
+  }, [accounts, products, dispatch]);
   return (
     <IonPage>
       <IonContent>
@@ -86,6 +97,10 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
           userData={userData}
           setUserData={setUserData}
           setCurrentUser={setCurrentUser}
+        />
+        <ProductSearchModel
+            showProductModal={showProductModal}
+            setShowProductModal={setShowProductModal}
         />
         <IonGrid>
           <IonRow>
@@ -120,8 +135,8 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {products.length
-                      ? products.map((product: any, index: number) => {
+                    {selectedProducts.length
+                      ? selectedProducts.map((product: any, index: number) => {
                           return (
                             <tr
                               key={product.productID}
@@ -131,8 +146,9 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                               <td>
                                 <input
                                   placeholder="select Product"
-                                  className="inputStyle txtCenter"
+                                  className="inputStyle txtCenter cursor"
                                   name="productName"
+                                  onClick={() => setShowProductModal(!showProductModal)}
                                 />
                               </td>
                               <td className="">
@@ -164,19 +180,25 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                   }}
                                 />
                               </td>
-                              <td>
-                                <IonIcon
-                                  onClick={() => RemoveItem(product.productID)}
-                                  icon={closeSharp}
-                                />
-                              </td>
+                              {selectedProducts.length === 1 ? (
+                                <td></td>
+                              ) : (
+                                <td>
+                                  <IonIcon
+                                    onClick={() =>
+                                      RemoveItem(product.productID)
+                                    }
+                                    icon={closeSharp}
+                                  />
+                                </td>
+                              )}
                             </tr>
                           );
                         })
                       : ""}
                   </tbody>
                 </Table>
-                {products.length && (
+                {selectedProducts.length && (
                   <IonButton
                     onClick={() => AddProduct()}
                     className="btnPosition"

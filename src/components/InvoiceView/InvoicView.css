@@ -40,3 +40,9 @@
 .btnPosition{
     float: right;
 }
+::placeholder{
+    color: white;
+}
+.cursor{
+    cursor: pointer;
+}

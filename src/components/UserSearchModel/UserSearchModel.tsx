@@ -3,7 +3,6 @@ import {
   IonModal,
   IonContent,
   IonPage,
-  IonCard,
   IonItem,
   IonButton,
   IonLabel,
@@ -23,28 +22,26 @@ import OpenAccountView from "../OpenAccountView/OpenAccountView";
 import { IAccount } from "../../lib/accounts";
 import "./UserSearchModel.css";
 const INITIAL_STATE = {
-    name: "",
-    email: "",
-    phone: "",
-    description: "",
-    accountNumber: "",
-    accountTitle: "",
-    address: "",
-    companyName: "",
-    balance: "0",
-    accountType: {
-      value: "",
-      label: "",
-    },
-  };
-  export const accountTypeCheck = async (
-    account: any,
-  ) => {
-    if (!account) return;
-    if (!account.accountType) {
-      throw new Error(`Account type is a required field`);
-    }
-  };
+  name: "",
+  email: "",
+  phone: "",
+  description: "",
+  accountNumber: "",
+  accountTitle: "",
+  address: "",
+  companyName: "",
+  balance: "0",
+  accountType: {
+    value: "",
+    label: "",
+  },
+};
+export const accountTypeCheck = async (account: any) => {
+  if (!account) return;
+  if (!account.accountType) {
+    throw new Error(`Account type is a required field`);
+  }
+};
 interface ISearchUserModelProps {
   showModal: boolean;
   setShowModal: (show: boolean) => void;
@@ -62,38 +59,40 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
   setUserData,
   setCurrentUser,
 }) => {
-    const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
-    const [errors, setErrors] = useState<ValidationError | undefined>();
-  
-    const { push } = useHistory();
-    const dispatch = useDispatch();
-  
-    const handleChange = (e: any) => {
-      setFormFields((prevField) => ({
-        ...prevField,
-        [e.currentTarget.name]: e.currentTarget.value,
-      }));
+  const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
+  const [errors, setErrors] = useState<ValidationError | undefined>();
+
+  const { push } = useHistory();
+  const dispatch = useDispatch();
+
+  const handleChange = (e: any) => {
+    setFormFields((prevField) => ({
+      ...prevField,
+      [e.currentTarget.name]: e.currentTarget.value,
+    }));
+  };
+
+  const submit = async () => {
+    const account = {
+      ...formFields,
+      balance: parseInt(formFields.balance),
+      uid: uuidv4(),
+      enabled: true,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
-  
-    const submit = async () => {
-      const account = {
-        ...formFields,
-        balance: parseInt(formFields.balance),
-        uid: uuidv4(),
-        enabled: true,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-      };
-      try {
-        await accountSchema.validate(account)
-        await accountTypeCheck(account);
-        dispatch(addAccount(account as any, () => {
-          push('/home/manage-accounts')
-        }))
-      } catch (error) {
-        setErrors(error)
-      }
-    };
+    try {
+      await accountSchema.validate(account);
+      await accountTypeCheck(account);
+      dispatch(
+        addAccount(account as any, () => {
+          push("/home/manage-accounts");
+        })
+      );
+    } catch (error) {
+      setErrors(error);
+    }
+  };
   const [segment, setSegment] = useState<string>("search");
   // js-search code start here
   var search = new JsSearch.Search("name");
@@ -125,52 +124,51 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
               <IonLabel>Add New</IonLabel>
             </IonSegmentButton>
           </IonSegment>
-          {/* <IonCard> */}
-            {segment == "search" ? (
-              <>
-                <IonSearchbar
-                  onIonChange={(e) => searchedUser(e.detail.value!)}
-                />
-                <IonList>
-                  {userData?.length
-                    ? userData.map((account: IAccount) => {
-                        return (
-                          <IonItem
-                            key={account.uid}
-                            className="cursor"
-                            onClick={() => {
-                              setShowModal(!showModal);
-                              setCurrentUser(
-                                userData.find(
-                                  (filter: any) => filter.uid === account.uid
-                                )
-                              );
-                            }}
-                          >
-                            <IonLabel>
-                              <h2>Name: {account.name}</h2>
-                              <h3>Phone: {account.phone}</h3>
-                              <p>Email: {account.email}</p>
-                            </IonLabel>
-                          </IonItem>
-                        );
-                      })
-                    : ""}
-                </IonList>
-              </>
-            ) : (
-              <OpenAccountView
-
+          {segment === "search" ? (
+            <>
+              <IonSearchbar
+                onIonChange={(e) => searchedUser(e.detail.value!)}
+              />
+              <IonList>
+                {userData?.length
+                  ? userData.map((account: IAccount) => {
+                      return (
+                        <IonItem
+                          key={account.uid}
+                          className="cursor"
+                          onClick={() => {
+                            setShowModal(!showModal);
+                            setCurrentUser(
+                              userData.find(
+                                (filter: any) => filter.uid === account.uid
+                              )
+                            );
+                          }}
+                        >
+                          <IonLabel>
+                            <h2>Name: {account.name}</h2>
+                            <h3>Phone: {account.phone}</h3>
+                            <p>Email: {account.email}</p>
+                          </IonLabel>
+                        </IonItem>
+                      );
+                    })
+                  : ""}
+              </IonList>
+            </>
+          ) : (
+            <OpenAccountView
               errors={errors}
               handleChange={handleChange}
               setErrors={setErrors}
               state={formFields}
               submit={submit}
-              />
-            )}
-          {/* </IonCard> */}
+            />
+          )}
         </IonContent>
-        <IonButton onClick={() => setShowModal(!showModal)}>{segment == 'search' ? 'Select' : 'Cancel'}</IonButton>
+        <IonButton onClick={() => setShowModal(!showModal)}>
+          {segment === "search" ? "Select" : "Cancel"}
+        </IonButton>
       </IonPage>
     </IonModal>
   );

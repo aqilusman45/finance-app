@@ -106,7 +106,7 @@ const ManageInvoice: React.FC = () => {
     <InvoiceView
       isEdit={true}
       UpdateQuantity={UpdateQuantity}
-      products={products}
+      // products={products}
       RemoveItem={RemoveItem}
       AddProduct={AddProduct}
       calculateSubTotal={calculateSubTotal}

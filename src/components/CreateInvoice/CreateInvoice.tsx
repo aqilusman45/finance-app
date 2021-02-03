@@ -23,7 +23,8 @@ const product2 = {
 };
 
 const CreateInvoice = () => {
-  const [products, setProducts] = useState<any[]>([product1, product2]);
+  // const [products, setProducts] = useState<any[]>([product1, product2]);
+  const [selectedProducts, setSelectedProducts] = useState<any[]>([product1, product2]);
   const [taxInput, setTaxInput] = useState<any>(0);
   const [userData, setUserData] = useState<any>();
   const [currentUser, setCurrentUser] = useState<any>({});
@@ -37,20 +38,20 @@ const CreateInvoice = () => {
     if (!accounts) {
       dispatch(fetchAccounts);
     }
-  }, []);
+  }, [accounts, dispatch]);
 
  
 
   const RemoveItem = (ProductID: any) => {
-    const filter = products.filter(
+    const filter = selectedProducts.filter(
       (product: any) => product.productID !== ProductID
     );
-    setProducts(filter);
+    setSelectedProducts(filter);
   };
 
   const AddProduct = () => {
-    setProducts([
-      ...products,
+    setSelectedProducts([
+      ...selectedProducts,
       {
         productName: "product3",
         quantity: 10,
@@ -64,28 +65,26 @@ const CreateInvoice = () => {
   };
 
   const UpdateQuantity = (value: number, productID: number) => {
-    const findIndex = products.findIndex(
+    const findIndex = selectedProducts.findIndex(
       (index) => index.productID === productID
     );
-    const updatedObject = [...products];
+    const updatedObject = [...selectedProducts];
     updatedObject[findIndex].quantity = value;
-    setProducts(updatedObject);
+    setSelectedProducts(updatedObject);
   };
 
   const getDiscountValue = (value: number, productID: number) => {
-    const findIndex = products.findIndex(
+    const findIndex = selectedProducts.findIndex(
       (index) => index.productID === productID
     );
-    const updatedObject = [...products];
+    const updatedObject = [...selectedProducts];
     updatedObject[findIndex].discount = value;
-    setProducts(updatedObject);
+    setSelectedProducts(updatedObject);
   };
 
   const calculateDiscount = () => {
     let totalDiscount = 0;
-    products.map((item) => {
-      // console.log("discount", totalDiscount =
-      // totalDiscount + (item.discount * item.unitPrict) / 100);
+    selectedProducts.map((item) => {
       return (totalDiscount =
         totalDiscount + (item.discount * item.unitPrict) / 100);
     });
@@ -94,7 +93,7 @@ const CreateInvoice = () => {
 
   const calculateSubTotal = () => {
     let total: number = 0;
-    products.map((item) => {
+    selectedProducts.map((item) => {
       return (total = total + item.quantity * item.unitPrict);
     });
     return total;
@@ -102,7 +101,7 @@ const CreateInvoice = () => {
 
   const calculateTax = () => {
     let totalTax = 0;
-    products.map((item) => {
+    selectedProducts.map((item) => {
       return (totalTax =
         totalTax + (item.quantity * item.unitPrict * taxInput) / 100);
     });
@@ -123,7 +122,7 @@ const CreateInvoice = () => {
       <InvoiceView
         UpdateQuantity={UpdateQuantity}
         isEdit={false}
-        products={products}
+        selectedProducts={selectedProducts}
         RemoveItem={RemoveItem}
         AddProduct={AddProduct}
         calculateSubTotal={calculateSubTotal}
