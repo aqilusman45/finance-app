@@ -7,11 +7,11 @@ import {
   IonItem,
   IonInput,
   IonPage,
-  IonSearchbar,
   IonIcon,
   IonList,
   IonLabel,
   IonButton,
+  IonSearchbar,
 } from "@ionic/react";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -37,7 +37,6 @@ interface InvoiceViewProps {
   calculateDiscount?: any;
   calculateTax?: any;
   calculateTotal?: any;
-  searchUser?: any;
   userData?: any;
   setCurrentUser?: any;
   searchText?: any;
@@ -58,7 +57,6 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   calculateTax,
   calculateDiscount,
   calculateTotal,
-  searchUser,
   userData,
   setCurrentUser,
   searchText,
@@ -85,23 +83,24 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
           accounts={accounts}
           showModal={showModal}
           setShowModal={setShowModal}
+          userData={userData}
+          setUserData={setUserData}
+          setCurrentUser={setCurrentUser}
         />
         <IonGrid>
           <IonRow>
             <IonCol size="12">
-              <IonSearchbar
-                value={searchText}
-                placeholder="Search User"
-                showCancelButton="focus"
-                debounce={1000}
+              <IonItem className="ion-margin">
+              <IonSearchbar 
+                value={currentUser.name}
+                placeholder="Select User"
                 onClick={() => setShowModal(!showModal)}
-                onIonChange={(e) => {
-                  searchUser(e.detail.value!);
-                  setSearchText(e.detail.value!);
-                }}
+                
               />
-              {currentUser.name}
-              {userData?.length ? (
+            
+            </IonItem>
+              {/* {currentUser.name} */}
+              {/* {userData?.length ? (
                 <div className="filteredUser">
                   <IonList>
                     {userData?.map((item: any) => {
@@ -111,11 +110,11 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                             onClick={() => {
                               setUserData("");
                               setSearchText();
-                              setCurrentUser(() =>
-                                userData?.find(
-                                  (filter: any) => filter.uid === item.uid
-                                )
-                              );
+                              // setCurrentUser(() =>
+                              //   userData?.find(
+                              //     (filter: any) => filter.uid === item.uid
+                              //   )
+                              // );
                             }}
                           >
                             {item.name}
@@ -127,7 +126,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                 </div>
               ) : (
                 ""
-              )}
+              )} */}
             </IonCol>
           </IonRow>
           {products?.length ? (

@@ -40,22 +40,7 @@ const CreateInvoice = () => {
     }
   }, []);
 
-  // js-search code start here
-  var search = new JsSearch.Search("name");
-  search.addIndex("name");
-  search.addIndex("phone");
-  search.addIndex("email");
-  search.addIndex("accountNumber");
-
-  // search.addDocuments(accounts!);
-
-
-  // js-search code end here
-  const searchUser = (input: any) => {
-    search.search(input);
-    setUserData(search.search(input));
-  };
-  console.log("userData", userData);
+ 
 
   const RemoveItem = (ProductID: any) => {
     const filter = products.filter(
@@ -148,7 +133,6 @@ const CreateInvoice = () => {
         calculateTax={calculateTax}
         calculateDiscount={calculateDiscount}
         calculateTotal={calculateTotal}
-        searchUser={searchUser}
         userData={userData}
         setCurrentUser={setCurrentUser}
         currentUser={currentUser}
