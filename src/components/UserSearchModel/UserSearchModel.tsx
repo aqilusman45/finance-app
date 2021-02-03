@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   IonModal,
   IonContent,
@@ -9,11 +9,42 @@ import {
   IonLabel,
   IonSearchbar,
   IonList,
+  IonSegment,
+  IonSegmentButton,
 } from "@ionic/react";
+import { useDispatch } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
+import { useHistory } from "react-router";
+import { ValidationError } from "yup";
+import { addAccount } from "../../store/reducers/accounts";
+import { accountSchema } from "../../helpers/validations";
 import * as JsSearch from "js-search";
-
+import OpenAccountView from "../OpenAccountView/OpenAccountView";
 import { IAccount } from "../../lib/accounts";
 import "./UserSearchModel.css";
+const INITIAL_STATE = {
+    name: "",
+    email: "",
+    phone: "",
+    description: "",
+    accountNumber: "",
+    accountTitle: "",
+    address: "",
+    companyName: "",
+    balance: "0",
+    accountType: {
+      value: "",
+      label: "",
+    },
+  };
+  export const accountTypeCheck = async (
+    account: any,
+  ) => {
+    if (!account) return;
+    if (!account.accountType) {
+      throw new Error(`Account type is a required field`);
+    }
+  };
 interface ISearchUserModelProps {
   showModal: boolean;
   setShowModal: (show: boolean) => void;
@@ -31,6 +62,39 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
   setUserData,
   setCurrentUser,
 }) => {
+    const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
+    const [errors, setErrors] = useState<ValidationError | undefined>();
+  
+    const { push } = useHistory();
+    const dispatch = useDispatch();
+  
+    const handleChange = (e: any) => {
+      setFormFields((prevField) => ({
+        ...prevField,
+        [e.currentTarget.name]: e.currentTarget.value,
+      }));
+    };
+  
+    const submit = async () => {
+      const account = {
+        ...formFields,
+        balance: parseInt(formFields.balance),
+        uid: uuidv4(),
+        enabled: true,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+      try {
+        await accountSchema.validate(account)
+        await accountTypeCheck(account);
+        dispatch(addAccount(account as any, () => {
+          push('/home/manage-accounts')
+        }))
+      } catch (error) {
+        setErrors(error)
+      }
+    };
+  const [segment, setSegment] = useState<string>("search");
   // js-search code start here
   var search = new JsSearch.Search("name");
   search.addIndex("name");
@@ -41,11 +105,7 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
   search.addDocuments(accounts!);
   const searchedUser = (input: any) => {
     search.search(input);
-    console.log(" search.search(input);", search.search(input));
     setUserData(search.search(input));
-    console.log("userData", userData);
-
-    console.log("input", input);
   };
 
   // js-search code end here
@@ -53,37 +113,64 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
     <IonModal isOpen={showModal}>
       <IonPage>
         <IonContent>
-          <IonCard>
-            <IonSearchbar onIonChange={(e) => searchedUser(e.detail.value!)} />
-            <IonList>
-              {userData?.length
-                ? userData.map((account: IAccount) => {
-                    return (
-                      <IonItem
-                        key={account.uid}
-                        className="cursor"
-                        onClick={() => {
-                          setShowModal(!showModal);
-                          setCurrentUser(
-                            userData.find(
-                              (filter: any) => filter.uid === account.uid
-                            )
-                          );
-                        }}
-                      >
-                        <IonLabel>
-                          <h2>Name: {account.name}</h2>
-                          <h3>Phone: {account.phone}</h3>
-                          <p>Email: {account.email}</p>
-                        </IonLabel>
-                      </IonItem>
-                    );
-                  })
-                : ""}
-            </IonList>
-          </IonCard>
+          <IonSegment
+            color="tertiary"
+            value={segment}
+            onIonChange={(e) => setSegment(e.detail.value!)}
+          >
+            <IonSegmentButton value="search">
+              <IonLabel>Search</IonLabel>
+            </IonSegmentButton>
+            <IonSegmentButton value="addNew">
+              <IonLabel>Add New</IonLabel>
+            </IonSegmentButton>
+          </IonSegment>
+          {/* <IonCard> */}
+            {segment == "search" ? (
+              <>
+                <IonSearchbar
+                  onIonChange={(e) => searchedUser(e.detail.value!)}
+                />
+                <IonList>
+                  {userData?.length
+                    ? userData.map((account: IAccount) => {
+                        return (
+                          <IonItem
+                            key={account.uid}
+                            className="cursor"
+                            onClick={() => {
+                              setShowModal(!showModal);
+                              setCurrentUser(
+                                userData.find(
+                                  (filter: any) => filter.uid === account.uid
+                                )
+                              );
+                            }}
+                          >
+                            <IonLabel>
+                              <h2>Name: {account.name}</h2>
+                              <h3>Phone: {account.phone}</h3>
+                              <p>Email: {account.email}</p>
+                            </IonLabel>
+                          </IonItem>
+                        );
+                      })
+                    : ""}
+                </IonList>
+              </>
+            ) : (
+              <OpenAccountView
+
+              errors={errors}
+              handleChange={handleChange}
+              setErrors={setErrors}
+              state={formFields}
+              submit={submit}
+              />
+            )}
+          {/* </IonCard> */}
         </IonContent>
-        <IonButton onClick={() => setShowModal(!showModal)}>Close</IonButton>
+        <IonButton onClick={() => setShowModal(!showModal)}>{segment == 'search' ? 'Select' : 'Cancel'}</IonButton>
       </IonPage>
     </IonModal>
   );
