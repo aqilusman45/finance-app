@@ -4,27 +4,50 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { fetchAccounts } from "./../../store/reducers/accounts";
 const product1 = {
-  productName: "product1",
-  quantity: 100,
-  unitPrict: 1000,
-  total: 1000,
-  productID: 123,
-  invoideID: 100,
-  discount: 0,
-};
-const product2 = {
-  productName: "product2",
-  quantity: 10,
-  unitPrict: 100,
-  total: 1000,
-  productID: 127,
-  invoideID: 100,
+
+  productName: "",
+  quantity: 0,
+  unitPrict: 0,
+  total: 0,
+  productID: '',
+  invoideID: '',
   discount: 0,
 };
 
+const product2 = {
+  uid: '',
+  invoiceNumber: '',
+  date: '',
+  paymentOption: {
+    value: '',
+    label: '',
+  },
+  detail: {
+    name: '',
+    companyName: 'string',
+    shippingAddress: '',
+    phone: '',
+    address: '',
+    email: '',
+
+  },
+  products: [{name: '', quantity: 0, unitPrice: 0, discount: 0}],
+  totalDiscount: 0,
+  subTotal: 0,
+  taxRate: 0,
+  shipping: 0,
+  currentBalance: 0,
+  total: 0,
+  remarks: '',
+  accountRef: '',
+  createdAt: 0,
+  updatedAt: 0,
+};
+
+
 const CreateInvoice = () => {
   // const [products, setProducts] = useState<any[]>([product1, product2]);
-  const [selectedProducts, setSelectedProducts] = useState<any[]>([product1, product2]);
+  const [selectedProducts, setSelectedProducts] = useState<any[]>([product1]);
   const [taxInput, setTaxInput] = useState<any>(0);
   const [userData, setUserData] = useState<any>();
   const [currentUser, setCurrentUser] = useState<any>({});
@@ -53,16 +76,18 @@ const CreateInvoice = () => {
     setSelectedProducts([
       ...selectedProducts,
       {
-        productName: "product3",
-        quantity: 10,
-        unitPrict: 10,
-        total: 50,
-        productID: Math.random() * 10000000,
-        invoideID: 101,
+        productName: "",
+        quantity: 0,
+        unitPrict: 0,
+        total: 0,
+        productID: '',
+        invoideID: '',
         discount: 0,
       },
     ]);
   };
+console.log("selectedProducts", selectedProducts);
+
 
   const UpdateQuantity = (value: number, productID: number) => {
     const findIndex = selectedProducts.findIndex(
@@ -137,6 +162,7 @@ const CreateInvoice = () => {
         searchText={searchText}
         setSearchText={setSearchText}
         setUserData={setUserData}
+        setSelectedProducts={setSelectedProducts}
       />
     </>
   );

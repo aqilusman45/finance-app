@@ -22,8 +22,9 @@ import { RootState } from "../../store/rootReducer";
 import { IonLoading } from "@ionic/react";
 import { fetchProducts } from "../../store/reducers/products";
 import { fetchAccounts } from "../../store/reducers/accounts";
-import ProductSearchModel from '../ProductSearchModel/ProductSearchModel';
+import ProductSearchModel from "../ProductSearchModel/ProductSearchModel";
 const keys = ["Description", "Quantity", "Unit Price", "Total", "Discount"];
+const invoideDetail = ["Sub Total", "Discount", "Tax", "Total"];
 
 interface InvoiceViewProps {
   RemoveItem?: any;
@@ -43,6 +44,7 @@ interface InvoiceViewProps {
   setSearchText?: any;
   setUserData?: any;
   currentUser?: any;
+  setSelectedProducts?: any
 }
 
 const InvoiceView: React.FC<InvoiceViewProps> = ({
@@ -63,6 +65,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   setSearchText,
   setUserData,
   currentUser,
+  setSelectedProducts,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
@@ -71,12 +74,10 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   const { isLoading, accounts } = useSelector((state: RootState) => {
     return state.accounts;
   });
-  const {products}  = useSelector((state: RootState) => {
+  const { products } = useSelector((state: RootState) => {
     return state.products;
   });
 
-  console.log("products", products);
-  
   useEffect(() => {
     if (!accounts) {
       dispatch(fetchAccounts());
@@ -99,25 +100,26 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
           setCurrentUser={setCurrentUser}
         />
         <ProductSearchModel
-            showProductModal={showProductModal}
-            setShowProductModal={setShowProductModal}
+          showProductModal={showProductModal}
+          setShowProductModal={setShowProductModal}
+          products={products}
+          setSelectedProducts={setSelectedProducts}
+          selectedProducts={selectedProducts}
         />
-        <IonGrid>
+        <IonGrid className="ion-margin">
           <IonRow>
             <IonCol size="12">
-              <IonItem className="ion-margin">
-                <IonSearchbar
-                  showCancelButton="focus"
-                  debounce={1000}
-                  value={currentUser.name}
-                  placeholder="Select User"
-                  onClick={() => setShowModal(!showModal)}
-                />
-              </IonItem>
+              <IonSearchbar
+                showCancelButton="focus"
+                debounce={1000}
+                value={currentUser.name}
+                placeholder="Select User"
+                onClick={() => setShowModal(!showModal)}
+              />
             </IonCol>
           </IonRow>
           {products?.length ? (
-            <IonRow className="productsTable">
+            <IonRow>
               <IonCol size="12">
                 <Table
                   striped
@@ -135,11 +137,11 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedProducts.length
+                    {selectedProducts?.length
                       ? selectedProducts.map((product: any, index: number) => {
                           return (
                             <tr
-                              key={product.productID}
+                              key={index}
                               className="table-row-hover"
                             >
                               <td>{index + 1}</td>
@@ -148,7 +150,9 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                   placeholder="select Product"
                                   className="inputStyle txtCenter cursor"
                                   name="productName"
-                                  onClick={() => setShowProductModal(!showProductModal)}
+                                  onClick={() =>
+                                    setShowProductModal(!showProductModal)
+                                  }
                                 />
                               </td>
                               <td className="">
@@ -207,7 +211,45 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                   </IonButton>
                 )}
               </IonCol>
-              <IonCol size="8"></IonCol>
+
+              <IonCol size="12">
+                <Table
+                  striped
+                  hover
+                  variant="dark"
+                  responsive="sm"
+                  className="txtCenter"
+                >
+                  <thead>
+                    <tr>
+                      {invoideDetail.map((key, index) => {
+                        return <th key={index}>{key.toLocaleUpperCase()}</th>;
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>SubTotal: {calculateSubTotal()}</td>
+                      <td>Discount: {calculateDiscount()} </td>
+                      <td>
+                        {" "}
+                        <input
+                          placeholder="Enter Tax"
+                          className="inputStyle txtCenter cursor"
+                          name="tax"
+                          
+                          onChange={(e: any) => {
+                            handleTaxInput(e.target.value);
+                          }}
+                        />
+                        {/* <span className="spanTaxStyle">{calculateTax()}</span> */}
+                      </td>
+                      <td>Total: {calculateTotal()}</td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </IonCol>
+              {/* <IonCol size="8"></IonCol>
               <IonCol size="4">
                 <IonList lines="inset">
                   <IonItem>
@@ -232,7 +274,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                     <IonLabel>Total: {calculateTotal()}</IonLabel>
                   </IonItem>
                 </IonList>
-              </IonCol>
+              </IonCol> */}
               <IonCol size="12">
                 <IonButton color="primary">
                   {isEdit ? "Update" : "Submit"}
