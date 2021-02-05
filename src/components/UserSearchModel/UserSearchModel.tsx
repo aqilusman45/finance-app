@@ -171,7 +171,7 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
           )}
         </IonContent>
         <IonButton onClick={() => setShowModal(!showModal)}>
-          {segment === "search" ? "Select" : "Cancel"}
+          Cancel
         </IonButton>
       </IonPage>
     </IonModal>

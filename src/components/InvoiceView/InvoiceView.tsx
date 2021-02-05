@@ -172,7 +172,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                   />
                                 </td>
                                 <td>{product.unitPrict}</td>
-                                
+
                                 <td className="">
                                   <input
                                     className="inputStyle txtCenter"
@@ -203,10 +203,51 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                         )
                       : ""}
                     <tr>
+                      {/* {selectedProducts.products.length && (
+                          <button
+                            onClick={() => AddProduct()}
+                            className="btnStyle"
+                          >
+                            Add New
+                          </button>
+                        )} */}
                       <td></td>
                       <td></td>
-                      <td>SubTotal: 1000</td>
-                     
+                      <td
+                        className="txtLeft cursor"
+                        onClick={() => AddProduct()}
+                      >
+                        Add New
+                      </td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>SubTotal</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td> 1000</td>
+                    </tr>
+                    <tr>
+                      <td>Discount </td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>10% </td>
+                    </tr>
+                    <tr>
+                      <td>Total</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td> 1000 </td>
+                    </tr>
+                    <tr>
                       <td>
                         <input
                           placeholder="Enter Tax"
@@ -217,16 +258,9 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                           }}
                         />
                       </td>
-                      <td>Discount: 10%  </td>
-                      <td>Total: 1000</td>
                     </tr>
                   </tbody>
                 </Table>
-                {selectedProducts.products.length && (
-                  <IonButton onClick={() => AddProduct()} className="btnStyle">
-                    Add New
-                  </IonButton>
-                )}
               </IonCol>
 
               <IonCol size="12">
