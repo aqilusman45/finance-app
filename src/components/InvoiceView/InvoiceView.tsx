@@ -20,10 +20,10 @@ import Table from "react-bootstrap/Table";
 import "./InvoicView.css";
 import { RootState } from "../../store/rootReducer";
 import { IonLoading } from "@ionic/react";
-import { fetchProducts } from "../../store/reducers/products";
+import { addProduct, fetchProducts } from "../../store/reducers/products";
 import { fetchAccounts } from "../../store/reducers/accounts";
 import ProductSearchModel from "../ProductSearchModel/ProductSearchModel";
-const keys = ["Description", "Quantity", "Unit Price", "Total", "Discount"];
+const keys = ["Description", "Quantity", "Unit Price", "Discount", "Total"];
 const invoideDetail = ["Sub Total", "Discount", "Tax", "Total"];
 
 interface InvoiceViewProps {
@@ -44,7 +44,8 @@ interface InvoiceViewProps {
   setSearchText?: any;
   setUserData?: any;
   currentUser?: any;
-  setSelectedProducts?: any
+  setSelectedProducts?: any;
+  updateUserDetail?: () => void;
 }
 
 const InvoiceView: React.FC<InvoiceViewProps> = ({
@@ -66,6 +67,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   setUserData,
   currentUser,
   setSelectedProducts,
+  updateUserDetail,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
@@ -98,6 +100,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
           userData={userData}
           setUserData={setUserData}
           setCurrentUser={setCurrentUser}
+          updateUserDetail={updateUserDetail}
         />
         <ProductSearchModel
           showProductModal={showProductModal}
@@ -118,7 +121,8 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
               />
             </IonCol>
           </IonRow>
-          {products?.length ? (
+          {/* {selectedProducts.products?.length ? 'hello' : 'world'} */}
+          {selectedProducts.products?.length ? (
             <IonRow>
               <IonCol size="12">
                 <Table
@@ -137,144 +141,94 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedProducts?.length
-                      ? selectedProducts.map((product: any, index: number) => {
-                          return (
-                            <tr
-                              key={index}
-                              className="table-row-hover"
-                            >
-                              <td>{index + 1}</td>
-                              <td>
-                                <input
-                                  placeholder="select Product"
-                                  className="inputStyle txtCenter cursor"
-                                  name="productName"
-                                  onClick={() =>
-                                    setShowProductModal(!showProductModal)
-                                  }
-                                />
-                              </td>
-                              <td className="">
-                                <input
-                                  className="inputStyle txtCenter"
-                                  name="quantity"
-                                  onChange={(e: any) => {
-                                    UpdateQuantity(
-                                      e.target.value,
-                                      product.productID
-                                    );
-                                  }}
-                                  key={product.productID}
-                                  value={product.quantity}
-                                />
-                              </td>
-                              <td>{product.unitPrict}</td>
-                              <td>{product.quantity * product.unitPrict}</td>
-                              <td className="">
-                                <input
-                                  className="inputStyle txtCenter"
-                                  name="discount"
-                                  value={product.discount}
-                                  onChange={(e: any) => {
-                                    getDiscountValue(
-                                      e.target.value,
-                                      product.productID
-                                    );
-                                  }}
-                                />
-                              </td>
-                              {selectedProducts.length === 1 ? (
-                                <td></td>
-                              ) : (
+                    {selectedProducts.products?.length
+                      ? selectedProducts.products.map(
+                          (product: any, index: number) => {
+                            return (
+                              <tr key={index} className="table-row-hover">
+                                <td>{index + 1}</td>
                                 <td>
-                                  <IonIcon
+                                  <input
+                                    placeholder="select Product"
+                                    className="inputStyle txtCenter cursor"
+                                    name="productName"
                                     onClick={() =>
-                                      RemoveItem(product.productID)
+                                      setShowProductModal(!showProductModal)
                                     }
-                                    icon={closeSharp}
                                   />
                                 </td>
-                              )}
-                            </tr>
-                          );
-                        })
+                                <td className="">
+                                  <input
+                                    className="inputStyle txtCenter"
+                                    name="quantity"
+                                    onChange={(e: any) => {
+                                      UpdateQuantity(
+                                        e.target.value,
+                                        product.id
+                                      );
+                                    }}
+                                    key={product.id}
+                                    value={product.quantity}
+                                  />
+                                </td>
+                                <td>{product.unitPrict}</td>
+                                
+                                <td className="">
+                                  <input
+                                    className="inputStyle txtCenter"
+                                    name="discount"
+                                    value={product.discount}
+                                    onChange={(e: any) => {
+                                      getDiscountValue(
+                                        e.target.value,
+                                        product.productID
+                                      );
+                                    }}
+                                  />
+                                </td>
+                                <td>{product.quantity * product.unitPrice}</td>
+                                {selectedProducts.products.length === 1 ? (
+                                  <td></td>
+                                ) : (
+                                  <td>
+                                    <IonIcon
+                                      onClick={() => RemoveItem(product.id)}
+                                      icon={closeSharp}
+                                    />
+                                  </td>
+                                )}
+                              </tr>
+                            );
+                          }
+                        )
                       : ""}
-                  </tbody>
-                </Table>
-                {selectedProducts.length && (
-                  <IonButton
-                    onClick={() => AddProduct()}
-                    className="btnPosition"
-                  >
-                    +
-                  </IonButton>
-                )}
-              </IonCol>
-
-              <IonCol size="12">
-                <Table
-                  striped
-                  hover
-                  variant="dark"
-                  responsive="sm"
-                  className="txtCenter"
-                >
-                  <thead>
                     <tr>
-                      {invoideDetail.map((key, index) => {
-                        return <th key={index}>{key.toLocaleUpperCase()}</th>;
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>SubTotal: {calculateSubTotal()}</td>
-                      <td>Discount: {calculateDiscount()} </td>
+                      <td></td>
+                      <td></td>
+                      <td>SubTotal: 1000</td>
+                     
                       <td>
-                        {" "}
                         <input
                           placeholder="Enter Tax"
                           className="inputStyle txtCenter cursor"
                           name="tax"
-                          
                           onChange={(e: any) => {
                             handleTaxInput(e.target.value);
                           }}
                         />
-                        {/* <span className="spanTaxStyle">{calculateTax()}</span> */}
                       </td>
-                      <td>Total: {calculateTotal()}</td>
+                      <td>Discount: 10%  </td>
+                      <td>Total: 1000</td>
                     </tr>
                   </tbody>
                 </Table>
+                {selectedProducts.products.length && (
+                  <IonButton onClick={() => AddProduct()} className="btnStyle">
+                    Add New
+                  </IonButton>
+                )}
               </IonCol>
-              {/* <IonCol size="8"></IonCol>
-              <IonCol size="4">
-                <IonList lines="inset">
-                  <IonItem>
-                    <IonLabel>SubTotal: {calculateSubTotal()}</IonLabel>
-                  </IonItem>
 
-                  <IonItem>
-                    <IonLabel>Discount: {calculateDiscount()} </IonLabel>
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel>Tax: </IonLabel>
-                    <IonInput
-                      class="ion-text-center taxInputStyle"
-                      name="tax"
-                      onIonChange={(e: any) => {
-                        handleTaxInput(e.detail.value);
-                      }}
-                    />
-                    <span className="spanTaxStyle">{calculateTax()} %</span>
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel>Total: {calculateTotal()}</IonLabel>
-                  </IonItem>
-                </IonList>
-              </IonCol> */}
               <IonCol size="12">
                 <IonButton color="primary">
                   {isEdit ? "Update" : "Submit"}

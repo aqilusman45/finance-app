@@ -49,6 +49,8 @@ interface ISearchUserModelProps {
   userData: any;
   setUserData: any;
   setCurrentUser: any;
+  updateUserDetail?:any;
+
 }
 
 const UserSearchModel: React.FC<ISearchUserModelProps> = ({
@@ -58,6 +60,7 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
   userData,
   setUserData,
   setCurrentUser,
+  updateUserDetail
 }) => {
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
   const [errors, setErrors] = useState<ValidationError | undefined>();
@@ -143,6 +146,7 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
                                 (filter: any) => filter.uid === account.uid
                               )
                             );
+                            updateUserDetail()
                           }}
                         >
                           <IonLabel>

@@ -37,12 +37,13 @@
     background-color: transparent;
     border: none;
 }
-.btnPosition{
-    float: right;
-}
+
 ::placeholder{
     color: white;
 }
 .cursor{
     cursor: pointer;
+}
+.btnStyle{
+    width: 100%;
 }

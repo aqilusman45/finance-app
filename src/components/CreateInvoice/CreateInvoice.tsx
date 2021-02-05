@@ -3,51 +3,49 @@ import InvoiceView from "./../InvoiceView/InvoiceView";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { fetchAccounts } from "./../../store/reducers/accounts";
-const product1 = {
+import products from "../../store/reducers/products";
 
-  productName: "",
-  quantity: 0,
-  unitPrict: 0,
-  total: 0,
-  productID: '',
-  invoideID: '',
-  discount: 0,
-};
 
 const product2 = {
-  uid: '',
-  invoiceNumber: '',
-  date: '',
+  uid: "",
+  invoiceNumber: "",
+  date: "",
   paymentOption: {
-    value: '',
-    label: '',
+    value: "",
+    label: "",
   },
   detail: {
-    name: '',
-    companyName: 'string',
-    shippingAddress: '',
-    phone: '',
-    address: '',
-    email: '',
-
+    name: "",
+    companyName: "",
+    shippingAddress: "",
+    phone: "",
+    address: "",
+    email: "",
   },
-  products: [{name: '', quantity: 0, unitPrice: 0, discount: 0}],
+  products: [
+    {
+      name: "",
+      quantity: 0,
+      unitPrice: 0,
+      discount: 0,
+      id: 123,
+    },
+  ],
   totalDiscount: 0,
   subTotal: 0,
   taxRate: 0,
   shipping: 0,
   currentBalance: 0,
   total: 0,
-  remarks: '',
-  accountRef: '',
+  remarks: "",
+  accountRef: "",
   createdAt: 0,
   updatedAt: 0,
 };
 
-
 const CreateInvoice = () => {
   // const [products, setProducts] = useState<any[]>([product1, product2]);
-  const [selectedProducts, setSelectedProducts] = useState<any[]>([product1]);
+  const [selectedProducts, setSelectedProducts] = useState<any>(product2);
   const [taxInput, setTaxInput] = useState<any>(0);
   const [userData, setUserData] = useState<any>();
   const [currentUser, setCurrentUser] = useState<any>({});
@@ -63,44 +61,70 @@ const CreateInvoice = () => {
     }
   }, [accounts, dispatch]);
 
- 
-
+  const updateUserDetail = () => {
+    console.log("currentUser", currentUser);
+    console.log("selectedProducts", selectedProducts);
+    setSelectedProducts({
+      ...selectedProducts,
+      uid: currentUser.uid,
+      currentBalance: currentUser.balance,
+      detail: {
+        ...selectedProducts.detail,
+        name: currentUser.name,
+        email: currentUser.email,
+        phone: currentUser.phone,
+        address: currentUser.address,
+        companyName: currentUser.companyName,
+      },
+    });
+    console.log("selectedProducts", selectedProducts);
+  };
   const RemoveItem = (ProductID: any) => {
-    const filter = selectedProducts.filter(
-      (product: any) => product.productID !== ProductID
+    console.log("ProductID", ProductID);
+
+    const filter = selectedProducts.products.filter(
+      (item: any) => item.id !== ProductID
     );
-    setSelectedProducts(filter);
+    console.log("filter", filter);
+
+    setSelectedProducts({
+      ...selectedProducts,
+      products: filter,
+    });
   };
 
   const AddProduct = () => {
-    setSelectedProducts([
+    setSelectedProducts({
       ...selectedProducts,
-      {
-        productName: "",
+      products: [...selectedProducts.products, {
+        name: "",
         quantity: 0,
-        unitPrict: 0,
-        total: 0,
-        productID: '',
-        invoideID: '',
+        unitPrice: 0,
         discount: 0,
-      },
-    ]);
+        id: Math.floor(Math.random() * 10000000000),
+      }],
+    });
   };
-console.log("selectedProducts", selectedProducts);
-
+  console.log("selectedProducts", selectedProducts.products);
 
   const UpdateQuantity = (value: number, productID: number) => {
-    const findIndex = selectedProducts.findIndex(
-      (index) => index.productID === productID
+    const findIndex = selectedProducts.products.findIndex(
+      (index: any) => index.id === productID
     );
-    const updatedObject = [...selectedProducts];
-    updatedObject[findIndex].quantity = value;
-    setSelectedProducts(updatedObject);
+    
+    
+    // const updatedObject = [...selectedProducts];
+    // updatedObject[findIndex].quantity = value;
+    // setSelectedProducts(updatedObject);
+    setSelectedProducts({
+      ...selectedProducts,
+      products: [...selectedProducts.products, selectedProducts.products[findIndex].quantity=value]
+    })
   };
 
   const getDiscountValue = (value: number, productID: number) => {
     const findIndex = selectedProducts.findIndex(
-      (index) => index.productID === productID
+      (index: any) => index.productID === productID
     );
     const updatedObject = [...selectedProducts];
     updatedObject[findIndex].discount = value;
@@ -109,7 +133,7 @@ console.log("selectedProducts", selectedProducts);
 
   const calculateDiscount = () => {
     let totalDiscount = 0;
-    selectedProducts.map((item) => {
+    selectedProducts.products.map((item: any) => {
       return (totalDiscount =
         totalDiscount + (item.discount * item.unitPrict) / 100);
     });
@@ -118,7 +142,7 @@ console.log("selectedProducts", selectedProducts);
 
   const calculateSubTotal = () => {
     let total: number = 0;
-    selectedProducts.map((item) => {
+    selectedProducts.products.map((item: any) => {
       return (total = total + item.quantity * item.unitPrict);
     });
     return total;
@@ -126,7 +150,7 @@ console.log("selectedProducts", selectedProducts);
 
   const calculateTax = () => {
     let totalTax = 0;
-    selectedProducts.map((item) => {
+    selectedProducts.products.map((item: any) => {
       return (totalTax =
         totalTax + (item.quantity * item.unitPrict * taxInput) / 100);
     });
@@ -143,7 +167,6 @@ console.log("selectedProducts", selectedProducts);
 
   return (
     <>
-    
       <InvoiceView
         UpdateQuantity={UpdateQuantity}
         isEdit={false}
@@ -163,6 +186,7 @@ console.log("selectedProducts", selectedProducts);
         setSearchText={setSearchText}
         setUserData={setUserData}
         setSelectedProducts={setSelectedProducts}
+        updateUserDetail={updateUserDetail}
       />
     </>
   );
