@@ -2,9 +2,12 @@ import { RxCollection, RxDocument } from "rxdb";
 import { AccountTypes } from "./enum";
 
 interface IProducts  {
-    product: string;
+    name: string;
     quantity: number;
-    unitPrice: number
+    unitPrice: number;
+    discount: number;
+    id: string;
+
 }
 
 export interface IInvoice {
@@ -24,7 +27,8 @@ export interface IInvoice {
     email: string;
   };
   products: IProducts[];
-  discount: number;
+  totalDiscount: number;
+  subTotal: number;
   taxRate: number;
   shipping: number;
   currentBalance: number;
@@ -33,11 +37,6 @@ export interface IInvoice {
   accountRef: string;
   createdAt: number;
   updatedAt: number;
-  // productName: string;
-  // quantity: number;
-  // unitPrict: number;
-  // productID: number;
-  // invoideID: number
 }
 
 

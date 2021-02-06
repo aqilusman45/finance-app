@@ -4,12 +4,8 @@ import {
   IonRow,
   IonCol,
   IonContent,
-  IonItem,
-  IonInput,
   IonPage,
   IonIcon,
-  IonList,
-  IonLabel,
   IonButton,
   IonSearchbar,
 } from "@ionic/react";
@@ -129,7 +125,6 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
               />
             </IonCol>
           </IonRow>
-          {/* {selectedProducts.products?.length ? 'hello' : 'world'} */}
           {createInvoice.products?.length ? (
             <IonRow>
               <IonCol size="12">
@@ -165,8 +160,8 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                       setShowProductModal(!showProductModal);
                                       getProductId(product.id);
                                     }}
+                                    value={product.name}
                                   />
-                                  {product.name}
                                 </td>
                                 <td className="">
                                   <input
@@ -182,7 +177,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                     value={product.quantity}
                                   />
                                 </td>
-                                <td>{product.unitPrict}</td>
+                                <td>{product.unitPrice}</td>
 
                                 <td className="">
                                   <input

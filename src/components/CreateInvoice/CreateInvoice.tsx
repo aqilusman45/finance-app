@@ -3,9 +3,7 @@ import InvoiceView from "./../InvoiceView/InvoiceView";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { fetchAccounts } from "./../../store/reducers/accounts";
-import products from "../../store/reducers/products";
-
-const product2 = {
+const INITIAL_STATE = {
   uid: "",
   invoiceNumber: "",
   date: "",
@@ -24,10 +22,10 @@ const product2 = {
   products: [
     {
       name: "",
-      quantity: 0,
-      unitPrice: 0,
+      quantity: 1,
+      unitPrice: 10,
       discount: 0,
-      id: Math.floor(Math.random() * 10000000000).toString(),
+      id: Math.floor(Math.random() * 10000000000),
     },
   ],
   totalDiscount: 0,
@@ -43,14 +41,13 @@ const product2 = {
 };
 
 const CreateInvoice = () => {
-  // const [products, setProducts] = useState<any[]>([product1, product2]);
   const [selectedProducts, setSelectedProducts] = useState<any>({});
-  const [createInvoice, setCreateInvoice] = useState<any>(product2);
+  const [createInvoice, setCreateInvoice] = useState<any>(INITIAL_STATE);
   const [taxInput, setTaxInput] = useState<any>(0);
   const [userData, setUserData] = useState<any>();
   const [currentUser, setCurrentUser] = useState<any>({});
   const [searchText, setSearchText] = useState("");
-  const [productID, setProductID] = useState<number>();
+  const [productID, setProductID] = useState<any>();
   const dispatch = useDispatch();
   const { accounts } = useSelector((state: RootState) => {
     return state.accounts;
@@ -77,16 +74,19 @@ const CreateInvoice = () => {
       },
     });
   };
+
   const getProductId = (id: any) => {
     setProductID(id);
+    console.log("id", id);
   };
   const updateProductDetail = () => {
     const findIndex = createInvoice.products.findIndex(
       (index: any) => index.id === productID
     );
+
     let updatedObject = [...createInvoice.products];
-    // updatedObject[findIndex].id = selectedProducts.uid;
     updatedObject[findIndex].name = selectedProducts.name;
+    updatedObject[findIndex].unitPrice = selectedProducts.price;
     setCreateInvoice({
       ...createInvoice,
       products: updatedObject,
@@ -111,28 +111,38 @@ const CreateInvoice = () => {
         ...createInvoice.products,
         {
           name: "",
-          quantity: 0,
+          quantity: 1,
           unitPrice: 0,
           discount: 0,
-          id: Math.floor(Math.random() * 10000000000).toString(),
+          id: Math.floor(Math.random() * 10000000000),
         },
       ],
     });
   };
 
-  const UpdateQuantity = (value: number, productID: number) => {
+  const UpdateQuantity = (value: any, productID: number) => {
     const findIndex = createInvoice.products.findIndex(
       (index: any) => index.id === productID
     );
+      console.log("type", typeof(value));
+      
+    const updatedObject = [...createInvoice.products];
+    if(value<1){
+    updatedObject[findIndex].quantity = 1;
 
-    // const updatedObject = [...selectedProducts];
-    // updatedObject[findIndex].quantity = value;
-    // setSelectedProducts(updatedObject);
-    // setCreateInvoice({
-    //   ...createInvoice,
-    //   products: [...createInvoice.products, createInvoice.products[findIndex].quantity=value]
-    // })
+    }
+    else{
+
+      updatedObject[findIndex].quantity = Number(value);
+    }
+    setCreateInvoice({
+      ...createInvoice,
+      products: updatedObject
+    })
   };
+  console.log("createinovice", createInvoice);
+  console.log("selected", selectedProducts);
+  
 
   const getDiscountValue = (value: number, productID: number) => {
     const findIndex = createInvoice.findIndex(
@@ -157,6 +167,8 @@ const CreateInvoice = () => {
     createInvoice.products.map((item: any) => {
       return (total = total + item.quantity * item.unitPrict);
     });
+    console.log("type subtotal",typeof(total));
+    
     return total;
   };
 

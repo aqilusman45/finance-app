@@ -72,20 +72,20 @@ const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
               <IonList>
                 {filteredProducts?.length
                   ? filteredProducts.map((product: any, index: number) => {
-                    console.log("product===========>", product);
                     
                       return (
                         <IonItem
                           key={index}
                           className="cursor"
                           onClick={() => {
-                            setFilteredProducts(!showProductModal);
                             setSelectedProducts(
                               filteredProducts.find(
                                 (filter: any) => filter.uid === product.uid
                               ),
                             );
                             updateProductDetail()
+                            setShowProductModal(!showProductModal)
+
                           }}
                         >
                           <IonLabel>
