@@ -46,7 +46,6 @@ const CreateInvoice = () => {
   const [taxInput, setTaxInput] = useState<any>(0);
   const [userData, setUserData] = useState<any>();
   const [currentUser, setCurrentUser] = useState<any>({});
-  const [searchText, setSearchText] = useState("");
   const [productID, setProductID] = useState<any>();
   const dispatch = useDispatch();
   const { accounts } = useSelector((state: RootState) => {
@@ -199,8 +198,6 @@ const CreateInvoice = () => {
         userData={userData}
         setCurrentUser={setCurrentUser}
         currentUser={currentUser}
-        searchText={searchText}
-        setSearchText={setSearchText}
         setUserData={setUserData}
         setCreateInvoice={setCreateInvoice}
         updateUserDetail={updateUserDetail}

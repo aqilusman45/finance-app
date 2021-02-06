@@ -36,8 +36,6 @@ interface InvoiceViewProps {
   calculateTotal?: any;
   userData?: any;
   setCurrentUser?: any;
-  searchText?: any;
-  setSearchText?: any;
   setUserData?: any;
   currentUser?: any;
   setCreateInvoice?: any;
@@ -61,8 +59,6 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   calculateTotal,
   userData,
   setCurrentUser,
-  searchText,
-  setSearchText,
   setUserData,
   currentUser,
   setCreateInvoice,

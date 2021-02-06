@@ -49,8 +49,7 @@ interface ISearchUserModelProps {
   userData: any;
   setUserData: any;
   setCurrentUser: any;
-  updateUserDetail?:any;
-
+  updateUserDetail?: any;
 }
 
 const UserSearchModel: React.FC<ISearchUserModelProps> = ({
@@ -60,12 +59,11 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
   userData,
   setUserData,
   setCurrentUser,
-  updateUserDetail
+  updateUserDetail,
 }) => {
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
   const [errors, setErrors] = useState<ValidationError | undefined>();
 
-  const { push } = useHistory();
   const dispatch = useDispatch();
 
   const handleChange = (e: any) => {
@@ -89,7 +87,7 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
       await accountTypeCheck(account);
       dispatch(
         addAccount(account as any, () => {
-          push("/home/manage-accounts");
+          setSegment("search");
         })
       );
     } catch (error) {
@@ -146,7 +144,7 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
                                 (filter: any) => filter.uid === account.uid
                               )
                             );
-                            updateUserDetail()
+                            updateUserDetail();
                           }}
                         >
                           <IonLabel>
@@ -170,9 +168,7 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
             />
           )}
         </IonContent>
-        <IonButton onClick={() => setShowModal(!showModal)}>
-          Cancel
-        </IonButton>
+        <IonButton onClick={() => setShowModal(!showModal)}>Cancel</IonButton>
       </IonPage>
     </IonModal>
   );
