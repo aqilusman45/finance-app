@@ -17,16 +17,20 @@ interface IProductSearchModelProps {
   showProductModal: boolean;
   setShowProductModal: (show: boolean) => void;
   products: any;
-  setSelectedProducts: any;
-  selectedProducts: any;
+  setCreateInvoice: any;
+  createInvoice: any;
+  updateProductDetail: any;
+  setSelectedProducts: any
 }
 
 const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
   setShowProductModal,
   showProductModal,
   products,
+  setCreateInvoice,
+  createInvoice,
+  updateProductDetail,
   setSelectedProducts,
-  selectedProducts,
 }) => {
   const [segment, setSegment] = useState<string>("search");
   const [filteredProducts, setFilteredProducts] = useState<any>();
@@ -41,7 +45,6 @@ const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
   const searchedProduct = (input: any) => {
     search.search(input);
     setFilteredProducts(search.search(input));
-    console.log("search.search(input);", search.search(input));
   };
 
   // js-search code end here
@@ -69,18 +72,20 @@ const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
               <IonList>
                 {filteredProducts?.length
                   ? filteredProducts.map((product: any, index: number) => {
+                    console.log("product===========>", product);
+                    
                       return (
                         <IonItem
                           key={index}
                           className="cursor"
                           onClick={() => {
                             setFilteredProducts(!showProductModal);
-                            setSelectedProducts([
-                              ...selectedProducts,
+                            setSelectedProducts(
                               filteredProducts.find(
                                 (filter: any) => filter.uid === product.uid
                               ),
-                            ]);
+                            );
+                            updateProductDetail()
                           }}
                         >
                           <IonLabel>

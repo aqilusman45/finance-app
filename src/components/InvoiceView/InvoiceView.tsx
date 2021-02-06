@@ -29,7 +29,7 @@ const invoideDetail = ["Sub Total", "Discount", "Tax", "Total"];
 interface InvoiceViewProps {
   RemoveItem?: any;
   AddProduct?: any;
-  selectedProducts?: any;
+  createInvoice?: any;
   UpdateQuantity?: any;
   calculateSubTotal?: any;
   handleTaxInput?: any;
@@ -44,14 +44,17 @@ interface InvoiceViewProps {
   setSearchText?: any;
   setUserData?: any;
   currentUser?: any;
-  setSelectedProducts?: any;
+  setCreateInvoice?: any;
   updateUserDetail?: () => void;
+  updateProductDetail?: any;
+  setSelectedProducts?: any;
+  getProductId?: any;
 }
 
 const InvoiceView: React.FC<InvoiceViewProps> = ({
   RemoveItem,
   AddProduct,
-  selectedProducts,
+  createInvoice,
   isEdit,
   UpdateQuantity,
   calculateSubTotal,
@@ -66,8 +69,11 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   setSearchText,
   setUserData,
   currentUser,
-  setSelectedProducts,
+  setCreateInvoice,
   updateUserDetail,
+  updateProductDetail,
+  setSelectedProducts,
+  getProductId,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
@@ -106,8 +112,10 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
           showProductModal={showProductModal}
           setShowProductModal={setShowProductModal}
           products={products}
+          setCreateInvoice={setCreateInvoice}
+          createInvoice={createInvoice}
+          updateProductDetail={updateProductDetail}
           setSelectedProducts={setSelectedProducts}
-          selectedProducts={selectedProducts}
         />
         <IonGrid className="ion-margin">
           <IonRow>
@@ -122,7 +130,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
             </IonCol>
           </IonRow>
           {/* {selectedProducts.products?.length ? 'hello' : 'world'} */}
-          {selectedProducts.products?.length ? (
+          {createInvoice.products?.length ? (
             <IonRow>
               <IonCol size="12">
                 <Table
@@ -141,21 +149,24 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedProducts.products?.length
-                      ? selectedProducts.products.map(
+                    {createInvoice.products?.length
+                      ? createInvoice.products.map(
                           (product: any, index: number) => {
                             return (
                               <tr key={index} className="table-row-hover">
                                 <td>{index + 1}</td>
                                 <td>
                                   <input
+                                  
                                     placeholder="select Product"
                                     className="inputStyle txtCenter cursor"
                                     name="productName"
-                                    onClick={() =>
-                                      setShowProductModal(!showProductModal)
-                                    }
+                                    onClick={() => {
+                                      setShowProductModal(!showProductModal);
+                                      getProductId(product.id);
+                                    }}
                                   />
+                                  {product.name}
                                 </td>
                                 <td className="">
                                   <input
@@ -187,7 +198,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                   />
                                 </td>
                                 <td>{product.quantity * product.unitPrice}</td>
-                                {selectedProducts.products.length === 1 ? (
+                                {createInvoice.products.length === 1 ? (
                                   <td></td>
                                 ) : (
                                   <td>
@@ -203,14 +214,6 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                         )
                       : ""}
                     <tr>
-                      {/* {selectedProducts.products.length && (
-                          <button
-                            onClick={() => AddProduct()}
-                            className="btnStyle"
-                          >
-                            Add New
-                          </button>
-                        )} */}
                       <td></td>
                       <td></td>
                       <td
