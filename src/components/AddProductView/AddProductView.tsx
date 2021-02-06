@@ -12,7 +12,7 @@ import {
   IonThumbnail,
   IonImg,
   IonToast,
-  IonIcon
+  IonIcon,
 } from "@ionic/react";
 import { closeCircle } from "ionicons/icons";
 import Carousel from "react-bootstrap/Carousel";
@@ -22,49 +22,49 @@ import { AttributeType } from "../../lib/enum";
 import { IImages, IOption } from "../../lib/products";
 import { IAttribute } from "../../lib/attributes";
 import { ValidationError } from "yup";
-
+import "./AddProductView.css";
 interface AddProductFormProps {
-    isLoading: boolean;
-    errors: ValidationError | undefined;
-    setErrors: (value: ValidationError | undefined) => void;
-    handleChange: (e: any) => void;
-    fileIput: any;
-    onFileSelect: (e: any) => void;
-    submit: () => void;
-    images: IImages[];
-    attributes: IAttribute[] | null;
-    handleAttributes: (options: IOption[], uid: string) => void;
-    handleSelect: (idx: number) => void;
-    removeImage: (idx: number) => void;
-    index: number;
-    sku: string;
-    price: string;
-    cost: string;
-    description: string;
-    quantity: string;
-    name: string;
+  isLoading: boolean;
+  errors: ValidationError | undefined;
+  setErrors: (value: ValidationError | undefined) => void;
+  handleChange: (e: any) => void;
+  fileIput: any;
+  onFileSelect: (e: any) => void;
+  submit: () => void;
+  images: IImages[];
+  attributes: IAttribute[] | null;
+  handleAttributes: (options: IOption[], uid: string) => void;
+  handleSelect: (idx: number) => void;
+  removeImage: (idx: number) => void;
+  index: number;
+  sku: string;
+  price: string;
+  cost: string;
+  description: string;
+  quantity: string;
+  name: string;
 }
 
 const AddProductForm = ({
-    isLoading,
-    errors,
-    setErrors,
-    handleChange,
-    fileIput,
-    onFileSelect,
-    submit,
-    images,
-    attributes,
-    handleAttributes,
-    handleSelect,
-    index,
-    sku,
-    price,
-    description,
-    cost,
-    quantity,
-    name,
-    removeImage
+  isLoading,
+  errors,
+  setErrors,
+  handleChange,
+  fileIput,
+  onFileSelect,
+  submit,
+  images,
+  attributes,
+  handleAttributes,
+  handleSelect,
+  index,
+  sku,
+  price,
+  description,
+  cost,
+  quantity,
+  name,
+  removeImage,
 }: AddProductFormProps) => {
   return (
     <IonContent>
@@ -87,7 +87,7 @@ const AddProductForm = ({
       />
       <IonGrid className="ion-padding">
         <IonRow className="ion-justify-content-between">
-          <IonCol size="6">
+          <IonCol size="6" className="mb">
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Product Name</IonLabel>
               <IonInput value={name} name="name" onIonChange={handleChange} />
@@ -127,6 +127,7 @@ const AddProductForm = ({
               Upload image
             </IonButton>
             <IonButton
+              className="addBtnStyle"
               onClick={(e) => {
                 e.preventDefault();
                 submit();

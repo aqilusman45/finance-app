@@ -124,25 +124,19 @@ const CreateInvoice = () => {
     const findIndex = createInvoice.products.findIndex(
       (index: any) => index.id === productID
     );
-      console.log("type", typeof(value));
-      
+    console.log("type", typeof value);
+
     const updatedObject = [...createInvoice.products];
-    if(value<1){
-    updatedObject[findIndex].quantity = 1;
-
-    }
-    else{
-
+    if (value < 1) {
+      updatedObject[findIndex].quantity = 1;
+    } else {
       updatedObject[findIndex].quantity = Number(value);
     }
     setCreateInvoice({
       ...createInvoice,
-      products: updatedObject
-    })
+      products: updatedObject,
+    });
   };
-  console.log("createinovice", createInvoice);
-  console.log("selected", selectedProducts);
-  
 
   const getDiscountValue = (value: number, productID: number) => {
     const findIndex = createInvoice.findIndex(
@@ -167,8 +161,7 @@ const CreateInvoice = () => {
     createInvoice.products.map((item: any) => {
       return (total = total + item.quantity * item.unitPrict);
     });
-    console.log("type subtotal",typeof(total));
-    
+
     return total;
   };
 
@@ -190,7 +183,7 @@ const CreateInvoice = () => {
   };
 
   return (
-    <>
+    
       <InvoiceView
         UpdateQuantity={UpdateQuantity}
         isEdit={false}
@@ -215,7 +208,6 @@ const CreateInvoice = () => {
         setSelectedProducts={setSelectedProducts}
         getProductId={getProductId}
       />
-    </>
   );
 };
 

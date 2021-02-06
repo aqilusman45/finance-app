@@ -149,7 +149,7 @@ const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
       await productAttributesCheck(attributes, product.attributes)
       dispatch(
         insertProduct(product as any, images, () => {
-          push("/home/create-invoice");
+          push("/home/manage-products");
         })
       );
     } catch (error) {
