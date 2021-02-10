@@ -189,6 +189,7 @@ const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
                               filteredProducts.find(
                                 (filter: any) => filter.uid === product.uid
                               )
+
                             );
                             updateProductDetail();
                             setShowProductModal(!showProductModal);

@@ -22,10 +22,10 @@ const INITIAL_STATE = {
   products: [
     {
       name: "",
-      quantity: 1,
+      quantity: 0,
       unitPrice: 10,
       discount: 0,
-      id: Math.floor(Math.random() * 10000000000),
+      id: 1234,
     },
   ],
   totalDiscount: 0,
@@ -76,7 +76,6 @@ const CreateInvoice = () => {
 
   const getProductId = (id: any) => {
     setProductID(id);
-    console.log("id", id);
   };
   const updateProductDetail = () => {
     const findIndex = createInvoice.products.findIndex(
@@ -92,9 +91,9 @@ const CreateInvoice = () => {
     });
   };
 
-  const RemoveItem = (ProductID: any) => {
+  const RemoveItem = (remItem: any) => {
     const filter = createInvoice.products.filter(
-      (item: any) => item.id !== ProductID
+      (item: any) => item.id !== remItem
     );
 
     setCreateInvoice({
@@ -102,6 +101,9 @@ const CreateInvoice = () => {
       products: filter,
     });
   };
+  // console.log("product id", productID);
+  // console.log("selected pro", selectedProducts);
+  // console.log("createinvoice", createInvoice);
 
   const AddProduct = () => {
     setCreateInvoice({
@@ -110,8 +112,8 @@ const CreateInvoice = () => {
         ...createInvoice.products,
         {
           name: "",
-          quantity: 1,
-          unitPrice: 0,
+          quantity: 0,
+          unitPrice: 5,
           discount: 0,
           id: Math.floor(Math.random() * 10000000000),
         },
@@ -119,40 +121,42 @@ const CreateInvoice = () => {
     });
   };
 
-  const UpdateQuantity = (value: any, productID: number) => {
+  const UpdateQuantity = (value: any, item: number) => {
     const findIndex = createInvoice.products.findIndex(
-      (index: any) => index.id === productID
+      (index: any) => index.id === item
     );
-    console.log("type", typeof value);
 
     const updatedObject = [...createInvoice.products];
-    if (value < 1) {
-      updatedObject[findIndex].quantity = 1;
-    } else {
-      updatedObject[findIndex].quantity = Number(value);
-    }
+    updatedObject[findIndex].quantity = Number(value);
     setCreateInvoice({
       ...createInvoice,
       products: updatedObject,
     });
   };
 
-  const getDiscountValue = (value: number, productID: number) => {
-    const findIndex = createInvoice.findIndex(
-      (index: any) => index.productID === productID
+  const getDiscountValue = (value: number, item: number) => {
+    const findIndex = createInvoice.products.findIndex(
+      (index: any) => index.id === item
     );
-    const updatedObject = [...createInvoice];
-    updatedObject[findIndex].discount = value;
-    setCreateInvoice(updatedObject);
+    console.log("discoutn value", value);
+
+    const updatedObject = [...createInvoice.products];
+    updatedObject[findIndex].discount = Number(value);
+    setCreateInvoice({
+      ...createInvoice,
+      products: updatedObject,
+    });
+    console.log("state value", createInvoice);
+
   };
 
-  const calculateDiscount = () => {
+  const calculateDiscount = (val1: any, val2: any) => {
     let totalDiscount = 0;
     createInvoice.products.map((item: any) => {
       return (totalDiscount =
         totalDiscount + (item.discount * item.unitPrict) / 100);
     });
-    return totalDiscount;
+    return (val1 * val2) / 100;
   };
 
   const calculateSubTotal = () => {
@@ -178,33 +182,32 @@ const CreateInvoice = () => {
   };
 
   const calculateTotal = () => {
-    return calculateSubTotal() + calculateTax() - calculateDiscount();
+    // return calculateSubTotal() + calculateTax() - calculateDiscount();
   };
 
   return (
-    
-      <InvoiceView
-        UpdateQuantity={UpdateQuantity}
-        isEdit={false}
-        createInvoice={createInvoice}
-        RemoveItem={RemoveItem}
-        AddProduct={AddProduct}
-        calculateSubTotal={calculateSubTotal}
-        handleTaxInput={handleTaxInput}
-        getDiscountValue={getDiscountValue}
-        calculateTax={calculateTax}
-        calculateDiscount={calculateDiscount}
-        calculateTotal={calculateTotal}
-        userData={userData}
-        setCurrentUser={setCurrentUser}
-        currentUser={currentUser}
-        setUserData={setUserData}
-        setCreateInvoice={setCreateInvoice}
-        updateUserDetail={updateUserDetail}
-        updateProductDetail={updateProductDetail}
-        setSelectedProducts={setSelectedProducts}
-        getProductId={getProductId}
-      />
+    <InvoiceView
+      UpdateQuantity={UpdateQuantity}
+      isEdit={false}
+      createInvoice={createInvoice}
+      RemoveItem={RemoveItem}
+      AddProduct={AddProduct}
+      calculateSubTotal={calculateSubTotal}
+      handleTaxInput={handleTaxInput}
+      getDiscountValue={getDiscountValue}
+      calculateTax={calculateTax}
+      calculateDiscount={calculateDiscount}
+      calculateTotal={calculateTotal}
+      userData={userData}
+      setCurrentUser={setCurrentUser}
+      currentUser={currentUser}
+      setUserData={setUserData}
+      setCreateInvoice={setCreateInvoice}
+      updateUserDetail={updateUserDetail}
+      updateProductDetail={updateProductDetail}
+      setSelectedProducts={setSelectedProducts}
+      getProductId={getProductId}
+    />
   );
 };
 

@@ -143,12 +143,15 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                     {createInvoice.products?.length
                       ? createInvoice.products.map(
                           (product: any, index: number) => {
+                            const totalPrice =
+                              product.quantity * product.unitPrice;
+                            const discount =
+                              (product.discount * totalPrice) / 100;
                             return (
                               <tr key={index} className="table-row-hover">
                                 <td>{index + 1}</td>
                                 <td>
                                   <input
-                                  
                                     placeholder="select Product"
                                     className="inputStyle txtCenter cursor"
                                     name="productName"
@@ -156,7 +159,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                       setShowProductModal(!showProductModal);
                                       getProductId(product.id);
                                     }}
-                                    value={product.name}
+                                    defaultValue={product.name}
                                   />
                                 </td>
                                 <td className="">
@@ -183,12 +186,12 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                     onChange={(e: any) => {
                                       getDiscountValue(
                                         e.target.value,
-                                        product.productID
+                                        product.id
                                       );
                                     }}
                                   />
                                 </td>
-                                <td>{product.quantity * product.unitPrice}</td>
+                                <td>{totalPrice - discount}</td>
                                 {createInvoice.products.length === 1 ? (
                                   <td></td>
                                 ) : (
@@ -204,15 +207,10 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                           }
                         )
                       : ""}
-                    <tr>
+                    <tr className="cursor" onClick={() => AddProduct()}>
                       <td></td>
                       <td></td>
-                      <td
-                        className="txtLeft cursor"
-                        onClick={() => AddProduct()}
-                      >
-                        Add New
-                      </td>
+                      <td className="txtLeft ">Add New</td>
                       <td></td>
                       <td></td>
                       <td></td>
@@ -234,14 +232,11 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                       <td>10% </td>
                     </tr>
                     <tr>
-                      <td>Total</td>
+                      <td>Tax</td>
                       <td></td>
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td> 1000 </td>
-                    </tr>
-                    <tr>
                       <td>
                         <input
                           placeholder="Enter Tax"
@@ -252,6 +247,14 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                           }}
                         />
                       </td>
+                    </tr>
+                    <tr>
+                      <td>Total</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td> 1000 </td>
                     </tr>
                   </tbody>
                 </Table>
