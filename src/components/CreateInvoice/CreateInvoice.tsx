@@ -105,7 +105,7 @@ const CreateInvoice = () => {
   // console.log("selected pro", selectedProducts);
   // console.log("createinvoice", createInvoice);
 
-  const AddProduct = () => {
+  const addNewRaw = () => {
     setCreateInvoice({
       ...createInvoice,
       products: [
@@ -147,24 +147,23 @@ const CreateInvoice = () => {
       products: updatedObject,
     });
     console.log("state value", createInvoice);
-
   };
 
-  const calculateDiscount = (val1: any, val2: any) => {
+  const calculateTotalDiscount = () => {
     let totalDiscount = 0;
     createInvoice.products.map((item: any) => {
       return (totalDiscount =
-        totalDiscount + (item.discount * item.unitPrict) / 100);
+        totalDiscount + (item.discount * item.unitPrice * item.quantity) / 100);
     });
-    return (val1 * val2) / 100;
+    return totalDiscount;
   };
+
 
   const calculateSubTotal = () => {
     let total: number = 0;
     createInvoice.products.map((item: any) => {
-      return (total = total + item.quantity * item.unitPrict);
+      return (total = total + item.quantity * item.unitPrice);
     });
-
     return total;
   };
 
@@ -172,7 +171,7 @@ const CreateInvoice = () => {
     let totalTax = 0;
     createInvoice.products.map((item: any) => {
       return (totalTax =
-        totalTax + (item.quantity * item.unitPrict * taxInput) / 100);
+        totalTax + (item.quantity * item.unitPrice * taxInput) / 100);
     });
     return totalTax;
   };
@@ -182,7 +181,7 @@ const CreateInvoice = () => {
   };
 
   const calculateTotal = () => {
-    // return calculateSubTotal() + calculateTax() - calculateDiscount();
+    return calculateSubTotal() + calculateTax() - calculateTotalDiscount();
   };
 
   return (
@@ -191,12 +190,11 @@ const CreateInvoice = () => {
       isEdit={false}
       createInvoice={createInvoice}
       RemoveItem={RemoveItem}
-      AddProduct={AddProduct}
+      addNewRaw={addNewRaw}
       calculateSubTotal={calculateSubTotal}
       handleTaxInput={handleTaxInput}
       getDiscountValue={getDiscountValue}
-      calculateTax={calculateTax}
-      calculateDiscount={calculateDiscount}
+      calculateTotalDiscount={calculateTotalDiscount}
       calculateTotal={calculateTotal}
       userData={userData}
       setCurrentUser={setCurrentUser}

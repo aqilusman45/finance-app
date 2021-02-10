@@ -36,7 +36,7 @@ const ManageInvoice: React.FC = () => {
     setProducts(filter);
   };
 
-  const AddProduct = () => {
+  const addNewRaw = () => {
     setProducts([
       ...products,
       {
@@ -68,7 +68,7 @@ const ManageInvoice: React.FC = () => {
     updatedObject[findIndex].discount = value;
   };
 
-  const calculateDiscount = () => {
+  const calculateTotalDiscount = () => {
     let totalDiscount = 0;
     products.map((item: any) => {
       return (totalDiscount =
@@ -108,12 +108,11 @@ const ManageInvoice: React.FC = () => {
       UpdateQuantity={UpdateQuantity}
       // products={products}
       RemoveItem={RemoveItem}
-      AddProduct={AddProduct}
+      addNewRaw={addNewRaw}
       calculateSubTotal={calculateSubTotal}
       handleTaxInput={handleTaxInput}
       getDiscountValue={getDiscountValue}
-      calculateTax={calculateTax}
-      calculateDiscount={calculateDiscount}
+      calculateTotalDiscount={calculateTotalDiscount}
       calculateTotal={calculateTotal}
     />
   );

@@ -20,19 +20,17 @@ import { addProduct, fetchProducts } from "../../store/reducers/products";
 import { fetchAccounts } from "../../store/reducers/accounts";
 import ProductSearchModel from "../ProductSearchModel/ProductSearchModel";
 const keys = ["Description", "Quantity", "Unit Price", "Discount", "Total"];
-const invoideDetail = ["Sub Total", "Discount", "Tax", "Total"];
 
 interface InvoiceViewProps {
   RemoveItem?: any;
-  AddProduct?: any;
+  addNewRaw?: any;
   createInvoice?: any;
   UpdateQuantity?: any;
   calculateSubTotal?: any;
   handleTaxInput?: any;
   isEdit?: boolean;
   getDiscountValue?: any;
-  calculateDiscount?: any;
-  calculateTax?: any;
+  calculateTotalDiscount?: any;
   calculateTotal?: any;
   userData?: any;
   setCurrentUser?: any;
@@ -47,15 +45,14 @@ interface InvoiceViewProps {
 
 const InvoiceView: React.FC<InvoiceViewProps> = ({
   RemoveItem,
-  AddProduct,
+  addNewRaw,
   createInvoice,
   isEdit,
   UpdateQuantity,
   calculateSubTotal,
   handleTaxInput,
   getDiscountValue,
-  calculateTax,
-  calculateDiscount,
+  calculateTotalDiscount,
   calculateTotal,
   userData,
   setCurrentUser,
@@ -207,7 +204,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                           }
                         )
                       : ""}
-                    <tr className="cursor" onClick={() => AddProduct()}>
+                    <tr className="cursor" onClick={() => addNewRaw()}>
                       <td></td>
                       <td></td>
                       <td className="txtLeft ">Add New</td>
@@ -221,7 +218,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td> 1000</td>
+                      <td> {calculateSubTotal()}</td>
                     </tr>
                     <tr>
                       <td>Discount </td>
@@ -229,7 +226,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td>10% </td>
+                      <td>{calculateTotalDiscount()} </td>
                     </tr>
                     <tr>
                       <td>Tax</td>
@@ -247,6 +244,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                           }}
                         />
                       </td>
+
                     </tr>
                     <tr>
                       <td>Total</td>
@@ -254,7 +252,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td> 1000 </td>
+                      <td>{calculateTotal()} </td>
                     </tr>
                   </tbody>
                 </Table>

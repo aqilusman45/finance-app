@@ -7,7 +7,6 @@ import { insertProduct } from "../../store/reducers/products";
 import { encodeImageFileAsURL } from "../../utils/toBase64";
 import { IImages } from "../../lib/products";
 import { IOption } from "../../lib/attributes";
-import { useHistory } from "react-router";
 import { productAttributesCheck, productSchema } from "../../helpers/validations";
 import { ValidationError } from "yup";
 
@@ -78,7 +77,6 @@ const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
   const [errors, setErrors] = useState<ValidationError | undefined>();
   const [selectedAttrs, setAttributes] = useState<any>({});
 
-  const { push } = useHistory();
   const dispatch = useDispatch();
   const { attributes, isLoading } = useSelector(
     (state: RootState) => state.attributes
