@@ -16,13 +16,13 @@ import Table from "react-bootstrap/Table";
 import "./InvoicView.css";
 import { RootState } from "../../store/rootReducer";
 import { IonLoading } from "@ionic/react";
-import { addProduct, fetchProducts } from "../../store/reducers/products";
+import { fetchProducts } from "../../store/reducers/products";
 import { fetchAccounts } from "../../store/reducers/accounts";
 import ProductSearchModel from "../ProductSearchModel/ProductSearchModel";
 const keys = ["Description", "Quantity", "Unit Price", "Discount", "Total"];
 
 interface InvoiceViewProps {
-  RemoveItem?: any;
+  RemoveItem?: any ;
   addNewRaw?: any;
   createInvoice?: any;
   UpdateQuantity?: any;
@@ -37,7 +37,7 @@ interface InvoiceViewProps {
   setUserData?: any;
   currentUser?: any;
   setCreateInvoice?: any;
-  updateUserDetail?: () => void;
+  updateUserDetail?: any;
   updateProductDetail?: any;
   setSelectedProducts?: any;
   getProductId?: any;
@@ -58,7 +58,6 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   setCurrentUser,
   setUserData,
   currentUser,
-  setCreateInvoice,
   updateUserDetail,
   updateProductDetail,
   setSelectedProducts,
@@ -101,8 +100,6 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
           showProductModal={showProductModal}
           setShowProductModal={setShowProductModal}
           products={products}
-          setCreateInvoice={setCreateInvoice}
-          createInvoice={createInvoice}
           updateProductDetail={updateProductDetail}
           setSelectedProducts={setSelectedProducts}
         />
@@ -145,7 +142,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                             const discount =
                               (product.discount * totalPrice) / 100;
                             return (
-                              <tr key={index} className="table-row-hover">
+                              <tr key={product.id} className="table-row-hover">
                                 <td>{index + 1}</td>
                                 <td>
                                   <input
@@ -207,7 +204,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                     <tr className="cursor" onClick={() => addNewRaw()}>
                       <td></td>
                       <td></td>
-                      <td className="txtLeft ">Add New</td>
+                      <td className="txtRight ">Add New</td>
                       <td></td>
                       <td></td>
                       <td></td>

@@ -47,6 +47,7 @@
 .btnStyle{
     width: 100%;
 }
-.txtLeft{
-    text-align: left;
+
+.txtRight {
+    text-align: right;
 }

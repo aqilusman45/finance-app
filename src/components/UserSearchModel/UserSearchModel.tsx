@@ -13,7 +13,6 @@ import {
 } from "@ionic/react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { useHistory } from "react-router";
 import { ValidationError } from "yup";
 import { addAccount } from "../../store/reducers/accounts";
 import { accountSchema } from "../../helpers/validations";
@@ -102,7 +101,9 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
   search.addIndex("email");
   search.addIndex("accountNumber");
 
-  search.addDocuments(accounts!);
+  if (accounts) {
+    search.addDocuments(accounts);
+  }
   const searchedUser = (input: any) => {
     search.search(input);
     setUserData(search.search(input));
@@ -138,13 +139,14 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
                           key={account.uid}
                           className="cursor"
                           onClick={() => {
-                            setShowModal(!showModal);
+                            const user =    userData.find(
+                              (filter: any) => filter.uid === account.uid
+                            )
                             setCurrentUser(
-                              userData.find(
-                                (filter: any) => filter.uid === account.uid
-                              )
-                            );
-                            updateUserDetail();
+                              user
+                              );
+                              setShowModal(!showModal);
+                            updateUserDetail(user);
                           }}
                         >
                           <IonLabel>

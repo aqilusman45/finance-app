@@ -38,8 +38,6 @@ interface IProductSearchModelProps {
   showProductModal: boolean;
   setShowProductModal: (show: boolean) => void;
   products: any;
-  setCreateInvoice: any;
-  createInvoice: any;
   updateProductDetail: any;
   setSelectedProducts: any;
 }
@@ -48,8 +46,6 @@ const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
   setShowProductModal,
   showProductModal,
   products,
-  setCreateInvoice,
-  createInvoice,
   updateProductDetail,
   setSelectedProducts,
 }) => {
@@ -62,7 +58,10 @@ const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
   search.addIndex("sku");
   search.addIndex("uid");
 
-  search.addDocuments(products!);
+  if (products) {
+    search.addDocuments(products);
+  }
+
   const searchedProduct = (input: any) => {
     search.search(input);
     setFilteredProducts(search.search(input));
@@ -183,14 +182,12 @@ const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
                           key={index}
                           className="cursor"
                           onClick={() => {
-                            setSelectedProducts(
-                              filteredProducts.find(
-                                (filter: any) => filter.uid === product.uid
-                              )
-
-                            );
-                            updateProductDetail();
+                            const prod = filteredProducts.find(
+                              (filter: any) => filter.uid === product.uid
+                            )
+                            setSelectedProducts(prod);
                             setShowProductModal(!showProductModal);
+                            updateProductDetail(prod);
                           }}
                         >
                           <IonLabel>

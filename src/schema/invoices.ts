@@ -66,6 +66,9 @@ export const invoiceSchema: RxJsonSchema = {
           },
           unitPrice: {
             type: "number"
+          },
+          productDiscount: {
+            type: "number"
           }
         }
       }
