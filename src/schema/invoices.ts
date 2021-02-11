@@ -1,4 +1,5 @@
 import { RxJsonSchema } from "rxdb";
+import { string } from "yup";
 import { PaymentOptions } from "../lib/enum";
 
 export const invoiceSchema: RxJsonSchema = {
@@ -29,7 +30,7 @@ export const invoiceSchema: RxJsonSchema = {
         }
       },
     },
-    details: {
+    detail: {
       type: "object",
       properties: {
         name: {
@@ -57,15 +58,12 @@ export const invoiceSchema: RxJsonSchema = {
       items: {
         type: "object",
         properties: {
-          // product: {
-          //   type: "string",
-          //   ref: "products"
-          // },
-          name: {
+          product: {
             type: "string",
+            ref: "products"
           },
-          id: {
-            type: "number",
+          name: {
+            type: "string"
           },
           quantity: {
             type: "number",
@@ -111,5 +109,7 @@ export const invoiceSchema: RxJsonSchema = {
       type: "number",
     }
   },
-  required: ["uid", "invoiceNumber", "paymentOption", "invoiceNumber"],
+  required: ["uid", "invoiceNumber", "paymentOption", "accountRef"],
 };
+
+

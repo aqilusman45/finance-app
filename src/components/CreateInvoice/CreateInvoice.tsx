@@ -5,42 +5,42 @@ import { RootState } from "../../store/rootReducer";
 import { fetchAccounts } from "./../../store/reducers/accounts";
 import { addInvoice } from "../../store/reducers/invoices";
 import { v4 as uuidv4 } from "uuid";
-
+import { PaymentOptions } from "../../lib/enum";
 const INITIAL_STATE = {
-  uid: "",
-  invoiceNumber: "098",
+  uid: uuidv4(),
+  invoiceNumber: "999999999",
   date: Date.now(),
   paymentOption: {
-    value: "BANK",
-    label: "BANK;",
+    value: PaymentOptions.BANK,
+    label: PaymentOptions.BANK,
   },
   detail: {
     name: "",
-    companyName: "dlsf",
-    shippingAddress: "ldf",
+    companyName: "",
+    shippingAddress: "",
     phone: "",
     address: "",
     email: "",
   },
   products: [
     {
+      product: "",
       name: "",
       quantity: 0,
       unitPrice: 0,
       discount: 0,
-      id: 12345,
     },
   ],
   totalDiscount: 0,
   subTotal: 0,
   taxRate: 0,
+  shipping: 0,
+  currentBalance: 0,
   total: 0,
-  shipping: 20,
-  currentBalance: 20,
-  remarks: "sd",
-  accountRef: "sdfl",
-  createdAt: 0,
-  updatedAt: 0,
+  remarks: "",
+  accountRef: "",
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
 };
 
 const CreateInvoice = () => {
@@ -66,6 +66,7 @@ const CreateInvoice = () => {
     setCreateInvoice({
       ...createInvoice,
       currentBalance: user.balance,
+      accountRef: user.uid,
       detail: {
         ...createInvoice.detail,
         name: user.name,
@@ -87,9 +88,9 @@ const CreateInvoice = () => {
     );
     
     let updatedObject = [...createInvoice.products];
-    updatedObject[findIndex].name = product.name;
+    updatedObject[findIndex].product = product.uid;
     updatedObject[findIndex].unitPrice = product.price;
-    updatedObject[findIndex].id = product.uid;
+    updatedObject[findIndex].name = product.name;
     setCreateInvoice({
       ...createInvoice,
       products: updatedObject,
@@ -188,13 +189,10 @@ const CreateInvoice = () => {
   const submit = async () => {
     const invoice = {
       ...createInvoice,
-      uid: uuidv4(),
       totalDiscount: Math.round(calculateTotalDiscount()),
       subTotal: Math.round(calculateSubTotal()),
       taxRate: Math.round(calculateTax()),
       total: Math.round(calculateTotal()),
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
     }
     try {
       dispatch(addInvoice(invoice))

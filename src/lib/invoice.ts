@@ -1,11 +1,11 @@
 import { RxCollection, RxDocument } from "rxdb";
 import { AccountTypes } from "./enum";
 interface IProducts  {
+    product: string
     name: string
     quantity: number;
     unitPrice: number;
     discount: number;
-    id: number
 
 }
 

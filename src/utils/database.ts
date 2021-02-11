@@ -185,7 +185,7 @@ export const accountsQuery = async () => {
 
 export const addInvoiceMutation = async (invoice: IInvoiceDocument) => {
   const db = await get();
-  const { invoices } = db.collections;
+  const { invoices } = db.collections;    
   return invoices.insert({
     ...invoice,
   });

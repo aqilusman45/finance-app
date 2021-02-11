@@ -155,7 +155,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                       setShowProductModal(!showProductModal);
                                       getProductId(product.id);
                                     }}
-                                    defaultValue={product.name}
+                                    // defaultValue={product.name}
                                   />
                                 </td>
                                 <td className="">
