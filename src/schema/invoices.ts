@@ -1,5 +1,4 @@
 import { RxJsonSchema } from "rxdb";
-import { string } from "yup";
 import { PaymentOptions } from "../lib/enum";
 
 export const invoiceSchema: RxJsonSchema = {

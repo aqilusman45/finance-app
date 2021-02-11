@@ -15,7 +15,7 @@ import { productSchema } from "../schema/products";
 import { RxDBEncryptionPlugin } from "rxdb/plugins/encryption";
 import { RxDBValidatePlugin } from "rxdb/plugins/validate";
 import { IAccount, IAccountDocument } from "../lib/accounts";
-import { IInvoice, IInvoiceDocument } from "../lib/invoice";
+import {  IInvoiceDocument } from "../lib/invoice";
 import { invoiceSchema } from "./../schema/invoices";
 addRxPlugin(RxDBValidatePlugin);
 addRxPlugin(RxDBEncryptionPlugin);

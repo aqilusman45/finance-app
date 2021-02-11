@@ -6,6 +6,9 @@ import { fetchAccounts } from "./../../store/reducers/accounts";
 import { addInvoice } from "../../store/reducers/invoices";
 import { v4 as uuidv4 } from "uuid";
 import { PaymentOptions } from "../../lib/enum";
+import { ValidationError } from "yup";
+import { invoiceSchema } from "../../helpers/validations";
+
 const INITIAL_STATE = {
   uid: uuidv4(),
   invoiceNumber: "999999999",
@@ -24,7 +27,7 @@ const INITIAL_STATE = {
   },
   products: [
     {
-      product: "",
+      product: Math.floor(Math.random()*1000),
       name: "",
       quantity: 0,
       unitPrice: 0,
@@ -50,6 +53,7 @@ const CreateInvoice = () => {
   const [userData, setUserData] = useState<any>();
   const [currentUser, setCurrentUser] = useState<any>({});
   const [productID, setProductID] = useState<any>();
+  const [errors, setErrors] = useState<ValidationError | undefined>();
 
   const dispatch = useDispatch();
   const { accounts } = useSelector((state: RootState) => {
@@ -84,7 +88,7 @@ const CreateInvoice = () => {
 
   const updateProductDetail = (product: any) => {
     const findIndex = createInvoice.products.findIndex(
-      (index: any) => index.id === productID
+      (index: any) => index.product === productID
     );
     
     let updatedObject = [...createInvoice.products];
@@ -99,7 +103,7 @@ const CreateInvoice = () => {
 
   const RemoveItem = (remItem: any) => {
     const filter = createInvoice.products.filter(
-      (item: any) => item.id !== remItem
+      (item: any) => item.product !== remItem
     );
 
     setCreateInvoice({
@@ -115,11 +119,11 @@ const CreateInvoice = () => {
       products: [
         ...createInvoice.products,
         {
+          product: Math.floor(Math.random()*1000),
           name: "",
           quantity: 0,
           unitPrice: 0,
           discount: 0,
-          id: Math.floor(Math.random() * 10000000000),
         },
       ],
     });
@@ -127,7 +131,7 @@ const CreateInvoice = () => {
 
   const UpdateQuantity = (value: any, item: number) => {
     const findIndex = createInvoice.products.findIndex(
-      (index: any) => index.id === item
+      (index: any) => index.product === item
     );
 
     const updatedObject = [...createInvoice.products];
@@ -140,7 +144,7 @@ const CreateInvoice = () => {
 
   const getDiscountValue = (value: number, item: number) => {
     const findIndex = createInvoice.products.findIndex(
-      (index: any) => index.id === item
+      (index: any) => index.product === item
     );
 
     const updatedObject = [...createInvoice.products];
@@ -195,10 +199,13 @@ const CreateInvoice = () => {
       total: Math.round(calculateTotal()),
     }
     try {
+      await invoiceSchema.validate(invoice)
       dispatch(addInvoice(invoice))
+      console.log("success");
       
-    } catch {
-      console.log("error inn");
+      
+    } catch (error) {
+      setErrors(error)
       
     }
   }
@@ -225,6 +232,8 @@ const CreateInvoice = () => {
       setSelectedProducts={setSelectedProducts}
       getProductId={getProductId}
       submit={submit}
+      errors={errors}
+      setErrors={setErrors}
     />
   );
 };

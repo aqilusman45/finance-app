@@ -8,6 +8,7 @@ import {
   IonIcon,
   IonButton,
   IonSearchbar,
+  IonToast,
 } from "@ionic/react";
 import { useSelector, useDispatch } from "react-redux";
 import { closeSharp } from "ionicons/icons";
@@ -42,6 +43,8 @@ interface InvoiceViewProps {
   setSelectedProducts?: any;
   getProductId?: any;
   submit?: any;
+  errors?: any;
+  setErrors?: any;
 }
 
 const InvoiceView: React.FC<InvoiceViewProps> = ({
@@ -64,6 +67,10 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   setSelectedProducts,
   getProductId,
   submit,
+  errors,
+  setErrors
+
+
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
@@ -88,6 +95,22 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   return (
     <IonPage>
       <IonContent>
+      <IonToast
+        isOpen={!!errors}
+        message={errors && errors.message}
+        position="bottom"
+        color="danger"
+        duration={2000}
+        onDidDismiss={() => {
+          setErrors(undefined);
+        }}
+        buttons={[
+          {
+            text: "Cancel",
+            role: "cancel",
+          },
+        ]}
+      />
         <IonLoading isOpen={isLoading} message={"Please wait..."} />
         <UserSearchModel
           accounts={accounts}
@@ -144,7 +167,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                             const discount =
                               (product.discount * totalPrice) / 100;
                             return (
-                              <tr key={product.id} className="table-row-hover">
+                              <tr key={product.product} className="table-row-hover">
                                 <td>{index + 1}</td>
                                 <td>
                                   <input
@@ -153,9 +176,9 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                     name="productName"
                                     onClick={() => {
                                       setShowProductModal(!showProductModal);
-                                      getProductId(product.id);
+                                      getProductId(product.product);
                                     }}
-                                    // defaultValue={product.name}
+                                    defaultValue={product.name}
                                   />
                                 </td>
                                 <td className="">
@@ -165,10 +188,10 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                     onChange={(e: any) => {
                                       UpdateQuantity(
                                         e.target.value,
-                                        product.id
+                                        product.product
                                       );
                                     }}
-                                    key={product.id}
+                                    key={product.product}
                                     value={product.quantity}
                                   />
                                 </td>
@@ -182,7 +205,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                     onChange={(e: any) => {
                                       getDiscountValue(
                                         e.target.value,
-                                        product.id
+                                        product.product
                                       );
                                     }}
                                   />
@@ -193,7 +216,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                 ) : (
                                   <td>
                                     <IonIcon
-                                      onClick={() => RemoveItem(product.id)}
+                                      onClick={() => RemoveItem(product.product)}
                                       icon={closeSharp}
                                     />
                                   </td>
