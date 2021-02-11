@@ -6,10 +6,10 @@ import {
   IonContent,
   IonSearchbar,
 } from "@ionic/react";
-import InoviceViewModel from "./../InvoiceViewModel/InoviceViewModel";
+import InoviceViewModel from "../InvoiceViewModel/InoviceViewModel";
 import Table from "react-bootstrap/Table";
 
-import { IEditInvoice } from "./../../lib/editInvoice";
+import { IEditInvoice } from "../../lib/editInvoice";
 const invoice1 = {
   invoiceID: "234",
   userName: "Hamza",
@@ -29,7 +29,7 @@ const invoice2 = {
 
 const keys = ["Invoice ID", "Name", "Phone", "Discount", "Tax", "Total"];
 
-const SearchInvoice: React.FC = () => {
+const ManageInvoices: React.FC = () => {
   const [showModel, setShowModel] = useState<boolean>(false);
   const [invoice, setInvoice] = useState<IEditInvoice[] | null>();
 
@@ -101,4 +101,4 @@ const SearchInvoice: React.FC = () => {
     </IonContent>
   );
 };
-export default SearchInvoice;
+export default ManageInvoices;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import InvoiceView from "./../InvoiceView/InvoiceView";
+import InvoiceView from "../InvoiceView/InvoiceView";
 import { useParams } from "react-router";
 const product1 = {
   productName: "product1",
@@ -20,7 +20,7 @@ const product2 = {
   discount: 0,
 };
 
-const ManageInvoice: React.FC = () => {
+const EditInvoice: React.FC = () => {
   const { id } = useParams<{
     id: string;
   }>();
@@ -118,4 +118,4 @@ const ManageInvoice: React.FC = () => {
   );
 };
 
-export default ManageInvoice;
+export default EditInvoice;

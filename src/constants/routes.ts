@@ -10,8 +10,8 @@ import {
   EditEntry,
   AddEntry,
   CreateInvoice,
-  SearcInvoice,
-  ManageInvoice
+  EditInvoice,
+  ManageInvoices
 } from "../components/index";
 import EditAttribute from "../components/EditAttribute/EditAttribute";
 import SearchEntry from "../components/SearchEntry/SearchEntry";
@@ -73,7 +73,7 @@ export const routes = [
         link: "/manage-invoices",
         text: "Manage Invoices",
         icon: "",
-        component: SearcInvoice,
+        component: ManageInvoices,
       },
     ],
   },
@@ -132,6 +132,6 @@ export const nonMenuRoutes = [
   },
   {
     link: "/edit-invoice/:id",
-    component: ManageInvoice,
+    component: EditInvoice,
   }
 ];
