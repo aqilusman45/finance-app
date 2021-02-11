@@ -59,10 +59,11 @@ export const addEntrySchema = yup.object().shape({
 
 })
 
-export const createInvoice = yup.object().shape({
-  quantity: yup.number().max(100000),
-  discount: yup.number().max(99),
-  tax: yup.number().max(99)
+export const invoiceSchema = yup.object().shape({
+  productName: yup.string().required(),
+  quantity: yup.number().max(100000).required(),
+  discount: yup.number().min(0).max(99),
+  tax: yup.number().min(0).max(99)
 
 
 })
