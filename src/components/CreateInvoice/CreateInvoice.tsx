@@ -3,19 +3,21 @@ import InvoiceView from "./../InvoiceView/InvoiceView";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { fetchAccounts } from "./../../store/reducers/accounts";
+import { addInvoice } from "../../store/reducers/invoices";
+import { v4 as uuidv4 } from "uuid";
 
 const INITIAL_STATE = {
   uid: "",
-  invoiceNumber: "",
-  date: "",
+  invoiceNumber: "098",
+  date: Date.now(),
   paymentOption: {
-    value: "",
-    label: "",
+    value: "BANK",
+    label: "BANK;",
   },
   detail: {
     name: "",
-    companyName: "",
-    shippingAddress: "",
+    companyName: "dlsf",
+    shippingAddress: "ldf",
     phone: "",
     address: "",
     email: "",
@@ -32,11 +34,11 @@ const INITIAL_STATE = {
   totalDiscount: 0,
   subTotal: 0,
   taxRate: 0,
-  shipping: 0,
-  currentBalance: 0,
   total: 0,
-  remarks: "",
-  accountRef: "",
+  shipping: 20,
+  currentBalance: 20,
+  remarks: "sd",
+  accountRef: "sdfl",
   createdAt: 0,
   updatedAt: 0,
 };
@@ -63,7 +65,6 @@ const CreateInvoice = () => {
   const updateUserDetail = (user: any) => {
     setCreateInvoice({
       ...createInvoice,
-      uid: user.uid,
       currentBalance: user.balance,
       detail: {
         ...createInvoice.detail,
@@ -184,6 +185,26 @@ const CreateInvoice = () => {
     return calculateSubTotal() + calculateTax() - calculateTotalDiscount();
   };
 
+  const submit = async () => {
+    const invoice = {
+      ...createInvoice,
+      uid: uuidv4(),
+      totalDiscount: Math.round(calculateTotalDiscount()),
+      subTotal: Math.round(calculateSubTotal()),
+      taxRate: Math.round(calculateTax()),
+      total: Math.round(calculateTotal()),
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    }
+    try {
+      dispatch(addInvoice(invoice))
+      
+    } catch {
+      console.log("error inn");
+      
+    }
+  }
+
   return (
     <InvoiceView
       UpdateQuantity={UpdateQuantity}
@@ -205,6 +226,7 @@ const CreateInvoice = () => {
       updateProductDetail={updateProductDetail}
       setSelectedProducts={setSelectedProducts}
       getProductId={getProductId}
+      submit={submit}
     />
   );
 };

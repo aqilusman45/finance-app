@@ -1,7 +1,7 @@
 import { IAccount, IAccountDocument } from "../lib/accounts";
 import { IAttribute, IAttributeDocument } from "../lib/attributes";
 import { IProduct, IProductDocument } from "../lib/products";
-
+import { IInvoice, IInvoiceDocument } from "../lib/invoice";
 export function transformAttribute(doc: IAttributeDocument): IAttribute {
   const {
     attributeName,
@@ -29,6 +29,13 @@ export function transformAccount(doc: IAccountDocument): IAccount {
     ...doc._data
   }
 }
+
+export function transformInvoice(doc: IInvoiceDocument): IInvoice {
+  return {
+    ...doc._data
+  }
+}
+
 
 export function transformAccounts(doc: IAccountDocument[]): IAccount[] {
   return doc.map((node) => transformAccount(node));

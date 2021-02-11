@@ -57,9 +57,15 @@ export const invoiceSchema: RxJsonSchema = {
       items: {
         type: "object",
         properties: {
-          product: {
+          // product: {
+          //   type: "string",
+          //   ref: "products"
+          // },
+          name: {
             type: "string",
-            ref: "products"
+          },
+          id: {
+            type: "number",
           },
           quantity: {
             type: "number",
@@ -67,13 +73,16 @@ export const invoiceSchema: RxJsonSchema = {
           unitPrice: {
             type: "number"
           },
-          productDiscount: {
+          discount: {
             type: "number"
           }
         }
       }
     },
-    discount: {
+    totalDiscount: {
+      type: "number"
+    },
+    subTotal: {
       type: "number"
     },
     taxRate: {

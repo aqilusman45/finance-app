@@ -41,6 +41,7 @@ interface InvoiceViewProps {
   updateProductDetail?: any;
   setSelectedProducts?: any;
   getProductId?: any;
+  submit?: any;
 }
 
 const InvoiceView: React.FC<InvoiceViewProps> = ({
@@ -62,6 +63,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   updateProductDetail,
   setSelectedProducts,
   getProductId,
+  submit,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
@@ -256,7 +258,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
               </IonCol>
 
               <IonCol size="12">
-                <IonButton color="primary">
+                <IonButton onClick={() => submit()} color="primary">
                   {isEdit ? "Update" : "Submit"}
                 </IonButton>
               </IonCol>

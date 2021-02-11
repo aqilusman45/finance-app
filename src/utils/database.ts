@@ -15,6 +15,8 @@ import { productSchema } from "../schema/products";
 import { RxDBEncryptionPlugin } from "rxdb/plugins/encryption";
 import { RxDBValidatePlugin } from "rxdb/plugins/validate";
 import { IAccount, IAccountDocument } from "../lib/accounts";
+import { IInvoice, IInvoiceDocument } from "../lib/invoice";
+import { invoiceSchema } from "./../schema/invoices";
 addRxPlugin(RxDBValidatePlugin);
 addRxPlugin(RxDBEncryptionPlugin);
 addRxPlugin(require("pouchdb-adapter-idb"));
@@ -31,6 +33,7 @@ const _create = async () => {
   await createCollection(db, productSchema, "products");
   await createCollection(db, attributeSchema, "attributes");
   await createCollection(db, userAccountsSchema, "accounts");
+  await createCollection(db, invoiceSchema, "invoices");
   return db;
 };
 
@@ -137,7 +140,7 @@ export const getProductAttatchments = async ({ uid, images }: IProduct) => {
       return {
         name,
         base64,
-        type
+        type,
       };
     })
   );
@@ -147,35 +150,43 @@ export const getProductAttatchments = async ({ uid, images }: IProduct) => {
 export const updateAttributeMutation = async (attribute: IAttribute) => {
   const db = await get();
   const { attributes } = db.collections;
-  const attr = await attributes.findOne().where('uid').eq(attribute.uid).exec()
+  const attr = await attributes.findOne().where("uid").eq(attribute.uid).exec();
   await attr?.atomicUpdate((oldData) => {
-    oldData.options = attribute.options
-    oldData.updatedAt = attribute.updatedAt
-    return oldData
-  })
+    oldData.options = attribute.options;
+    oldData.updatedAt = attribute.updatedAt;
+    return oldData;
+  });
 };
 
 export const updateAccountMutation = async (account: IAccount) => {
   const db = await get();
   const { accounts } = db.collections;
-  const acc = await accounts.findOne().where('uid').eq(account.uid).exec()
+  const acc = await accounts.findOne().where("uid").eq(account.uid).exec();
   await acc?.update({
     $set: {
-      ...account
-    }
-  })
+      ...account,
+    },
+  });
 };
 
 export const addAccountMutation = async (account: IAccountDocument) => {
   const db = await get();
   const { accounts } = db.collections;
   return accounts.insert({
-    ...account
-  })
+    ...account,
+  });
 };
 
 export const accountsQuery = async () => {
   const db = await get();
   const { accounts } = db.collections;
   return accounts.find().exec();
+};
+
+export const addInvoiceMutation = async (invoice: IInvoiceDocument) => {
+  const db = await get();
+  const { invoices } = db.collections;
+  return invoices.insert({
+    ...invoice,
+  });
 };
