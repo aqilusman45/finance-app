@@ -200,10 +200,7 @@ const CreateInvoice = () => {
     }
     try {
       await invoiceSchema.validate(invoice)
-      dispatch(addInvoice(invoice))
-      console.log("success");
-      
-      
+      dispatch(addInvoice(invoice))      
     } catch (error) {
       setErrors(error)
       

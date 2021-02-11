@@ -26,7 +26,6 @@ const invoiceSlice = createSlice({
     },
     addNewInvoice: (state, action: PayloadAction<IInvoiceDocument>) => {
       const invoice = action.payload;
-      console.log("invoice", invoice);
       state.invoices?.unshift(transformInvoice(invoice));
       state.isLoading = false;
     },
