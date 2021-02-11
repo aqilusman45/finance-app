@@ -212,24 +212,24 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                       <td></td>
                     </tr>
                     <tr>
+                      <td></td>                                                         
                       <td>SubTotal</td>
-                      <td></td>
                       <td></td>
                       <td></td>
                       <td></td>
                       <td> {calculateSubTotal()}</td>
                     </tr>
                     <tr>
-                      <td>Discount </td>
                       <td></td>
+                      <td>Discount </td>
                       <td></td>
                       <td></td>
                       <td></td>
                       <td>{calculateTotalDiscount()} </td>
                     </tr>
                     <tr>
-                      <td>Tax</td>
                       <td></td>
+                      <td>Tax</td>
                       <td></td>
                       <td></td>
                       <td></td>
@@ -246,8 +246,8 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
 
                     </tr>
                     <tr>
-                      <td>Total</td>
                       <td></td>
+                      <td>Total</td>
                       <td></td>
                       <td></td>
                       <td></td>
