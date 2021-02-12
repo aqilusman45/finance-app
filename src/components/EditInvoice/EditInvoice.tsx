@@ -4,7 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { RootState } from "../../store/rootReducer";
 import { PaymentOptions } from "../../lib/enum";
-import { fetchInvoices } from "../../store/reducers/invoices";
+import {
+  fetchInvoices,
+  updateInvoiceAsync,
+} from "../../store/reducers/invoices";
 import { ValidationError } from "yup";
 
 const INITIAL_STATE = {
@@ -59,6 +62,7 @@ const EditInvoice: React.FC = () => {
   const { invoices } = useSelector((state: RootState) => {
     return state.invoices;
   });
+  const { push } = useHistory();
 
   useEffect(() => {
     if (!invoices) {
@@ -139,7 +143,6 @@ const EditInvoice: React.FC = () => {
     const findIndex = createInvoice.products.findIndex(
       (index: any) => index.product === item
     );
-    console.log("item", item);
 
     const updatedObject = [...createInvoice.products];
     updatedObject[findIndex].quantity = Number(value);
@@ -198,6 +201,18 @@ const EditInvoice: React.FC = () => {
     );
   };
 
+  const submit = async  () => {
+    try {
+      dispatch(updateInvoiceAsync(createInvoice as any, () => {
+        push('/home/create-invoice')
+      }))
+      console.log("updated");
+      
+    } catch (error) {
+      setErrors(error);
+    }
+  };
+
   return (
     <InvoiceView
       UpdateQuantity={UpdateQuantity}
@@ -216,7 +231,7 @@ const EditInvoice: React.FC = () => {
       updateUserDetail={updateUserDetail}
       updateProductDetail={updateProductDetail}
       getProductId={getProductId}
-      // submit={submit}
+      submit={submit}
       errors={errors}
       setErrors={setErrors}
     />
