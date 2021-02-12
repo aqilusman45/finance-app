@@ -11,7 +11,7 @@ import {
   IonCardContent,
 } from "@ionic/react";
 import { Link } from "react-router-dom";
-import { text, cube, keyOutline, callOutline } from "ionicons/icons";
+import { text, cube, keyOutline, callOutline, walletOutline, calendar,cashOutline } from "ionicons/icons";
 interface InvoiceViewModelProps {
   showModel: boolean;
   setShowModel: (show: boolean) => void;
@@ -23,7 +23,19 @@ const InvoiceViewModel: React.FC<InvoiceViewModelProps> = ({
   invoice,
 }) => {
   if (!invoice) return null;
-  const { userName, total, invoiceID, discount, phone, tax } = invoice;
+  const {
+    invoiceNumber,
+    subTotal,
+    taxRate,
+    total,
+    totalDiscount,
+    detail,
+    paymentOption,
+    currentBalance,
+    date,
+    uid,
+  } = invoice;
+  console.log("invoice model", invoice);
 
   return (
     <IonModal isOpen={showModel}>
@@ -32,40 +44,55 @@ const InvoiceViewModel: React.FC<InvoiceViewModelProps> = ({
           <IonCard>
             <IonItem>
               <IonIcon icon={keyOutline} slot="start" />
-              <IonLabel>Invoide ID: {invoiceID}</IonLabel>
+              <IonLabel>Invoide Number: {invoiceNumber} </IonLabel>
             </IonItem>
             <IonItem>
               <IonIcon icon={text} slot="start" />
-              <IonLabel>Name: {userName}</IonLabel>
+              <IonLabel>Name: {detail.name}</IonLabel>
             </IonItem>
             <IonItem>
               <IonIcon icon={callOutline} slot="start" />
-              <IonLabel>Phone: {phone}</IonLabel>
-            </IonItem>
-
-            <IonItem>
-              <IonIcon icon={cube} slot="start" />
-              <IonLabel>Discount: {discount}</IonLabel>
+              <IonLabel>Phone: {detail.phone}</IonLabel>
             </IonItem>
             <IonItem>
+              <IonIcon icon={walletOutline} slot="start" />
+              <IonLabel>Current Balance: {currentBalance}</IonLabel>
+            </IonItem>
+            <IonItem>
+              <IonIcon icon={calendar} slot="start" />
+              <IonLabel>Date: {date}</IonLabel>
+            </IonItem>
+            <IonItem>
               <IonIcon icon={cube} slot="start" />
-              <IonLabel>Tax: {tax}</IonLabel>
+              <IonLabel>Discount: {totalDiscount}</IonLabel>
+            </IonItem>
+            <IonItem>
+              <IonIcon icon={cube} slot="start" />
+              <IonLabel>Tax: {taxRate}</IonLabel>
+            </IonItem>
+            <IonItem>
+              <IonIcon icon={cube} slot="start" />
+              <IonLabel>SubTotal: {subTotal}</IonLabel>
             </IonItem>
             <IonItem>
               <IonIcon icon={cube} slot="start" />
               <IonLabel>Total: {total}</IonLabel>
             </IonItem>
+            <IonItem>
+              <IonIcon icon={cashOutline} slot="start" />
+              <IonLabel>Payment Option: {paymentOption.value}</IonLabel>
+            </IonItem>
           </IonCard>
           <IonCard>
             <IonCardContent>
-              <Link to={`/home/edit-invoice/${invoiceID}`}>
+              <Link to={`/home/edit-invoice/${uid}`}>
                 <IonButton fill="outline">Edit</IonButton>
               </Link>
             </IonCardContent>
           </IonCard>
         </IonContent>
         <IonButton onClick={() => setShowModel(!showModel)}>
-          Close Modal
+          Close
         </IonButton>
       </IonPage>
     </IonModal>

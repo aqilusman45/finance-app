@@ -15,7 +15,7 @@ import {
 import InoviceViewModel from "../InvoiceViewModel/InoviceViewModel";
 import Table from "react-bootstrap/Table";
 import "./ManageInvoices.css";
-import { IEditInvoice } from "../../lib/editInvoice";
+import { IInvoice } from "../../lib/invoice";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchInvoices } from "../../store/reducers/invoices";
 import { RootState } from "../../store/rootReducer";
@@ -40,13 +40,14 @@ const keys = ["Invoice ID", "Name", "Phone", "Discount", "Tax", "Total"];
 
 const ManageInvoices: React.FC = () => {
   const [showModel, setShowModel] = useState<boolean>(false);
-  const [invoice, setInvoice] = useState<IEditInvoice[] | null>();
+  const [invoice, setInvoice] = useState<IInvoice | null>();
   const [gender, setGender] = useState<string>("all");
 
   const dispatch = useDispatch();
   const {isLoading, invoices} = useSelector((state: RootState) => {
     return state.invoices;
   });
+  
 
   useEffect(() => {
     if (!invoices) {
@@ -109,9 +110,7 @@ const ManageInvoices: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {invoices.map((invoice: any, index: number) => {
-                        console.log("invoice manage", invoice);
-                        
+                      {invoices.map((invoice: any, index: number) => {                        
                          const data = {
                           uid: invoice.uid,
                           invoiceNumber: invoice.invoiceNumber,
@@ -126,17 +125,15 @@ const ManageInvoices: React.FC = () => {
                           <tr
                             key={data.uid}
                             className="table-row-hover"
-                            // onClick={() => {
-                            //   console.log("open model");
-
-                            //   setInvoice(() =>
-                            //     invoices.find(
-                            //       (account: any) =>
-                            //         account.invoiceID === invoice.invoiceID
-                            //     )
-                            //   );
-                            //   setShowModel(!showModel);
-                            // }}
+                            onClick={() => {
+                              setInvoice(() =>
+                                invoices.find(
+                                  (account: any) =>
+                                    account.uid === invoice.uid
+                                )
+                              );
+                              setShowModel(!showModel);
+                            }}
                           >
                             <td>{index + 1}</td>
                             <td>{data.invoiceNumber}</td>
