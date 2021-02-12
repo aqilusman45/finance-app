@@ -210,7 +210,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                     }}
                                   />
                                 </td>
-                                <td>{totalPrice - discount}</td>
+                                <td>{Math.round(totalPrice - discount)}</td>
                                 {createInvoice.products.length === 1 ? (
                                   <td></td>
                                 ) : (

@@ -80,11 +80,11 @@ const CreateInvoice = () => {
         companyName: user.companyName,
       },
     });
+    
   };
 
   const getProductId = (id: any) => {
     setProductID(id);
-    console.log("id", id)
 
   };
 
@@ -130,7 +130,6 @@ const CreateInvoice = () => {
       ],
     });
   };
-console.log("create invoices", createInvoice);
 
   const UpdateQuantity = (value: any, item: number) => {
     const findIndex = createInvoice.products.findIndex(
@@ -165,7 +164,7 @@ console.log("create invoices", createInvoice);
       return (totalDiscount =
         totalDiscount + (item.discount * item.unitPrice * item.quantity) / 100);
     });
-    return totalDiscount;
+    return Math.round(totalDiscount);
   };
 
 
@@ -174,7 +173,7 @@ console.log("create invoices", createInvoice);
     createInvoice.products.map((item: any) => {
       return (total = total + item.quantity * item.unitPrice);
     });
-    return total;
+    return Math.round(total);
   };
 
   const calculateTax = () => {
@@ -183,7 +182,7 @@ console.log("create invoices", createInvoice);
       return (totalTax =
         totalTax + (item.quantity * item.unitPrice * taxInput) / 100);
     });
-    return totalTax;
+    return Math.round(totalTax);
   };
 
   const handleTaxInput = (value: number) => {
@@ -191,16 +190,16 @@ console.log("create invoices", createInvoice);
   };
 
   const calculateTotal = () => {
-    return calculateSubTotal() + calculateTax() - calculateTotalDiscount();
+    return Math.round(calculateSubTotal() + calculateTax() - calculateTotalDiscount());
   };
 
   const submit = async () => {
     const invoice = {
       ...createInvoice,
-      totalDiscount: Math.round(calculateTotalDiscount()),
-      subTotal: Math.round(calculateSubTotal()),
-      taxRate: Math.round(calculateTax()),
-      total: Math.round(calculateTotal()),
+      totalDiscount: calculateTotalDiscount(),
+      subTotal: calculateSubTotal(),
+      taxRate: calculateTax(),
+      total: calculateTotal(),
     }
     try {
       await invoiceSchema.validate(invoice)
