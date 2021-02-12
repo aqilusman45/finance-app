@@ -205,9 +205,7 @@ const EditInvoice: React.FC = () => {
     try {
       dispatch(updateInvoiceAsync(createInvoice as any, () => {
         push('/home/create-invoice')
-      }))
-      console.log("updated");
-      
+      }))      
     } catch (error) {
       setErrors(error);
     }

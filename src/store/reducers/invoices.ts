@@ -59,11 +59,15 @@ export const {
 
 export default invoiceSlice.reducer;
 
-export const addInvoice = (invoice: IInvoice): AppThunk => async (dispatch) => {
+export const addInvoice = (
+  invoice: IInvoice,
+  cb: () => void
+): AppThunk => async (dispatch) => {
   try {
     dispatch(startLoading());
     await addInvoiceMutation(invoice as any);
     dispatch(addNewInvoice(invoice as any));
+    cb();
     dispatch(doneLoading());
   } catch (error) {
     throw error;

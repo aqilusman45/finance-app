@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import { PaymentOptions } from "../../lib/enum";
 import { ValidationError } from "yup";
 import { invoiceSchema } from "../../helpers/validations";
+import { useHistory } from "react-router";
 
 const INITIAL_STATE = {
   uid: uuidv4(),
@@ -54,6 +55,7 @@ const CreateInvoice = () => {
   const [errors, setErrors] = useState<ValidationError | undefined>();
 
   const dispatch = useDispatch();
+  const {push} = useHistory()
   const { accounts } = useSelector((state: RootState) => {
     return state.accounts;
   });
@@ -133,8 +135,6 @@ const CreateInvoice = () => {
     const findIndex = createInvoice.products.findIndex(
       (index: any) => index.product === item
     );
-    console.log("item", item)
-
     const updatedObject = [...createInvoice.products];
     updatedObject[findIndex].quantity = Number(value);
     setCreateInvoice({
@@ -201,7 +201,9 @@ const CreateInvoice = () => {
     }
     try {
       await invoiceSchema.validate(invoice)
-      dispatch(addInvoice(invoice))      
+      dispatch(addInvoice(invoice, () => {
+        push('/home/manage-invoices')
+      }))      
     } catch (error) {
       setErrors(error)
       
