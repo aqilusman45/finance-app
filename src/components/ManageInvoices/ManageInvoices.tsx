@@ -19,25 +19,8 @@ import { IInvoice } from "../../lib/invoice";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchInvoices } from "../../store/reducers/invoices";
 import { RootState } from "../../store/rootReducer";
-const invoice1 = {
-  invoiceID: "234",
-  userName: "Hamza",
-  phone: "453480593045",
-  total: 1000,
-  discount: 5,
-  tax: 10,
-};
-const invoice2 = {
-  invoiceID: "089",
-  userName: "Ali",
-  phone: "05893059",
-  total: 3000,
-  discount: 10,
-  tax: 14,
-};
 
 const keys = ["Invoice ID", "Name", "Phone", "Discount", "Tax", "Total"];
-
 const ManageInvoices: React.FC = () => {
   const [showModel, setShowModel] = useState<boolean>(false);
   const [invoice, setInvoice] = useState<IInvoice | null>();
