@@ -36,6 +36,9 @@ export function transformInvoice(doc: IInvoiceDocument): IInvoice {
   }
 }
 
+export function transformInvoices(doc: IInvoiceDocument[]): IInvoice[] {
+  return doc.map((node) => transformInvoice(node));
+}
 
 export function transformAccounts(doc: IAccountDocument[]): IAccount[] {
   return doc.map((node) => transformAccount(node));

@@ -15,7 +15,7 @@ import { productSchema } from "../schema/products";
 import { RxDBEncryptionPlugin } from "rxdb/plugins/encryption";
 import { RxDBValidatePlugin } from "rxdb/plugins/validate";
 import { IAccount, IAccountDocument } from "../lib/accounts";
-import {  IInvoiceDocument } from "../lib/invoice";
+import { IInvoiceDocument } from "../lib/invoice";
 import { invoiceSchema } from "./../schema/invoices";
 addRxPlugin(RxDBValidatePlugin);
 addRxPlugin(RxDBEncryptionPlugin);
@@ -185,8 +185,14 @@ export const accountsQuery = async () => {
 
 export const addInvoiceMutation = async (invoice: IInvoiceDocument) => {
   const db = await get();
-  const { invoices } = db.collections;    
+  const { invoices } = db.collections;
   return invoices.insert({
     ...invoice,
   });
+};
+
+export const invoicesQuery = async () => {
+  const db = await get();
+  const { invoices } = db.collections;
+  return invoices.find().exec();
 };

@@ -27,7 +27,7 @@ const INITIAL_STATE = {
   },
   products: [
     {
-      product: Math.floor(Math.random()*1000),
+      product: 12345,
       name: "",
       quantity: 0,
       unitPrice: 0,
@@ -84,6 +84,8 @@ const CreateInvoice = () => {
 
   const getProductId = (id: any) => {
     setProductID(id);
+    console.log("id", id)
+
   };
 
   const updateProductDetail = (product: any) => {
@@ -119,7 +121,7 @@ const CreateInvoice = () => {
       products: [
         ...createInvoice.products,
         {
-          product: Math.floor(Math.random()*1000),
+          product: Math.floor(Math.random()*100000000000),
           name: "",
           quantity: 0,
           unitPrice: 0,
@@ -128,11 +130,13 @@ const CreateInvoice = () => {
       ],
     });
   };
+console.log("create invoices", createInvoice);
 
   const UpdateQuantity = (value: any, item: number) => {
     const findIndex = createInvoice.products.findIndex(
       (index: any) => index.product === item
     );
+    console.log("item", item)
 
     const updatedObject = [...createInvoice.products];
     updatedObject[findIndex].quantity = Number(value);

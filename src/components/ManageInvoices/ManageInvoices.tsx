@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   IonGrid,
   IonRow,
@@ -9,12 +9,16 @@ import {
   IonItem,
   IonLabel,
   IonSelect,
+  IonLoading,
   IonSelectOption,
 } from "@ionic/react";
 import InoviceViewModel from "../InvoiceViewModel/InoviceViewModel";
 import Table from "react-bootstrap/Table";
 import "./ManageInvoices.css";
 import { IEditInvoice } from "../../lib/editInvoice";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchInvoices } from "../../store/reducers/invoices";
+import { RootState } from "../../store/rootReducer";
 const invoice1 = {
   invoiceID: "234",
   userName: "Hamza",
@@ -39,7 +43,16 @@ const ManageInvoices: React.FC = () => {
   const [invoice, setInvoice] = useState<IEditInvoice[] | null>();
   const [gender, setGender] = useState<string>("all");
 
-  const [invoices] = useState<any>([{ ...invoice1 }, { ...invoice2 }]);
+  const dispatch = useDispatch();
+  const {isLoading, invoices} = useSelector((state: RootState) => {
+    return state.invoices;
+  });
+
+  useEffect(() => {
+    if (!invoices) {
+      dispatch(fetchInvoices());
+    }
+  }, [invoices, dispatch]);
   return (
     <IonPage>
       <IonContent>
@@ -81,7 +94,7 @@ const ManageInvoices: React.FC = () => {
               </IonItem>
             </IonCol>
           </IonRow>
-          {/* <IonLoading isOpen={isLoading} message={"Please wait..."} /> */}
+          <IonLoading isOpen={isLoading} message={"Please wait..."} />
           {!!invoices?.length ? (
             <>
               <IonRow>
@@ -97,29 +110,41 @@ const ManageInvoices: React.FC = () => {
                     </thead>
                     <tbody>
                       {invoices.map((invoice: any, index: number) => {
+                        console.log("invoice manage", invoice);
+                        
+                         const data = {
+                          uid: invoice.uid,
+                          invoiceNumber: invoice.invoiceNumber,
+                          name: invoice.detail.name,
+                          phone: invoice.detail.phone,
+                          totalDiscount: invoice.totalDiscount,
+                          taxRate: invoice.taxRate,
+                          total: invoice.total,
+                         }
+
                         return (
                           <tr
-                            key={index}
+                            key={data.uid}
                             className="table-row-hover"
-                            onClick={() => {
-                              console.log("open model");
+                            // onClick={() => {
+                            //   console.log("open model");
 
-                              setInvoice(() =>
-                                invoices.find(
-                                  (account: any) =>
-                                    account.invoiceID === invoice.invoiceID
-                                )
-                              );
-                              setShowModel(!showModel);
-                            }}
+                            //   setInvoice(() =>
+                            //     invoices.find(
+                            //       (account: any) =>
+                            //         account.invoiceID === invoice.invoiceID
+                            //     )
+                            //   );
+                            //   setShowModel(!showModel);
+                            // }}
                           >
                             <td>{index + 1}</td>
-                            <td>{invoice.invoiceID}</td>
-                            <td>{invoice.userName}</td>
-                            <td>{invoice.phone}</td>
-                            <td>{invoice.discount} %</td>
-                            <td>{invoice.tax} %</td>
-                            <td>{invoice.total}</td>
+                            <td>{data.invoiceNumber}</td>
+                            <td>{data.name}</td>
+                            <td>{data.phone}</td>
+                            <td>{data.totalDiscount} </td>
+                            <td>{data.taxRate} </td>
+                            <td>{data.total}</td>
                           </tr>
                         );
                       })}
