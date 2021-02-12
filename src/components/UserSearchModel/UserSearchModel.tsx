@@ -47,7 +47,6 @@ interface ISearchUserModelProps {
   accounts: any;
   userData: any;
   setUserData: any;
-  setCurrentUser: any;
   updateUserDetail?: any;
 }
 
@@ -57,7 +56,6 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
   accounts,
   userData,
   setUserData,
-  setCurrentUser,
   updateUserDetail,
 }) => {
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
@@ -139,13 +137,10 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
                           key={account.uid}
                           className="cursor"
                           onClick={() => {
-                            const user =    userData.find(
+                            const user = userData.find(
                               (filter: any) => filter.uid === account.uid
-                            )
-                            setCurrentUser(
-                              user
-                              );
-                              setShowModal(!showModal);
+                            );
+                            setShowModal(!showModal);
                             updateUserDetail(user);
                           }}
                         >

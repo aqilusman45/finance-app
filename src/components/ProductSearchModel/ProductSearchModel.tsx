@@ -39,7 +39,6 @@ interface IProductSearchModelProps {
   setShowProductModal: (show: boolean) => void;
   products: any;
   updateProductDetail: any;
-  setSelectedProducts: any;
 }
 
 const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
@@ -47,7 +46,6 @@ const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
   showProductModal,
   products,
   updateProductDetail,
-  setSelectedProducts,
 }) => {
   const [segment, setSegment] = useState<string>("search");
   const [filteredProducts, setFilteredProducts] = useState<any>();
@@ -185,7 +183,6 @@ const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
                             const prod = filteredProducts.find(
                               (filter: any) => filter.uid === product.uid
                             )
-                            setSelectedProducts(prod);
                             setShowProductModal(!showProductModal);
                             updateProductDetail(prod);
                           }}

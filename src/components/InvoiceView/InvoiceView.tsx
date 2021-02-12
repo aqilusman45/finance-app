@@ -34,13 +34,10 @@ interface InvoiceViewProps {
   calculateTotalDiscount?: any;
   calculateTotal?: any;
   userData?: any;
-  setCurrentUser?: any;
   setUserData?: any;
-  currentUser?: any;
   setCreateInvoice?: any;
   updateUserDetail?: any;
   updateProductDetail?: any;
-  setSelectedProducts?: any;
   getProductId?: any;
   submit?: any;
   errors?: any;
@@ -59,12 +56,9 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   calculateTotalDiscount,
   calculateTotal,
   userData,
-  setCurrentUser,
   setUserData,
-  currentUser,
   updateUserDetail,
   updateProductDetail,
-  setSelectedProducts,
   getProductId,
   submit,
   errors,
@@ -118,7 +112,6 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
           setShowModal={setShowModal}
           userData={userData}
           setUserData={setUserData}
-          setCurrentUser={setCurrentUser}
           updateUserDetail={updateUserDetail}
         />
         <ProductSearchModel
@@ -126,7 +119,6 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
           setShowProductModal={setShowProductModal}
           products={products}
           updateProductDetail={updateProductDetail}
-          setSelectedProducts={setSelectedProducts}
         />
         <IonGrid className="ion-margin">
           <IonRow>
@@ -134,7 +126,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
               <IonSearchbar
                 showCancelButton="focus"
                 debounce={1000}
-                value={currentUser.name}
+                value={createInvoice ?  createInvoice.detail.name : ''}
                 placeholder="Select User"
                 onClick={() => setShowModal(!showModal)}
               />
@@ -181,7 +173,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                     defaultValue={product.name}
                                   />
                                 </td>
-                                <td className="">
+                                <td >
                                   <input
                                     className="inputStyle txtCenter"
                                     name="quantity"
