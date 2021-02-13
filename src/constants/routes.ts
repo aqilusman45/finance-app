@@ -52,11 +52,17 @@ export const routes = [
     icon: "",
     subMenuLinks: [
       {
+        link: "/create-entry",
+        text: "Add Entry",
+        icon: "",
+        component: AddEntry,
+      },
+      {
         link: "/entries",
         text: "Entries",
         icon: "",
         component: SearchEntry,
-      },
+      },   
     ],
   },
   {
