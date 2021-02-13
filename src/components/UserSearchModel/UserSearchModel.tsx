@@ -152,7 +152,27 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
                         </IonItem>
                       );
                     })
-                  : ""}
+                  : accounts?.map((account: IAccount) => {
+                      return (
+                        <IonItem
+                          key={account.uid}
+                          className="cursor"
+                          onClick={() => {
+                            const user = accounts.find(
+                              (filter: any) => filter.uid === account.uid
+                            );
+                            setShowModal(!showModal);
+                            updateUserDetail(user);
+                          }}
+                        >
+                          <IonLabel>
+                            <h2>Name: {account.name}</h2>
+                            <h3>Phone: {account.phone}</h3>
+                            <p>Email: {account.email}</p>
+                          </IonLabel>
+                        </IonItem>
+                      );
+                    })}
               </IonList>
             </>
           ) : (
