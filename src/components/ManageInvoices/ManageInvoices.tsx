@@ -93,12 +93,12 @@ const ManageInvoices: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {invoices.map((invoice: any, index: number) => {                        
+                      {invoices.map((invoice: any, index: number) => {                                                
                          const data = {
                           uid: invoice.uid,
                           invoiceNumber: invoice.invoiceNumber,
-                          name: invoice.detail.name,
                           phone: invoice.detail.phone,
+                          name: invoice.detail.name,
                           totalDiscount: invoice.totalDiscount,
                           taxRate: invoice.taxRate,
                           total: invoice.total,

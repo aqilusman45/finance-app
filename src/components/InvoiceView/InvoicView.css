@@ -51,3 +51,8 @@
 .txtRight {
     text-align: right;
 }
+.createIcon {
+    top: 1px;
+    right: 47px;
+    font-size: 24px;
+}

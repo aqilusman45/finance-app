@@ -11,7 +11,7 @@ import {
   IonToast,
 } from "@ionic/react";
 import { useSelector, useDispatch } from "react-redux";
-import { closeSharp } from "ionicons/icons";
+import { closeSharp, create } from "ionicons/icons";
 import UserSearchModel from "./../UserSearchModel/UserSearchModel";
 import Table from "react-bootstrap/Table";
 import "./InvoicView.css";
@@ -23,7 +23,7 @@ import ProductSearchModel from "../ProductSearchModel/ProductSearchModel";
 const keys = ["Description", "Quantity", "Unit Price", "Discount", "Total"];
 
 interface InvoiceViewProps {
-  RemoveItem?: any ;
+  RemoveItem?: any;
   addNewRaw?: any;
   createInvoice?: any;
   UpdateQuantity?: any;
@@ -62,9 +62,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   getProductId,
   submit,
   errors,
-  setErrors
-
-
+  setErrors,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
@@ -89,22 +87,22 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   return (
     <IonPage>
       <IonContent>
-      <IonToast
-        isOpen={!!errors}
-        message={errors && errors.message}
-        position="bottom"
-        color="danger"
-        duration={2000}
-        onDidDismiss={() => {
-          setErrors(undefined);
-        }}
-        buttons={[
-          {
-            text: "Cancel",
-            role: "cancel",
-          },
-        ]}
-      />
+        <IonToast
+          isOpen={!!errors}
+          message={errors && errors.message}
+          position="bottom"
+          color="danger"
+          duration={2000}
+          onDidDismiss={() => {
+            setErrors(undefined);
+          }}
+          buttons={[
+            {
+              text: "Cancel",
+              role: "cancel",
+            },
+          ]}
+        />
         <IonLoading isOpen={isLoading} message={"Please wait..."} />
         <UserSearchModel
           accounts={accounts}
@@ -126,7 +124,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
               <IonSearchbar
                 showCancelButton="focus"
                 debounce={1000}
-                value={createInvoice ?  createInvoice.detail.name : ''}
+                value={createInvoice ? createInvoice.detail.name : ""}
                 placeholder="Select User"
                 onClick={() => setShowModal(!showModal)}
               />
@@ -159,7 +157,10 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                             const discount =
                               (product.discount * totalPrice) / 100;
                             return (
-                              <tr key={product.product} className="table-row-hover">
+                              <tr
+                                key={product.product}
+                                className="table-row-hover"
+                              >
                                 <td>{index + 1}</td>
                                 <td>
                                   <input
@@ -173,9 +174,9 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                     defaultValue={product.name}
                                   />
                                 </td>
-                                <td >
+                                <td className="position-relative">
                                   <input
-                                    className="inputStyle txtCenter"
+                                    className="inputStyle txtCenter position-relative"
                                     name="quantity"
                                     onChange={(e: any) => {
                                       UpdateQuantity(
@@ -186,12 +187,17 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                     key={product.product}
                                     value={product.quantity}
                                   />
+                                  <IonIcon
+                                    className=" position-absolute createIcon"
+                                    slot="start"
+                                    icon={create}
+                                  />
                                 </td>
                                 <td>{product.unitPrice}</td>
 
-                                <td className="">
+                                <td className="position-relative">
                                   <input
-                                    className="inputStyle txtCenter"
+                                    className="inputStyle txtCenter "
                                     name="discount"
                                     value={product.discount}
                                     onChange={(e: any) => {
@@ -201,6 +207,11 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                       );
                                     }}
                                   />
+                                  <IonIcon
+                                    className=" position-absolute createIcon"
+                                    slot="start"
+                                    icon={create}
+                                  />
                                 </td>
                                 <td>{Math.round(totalPrice - discount)}</td>
                                 {createInvoice.products.length === 1 ? (
@@ -208,7 +219,9 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                 ) : (
                                   <td>
                                     <IonIcon
-                                      onClick={() => RemoveItem(product.product)}
+                                      onClick={() =>
+                                        RemoveItem(product.product)
+                                      }
                                       icon={closeSharp}
                                     />
                                   </td>
@@ -224,10 +237,9 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                       <td className="txtRight ">Add New</td>
                       <td></td>
                       <td></td>
-                      <td></td>
                     </tr>
                     <tr>
-                      <td></td>                                                         
+                      <td></td>
                       <td>SubTotal</td>
                       <td></td>
                       <td></td>
@@ -244,21 +256,26 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                     </tr>
                     <tr>
                       <td></td>
-                      <td>Tax</td>
+                      <td>Tax %</td>
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td>
+                      <td className="position-relative">
                         <input
                           placeholder="Enter Tax"
+                          value={createInvoice.taxRate}
                           className="inputStyle txtCenter cursor"
                           name="tax"
                           onChange={(e: any) => {
                             handleTaxInput(e.target.value);
                           }}
                         />
+                        <IonIcon
+                          className=" position-absolute createIcon"
+                          slot="start"
+                          icon={create}
+                        />
                       </td>
-
                     </tr>
                     <tr>
                       <td></td>

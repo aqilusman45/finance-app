@@ -185,6 +185,10 @@ const CreateInvoice = () => {
 
   const handleTaxInput = (value: number) => {
     setTaxInput(value);
+    setCreateInvoice({
+      ...createInvoice,
+      taxRate: Number(value),
+    });
   };
 
   const calculateTotal = () => {
@@ -196,7 +200,6 @@ const CreateInvoice = () => {
       ...createInvoice,
       totalDiscount: calculateTotalDiscount(),
       subTotal: calculateSubTotal(),
-      taxRate: calculateTax(),
       total: calculateTotal(),
     }
     try {
