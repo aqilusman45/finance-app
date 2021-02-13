@@ -14,6 +14,22 @@ export const LedgerSchema: RxJsonSchema = {
     date: {
       type: "number",
     },
+    paymentOption: {
+      type: "object",
+      properties: {
+        value: {
+          type: "string",
+          enum: [
+            PaymentOptions.BANK,
+            PaymentOptions.CASH,
+            PaymentOptions.CHEQUE,
+          ],
+        },
+        label: {
+          type: "string",
+        },
+      },
+    },
     accountRef: {
       type: "string",
       ref: "accounts",
@@ -63,4 +79,5 @@ export const LedgerSchema: RxJsonSchema = {
       },
     },
   },
+  required: ["uid", "accountRef", "invoiceRef"],
 };
