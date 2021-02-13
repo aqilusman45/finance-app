@@ -9,6 +9,7 @@ import { PaymentOptions } from "../../lib/enum";
 import { ValidationError } from "yup";
 import { invoiceSchema } from "../../helpers/validations";
 import { useHistory } from "react-router";
+import { updateUserBalance } from "../../utils/invoice";
 
 const INITIAL_STATE = {
   uid: uuidv4(),
@@ -55,7 +56,7 @@ const CreateInvoice = () => {
   const [errors, setErrors] = useState<ValidationError | undefined>();
 
   const dispatch = useDispatch();
-  const {push} = useHistory()
+  const { push } = useHistory();
   const { accounts } = useSelector((state: RootState) => {
     return state.accounts;
   });
@@ -80,19 +81,17 @@ const CreateInvoice = () => {
         companyName: user.companyName,
       },
     });
-    
   };
 
   const getProductId = (id: any) => {
     setProductID(id);
-
   };
 
   const updateProductDetail = (product: any) => {
     const findIndex = createInvoice.products.findIndex(
       (index: any) => index.product === productID
     );
-    
+
     let updatedObject = [...createInvoice.products];
     updatedObject[findIndex].product = product.uid;
     updatedObject[findIndex].unitPrice = product.price;
@@ -113,15 +112,14 @@ const CreateInvoice = () => {
       products: filter,
     });
   };
- 
-  
+
   const addNewRaw = () => {
     setCreateInvoice({
       ...createInvoice,
       products: [
         ...createInvoice.products,
         {
-          product: Math.floor(Math.random()*100000000000),
+          product: Math.floor(Math.random() * 100000000000),
           name: "",
           quantity: 0,
           unitPrice: 0,
@@ -165,7 +163,6 @@ const CreateInvoice = () => {
     return Math.round(totalDiscount);
   };
 
-
   const calculateSubTotal = () => {
     let total: number = 0;
     createInvoice.products.map((item: any) => {
@@ -192,26 +189,35 @@ const CreateInvoice = () => {
   };
 
   const calculateTotal = () => {
-    return Math.round(calculateSubTotal() + calculateTax() - calculateTotalDiscount());
+    return Math.round(
+      calculateSubTotal() + calculateTax() - calculateTotalDiscount()
+    );
   };
+
+  const updatedBalance = updateUserBalance(
+    createInvoice.currentBalance,
+    calculateTotal()
+  );
 
   const submit = async () => {
     const invoice = {
       ...createInvoice,
+      currentBalance: updatedBalance,
       totalDiscount: calculateTotalDiscount(),
       subTotal: calculateSubTotal(),
       total: calculateTotal(),
-    }
+    };
     try {
-      await invoiceSchema.validate(invoice)
-      dispatch(addInvoice(invoice, () => {
-        push('/home/manage-invoices')
-      }))      
+      await invoiceSchema.validate(invoice);
+      dispatch(
+        addInvoice(invoice, () => {
+          push("/home/manage-invoices");
+        })
+      );
     } catch (error) {
-      setErrors(error)
-      
+      setErrors(error);
     }
-  }
+  };
 
   return (
     <InvoiceView
