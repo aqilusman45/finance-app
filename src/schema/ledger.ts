@@ -1,5 +1,5 @@
 import { RxJsonSchema } from "rxdb";
-import { PaymentOptions } from "../lib/enum";
+import { PaymentOptions, EntryTypes } from "../lib/enum";
 
 export const LedgerSchema: RxJsonSchema = {
   title: "ledger shcema",
@@ -23,6 +23,21 @@ export const LedgerSchema: RxJsonSchema = {
             PaymentOptions.BANK,
             PaymentOptions.CASH,
             PaymentOptions.CHEQUE,
+          ],
+        },
+        label: {
+          type: "string",
+        },
+      },
+    },
+    EntryType: {
+      type: "object",
+      properties: {
+        value: {
+          type: "string",
+          enum: [
+            EntryTypes.DEBIT,
+            EntryTypes.CREDIT,
           ],
         },
         label: {
