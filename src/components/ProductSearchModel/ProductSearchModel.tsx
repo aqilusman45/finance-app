@@ -195,7 +195,27 @@ const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
                         </IonItem>
                       );
                     })
-                  : ""}
+                  : products?.map((product: any, index: number) => {
+                    return (
+                      <IonItem
+                        key={index}
+                        className="cursor"
+                        onClick={() => {
+                          const prod = products.find(
+                            (filter: any) => filter.uid === product.uid
+                          )
+                          setShowProductModal(!showProductModal);
+                          updateProductDetail(prod);
+                        }}
+                      >
+                        <IonLabel>
+                          <h2>Name: {product.name}</h2>
+                          <h3>Price: {product.price}</h3>
+                          <p>Description: {product.description}</p>
+                        </IonLabel>
+                      </IonItem>
+                    );
+                  })}
               </IonList>
             </>
           ) : (
