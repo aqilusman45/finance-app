@@ -234,7 +234,8 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                     <tr className="cursor" onClick={() => addNewRaw()}>
                       <td></td>
                       <td></td>
-                      <td className="txtRight ">Add New</td>
+                      <td></td>
+                      <td>Add New</td>
                       <td></td>
                       <td></td>
                     </tr>

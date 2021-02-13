@@ -43,8 +43,8 @@ const INITIAL_STATE = {
   total: 0,
   remarks: "",
   accountRef: "",
-  createdAt: Date.now(),
-  updatedAt: Date.now(),
+  createdAt: 0,
+  updatedAt: 0,
 };
 
 const EditInvoice: React.FC = () => {
@@ -202,8 +202,13 @@ const EditInvoice: React.FC = () => {
   };
 
   const submit = async  () => {
+    const invoice = {
+      ...createInvoice,
+      updatedAt: Date.now()
+      
+    }
     try {
-      dispatch(updateInvoiceAsync(createInvoice as any, () => {
+      dispatch(updateInvoiceAsync(invoice as any, () => {
         push('/home/create-invoice')
       }))      
     } catch (error) {
