@@ -25,8 +25,8 @@ const entriesSlice = createSlice({
       state.isLoading = false;
     },
     addNewEntry: (state, action: PayloadAction<IEntryDocument>) => {
-      const account = action.payload;
-      state.entries?.unshift(transformEntry(account));
+      const entry = action.payload;
+      state.entries?.unshift(transformEntry(entry));
       state.isLoading = false;
     },
   },
@@ -35,14 +35,14 @@ const entriesSlice = createSlice({
 export const { doneLoading, startLoading, addNewEntry } = entriesSlice.actions;
 export default entriesSlice.reducer;
 
-export const addAccount = (
-    account: IEntry,
+export const addEntry = (
+    entry: IEntry,
     cb: () => void
 ): AppThunk => async dispatch => {
     try {
         dispatch(startLoading());
-        await addEntryMutation(account as any);
-        dispatch(addNewEntry(account as any));
+        await addEntryMutation(entry as any);
+        dispatch(addNewEntry(entry as any));
         cb();
         dispatch(doneLoading());
     } catch (error) {
