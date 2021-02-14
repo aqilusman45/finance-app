@@ -94,5 +94,5 @@ export const LedgerSchema: RxJsonSchema = {
       },
     },
   },
-  required: ["uid", "accountRef", "invoiceRef"],
+  required: ["uid", "accountRef", "invoiceRef", "paymentOption", "entryType"],
 };
