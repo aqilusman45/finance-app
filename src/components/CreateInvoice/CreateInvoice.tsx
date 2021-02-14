@@ -5,11 +5,12 @@ import { RootState } from "../../store/rootReducer";
 import { fetchAccounts } from "./../../store/reducers/accounts";
 import { addInvoice } from "../../store/reducers/invoices";
 import { v4 as uuidv4 } from "uuid";
-import { PaymentOptions } from "../../lib/enum";
+import { PaymentOptions, EntryTypes } from "../../lib/enum";
 import { ValidationError } from "yup";
 import { invoiceSchema } from "../../helpers/validations";
 import { useHistory } from "react-router";
 import { updateUserBalance } from "../../utils/invoice";
+import { addEntry } from "../../store/reducers/entries";
 
 const INITIAL_STATE = {
   uid: uuidv4(),
@@ -48,12 +49,39 @@ const INITIAL_STATE = {
   updatedAt: Date.now(),
 };
 
+const ENTRY_INITIAL_STATE = {
+  uid: uuidv4(),
+  date: Date.now(),
+  paymentOptions: {
+    value: PaymentOptions.BANK,
+    label: PaymentOptions.BANK,
+  },
+  entryType: {
+    value: EntryTypes.CREDIT,
+    label: EntryTypes.DEBIT,
+  },
+  accountRef: "",
+  invoiceRef: "",
+  customerName: "",
+  phone: "",
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
+  entries: [
+    {
+      payableAmount: 0,
+      receivableAmount: 0,
+      remainingAmount: 0,
+      date: Date.now(),
+    },
+  ],
+};
 const CreateInvoice = () => {
   const [createInvoice, setCreateInvoice] = useState<any>(INITIAL_STATE);
   const [taxInput, setTaxInput] = useState<any>(0);
   const [userData, setUserData] = useState<any>();
   const [productID, setProductID] = useState<any>();
   const [errors, setErrors] = useState<ValidationError | undefined>();
+  const [addEntry, setAddEntry] = useState<any>(ENTRY_INITIAL_STATE);
 
   const dispatch = useDispatch();
   const { push } = useHistory();

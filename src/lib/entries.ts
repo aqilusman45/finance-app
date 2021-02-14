@@ -16,11 +16,8 @@ export interface IEntry {
   invoiceRef: string;
   createdAt: number;
   updatedAt: number;
-  detail: {
-    name: string;
-    phone: string;
-    email: string;
-  };
+  customerName: string,
+  phone: string,
   entries: {
     payableAmount: number;
     receivableAmount: number;

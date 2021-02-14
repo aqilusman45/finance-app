@@ -59,19 +59,12 @@ export const entrySchema: RxJsonSchema = {
     updatedAt: {
       type: "number",
     },
-    detail: {
-      type: "object",
-      properties: {
-        name: {
-          type: "string",
-        },
-        phone: {
-          type: "string",
-        },
-        email: {
-          type: "string",
-        },
-      },
+    customerName: {
+      type: "string",
+    },
+    phone: {
+      type: "string",
+
     },
     entries: {
       type: "array",
