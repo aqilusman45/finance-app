@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   IonGrid,
   IonRow,
@@ -14,48 +14,62 @@ import {
   IonSearchbar,
 } from "@ionic/react";
 import UserSearchModel from "./../UserSearchModel/UserSearchModel";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchAccounts } from "../../store/reducers/accounts";
-import { RootState } from "../../store/rootReducer";
+import { PaymentOptions } from "../../lib/enum";
+
+const options = [
+  {
+    value: PaymentOptions.BANK,
+    label: "Bank",
+  },
+  {
+    value: PaymentOptions.CASH,
+    label: "Cash",
+  },
+  {
+    value: PaymentOptions.CHEQUE,
+    label: "Cheque",
+  },
+];
 
 interface AddEntryViewProps {
   isEdit?: boolean;
+  accounts?: any;
+  userData?: any;
+  setUserData?: any;
+  updateUserDetail?: any;
+  selectedUser?: any;
+  currentBlnc?: any;
+  amount?: any;
+  setAmount?: any
+  formFields?: any;
+  handleChange?: any
+
 }
-const AddEntryView: React.FC<AddEntryViewProps> = ({ isEdit }) => {
-  const [selected, setSelected] = React.useState<string>();
+const AddEntryView: React.FC<AddEntryViewProps> = ({
+  isEdit,
+  accounts,
+  userData,
+  setUserData,
+  updateUserDetail,
+  selectedUser,
+  currentBlnc,
+  amount,
+  setAmount,
+  formFields,
+  handleChange
+}) => {
   const [showModal, setShowModal] = useState(false);
-  const [userData, setUserData] = useState<any>();
-  const [selectedUser, setSelectedUser] = useState<any>({})
-  const dispatch = useDispatch();
 
-  const { isLoading, accounts } = useSelector((state: RootState) => {
-    return state.accounts;
-  });
-
-  const updateUserDetail = (user: any) => {
-    setSelectedUser(user)
-  console.log("user", user);
-
-    
-  }
-
-  useEffect(() => {
-    if (!accounts) {
-      dispatch(fetchAccounts());
-    }
-  }, [accounts, dispatch]);
-  
   return (
     <IonPage>
       <IonContent>
-      <UserSearchModel
+        <UserSearchModel
           accounts={accounts}
           showModal={showModal}
           setShowModal={setShowModal}
           userData={userData}
           setUserData={setUserData}
           updateUserDetail={updateUserDetail}
-
         />
         <IonGrid className="ion-margin">
           <IonRow>
@@ -80,24 +94,14 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({ isEdit }) => {
               </IonItem>
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Balance</IonLabel>
-                <IonInput value={selectedUser.balance} name="phone" />
+                <IonInput value={selectedUser && currentBlnc} name="phone" />
               </IonItem>
-             
+
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Amount</IonLabel>
-                <IonInput value="" name="amount" />
+                <IonInput value={amount} name="amount" onIonChange={(e) => setAmount(e.detail.value)}/>
               </IonItem>
-              <IonItem>
-                <IonSelect
-                  name="accountType"
-                  value={selected}
-                  placeholder="Entry Type"
-                  onIonChange={(e) => setSelected(e.detail.value)}
-                >
-                  <IonSelectOption value="credit">Credit</IonSelectOption>
-                  <IonSelectOption value="debit">Debit</IonSelectOption>
-                </IonSelect>
-              </IonItem>
+           
               <IonButton className="ion-margin">
                 {isEdit ? "Update Entry" : "Create Entry"}
               </IonButton>
@@ -106,17 +110,29 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({ isEdit }) => {
               </IonButton>
             </IonCol>
             <IonCol size="6">
-            <IonItem className="ion-margin">
+              <IonItem className="ion-margin">
                 <IonLabel position="stacked">invoice ID</IonLabel>
                 <IonInput value="" name="invoiceID" />
               </IonItem>
               <IonItem className="ion-margin">
-                <IonLabel position="stacked">Account Type</IonLabel>
-                <IonInput value="" name="acountType" />
+                <IonSelect name="paymentOptions" placeholder="Account Type">
+                  {options.map(({ value, label }) => (
+                    <IonSelectOption key={value} value={value}>
+                      {label}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
               </IonItem>
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Receivable Amount</IonLabel>
-                <IonInput value="" name="receivableAmount" />
+                <IonInput value= {currentBlnc-amount} name="receivableAmount" />
+               
+              </IonItem>
+              <IonItem>
+                <IonSelect name="entryType" placeholder="Entry Type">
+                  <IonSelectOption value="credit">Credit</IonSelectOption>
+                  <IonSelectOption value="debit">Debit</IonSelectOption>
+                </IonSelect>
               </IonItem>
             </IonCol>
           </IonRow>

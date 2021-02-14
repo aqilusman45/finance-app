@@ -30,7 +30,7 @@ export const LedgerSchema: RxJsonSchema = {
         },
       },
     },
-    EntryType: {
+    entryType: {
       type: "object",
       properties: {
         value: {
