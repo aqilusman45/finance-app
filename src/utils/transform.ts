@@ -2,6 +2,7 @@ import { IAccount, IAccountDocument } from "../lib/accounts";
 import { IAttribute, IAttributeDocument } from "../lib/attributes";
 import { IProduct, IProductDocument } from "../lib/products";
 import { IInvoice, IInvoiceDocument } from "../lib/invoice";
+import { IEntry, IEntryDocument } from "../lib/entries";
 export function transformAttribute(doc: IAttributeDocument): IAttribute {
   const {
     attributeName,
@@ -74,4 +75,10 @@ export function transformProduct(doc: IProductDocument): IProduct {
     attributes,
     images,
   };
+}
+
+export function transformEntry(doc: IEntryDocument): IEntry {
+  return {
+    ...doc._data
+  }
 }
