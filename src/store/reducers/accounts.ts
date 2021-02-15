@@ -67,13 +67,13 @@ export const addAccount = (
 
 export const updateAccountAsync = (
   account: IAccountDocument,
-  cb: () => void
+  cb?: () => void
 ): AppThunk => async (dispatch) => {
   try {
     dispatch(startLoading());
     await updateAccountMutation(account);
     dispatch(updateAccount(account));
-    cb();
+    cb && cb();
     dispatch(doneLoading());
   } catch (error) {
     throw error;

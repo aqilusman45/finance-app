@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import InvoiceView from "./../InvoiceView/InvoiceView";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
-import { fetchAccounts } from "./../../store/reducers/accounts";
+import {
+  fetchAccounts,
+  updateAccountAsync,
+} from "./../../store/reducers/accounts";
 import { addInvoice } from "../../store/reducers/invoices";
 import { v4 as uuidv4 } from "uuid";
 import { PaymentOptions, EntryTypes } from "../../lib/enum";
@@ -75,6 +78,7 @@ const CreateInvoice = () => {
   const [productID, setProductID] = useState<any>();
   const [errors, setErrors] = useState<ValidationError | undefined>();
   const [entryData, setEntryData] = useState<any>(ENTRY_INITIAL_STATE);
+  const [accountData, setAccountData] = useState({});
 
   const dispatch = useDispatch();
   const { push } = useHistory();
@@ -88,7 +92,9 @@ const CreateInvoice = () => {
     }
   }, [accounts, dispatch]);
 
-  const updateUserDetail = (user: any) => {
+  const updateUserDetail = (user: any) => {    
+    setAccountData(user);
+
     setCreateInvoice({
       ...createInvoice,
       currentBalance: user.balance,
@@ -232,8 +238,8 @@ const CreateInvoice = () => {
       payableAmount: calculateTotal(),
       receivableAmount: calculateTotal() - updatedBalance,
       remainingAmount: updatedBalance,
-      date: Date.now()
-    }
+      date: Date.now(),
+    };
     const entry = {
       ...entryData,
       accountRef: createInvoice.accountRef,
@@ -242,8 +248,13 @@ const CreateInvoice = () => {
       phone: createInvoice.detail.phone,
       entries: [...entryData.entries, firstEntry],
     };
+    const account = {
+      ...accountData,
+      balance: updatedBalance,
+    };
     try {
       await invoiceSchema.validate(invoice);
+      dispatch(updateAccountAsync(account as any))
       dispatch(addEntry(entry));
       dispatch(
         addInvoice(invoice, () => {
