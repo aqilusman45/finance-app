@@ -16,34 +16,16 @@ import {
 import UserSearchModel from "./../UserSearchModel/UserSearchModel";
 import { PaymentOptions } from "../../lib/enum";
 
-const options = [
-  {
-    value: PaymentOptions.BANK,
-    label: "Bank",
-  },
-  {
-    value: PaymentOptions.CASH,
-    label: "Cash",
-  },
-  {
-    value: PaymentOptions.CHEQUE,
-    label: "Cheque",
-  },
-];
-
 interface AddEntryViewProps {
   isEdit?: boolean;
   accounts?: any;
   userData?: any;
   setUserData?: any;
   updateUserDetail?: any;
-  selectedUser?: any;
-  currentBlnc?: any;
   amount?: any;
-  setAmount?: any
+  setAmount?: any;
   formFields?: any;
-  handleChange?: any
-
+  submit?: any;
 }
 const AddEntryView: React.FC<AddEntryViewProps> = ({
   isEdit,
@@ -51,14 +33,13 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
   userData,
   setUserData,
   updateUserDetail,
-  selectedUser,
-  currentBlnc,
   amount,
   setAmount,
   formFields,
-  handleChange
+  submit,
 }) => {
   const [showModal, setShowModal] = useState(false);
+  const { name, phone, balance } = formFields;
 
   return (
     <IonPage>
@@ -86,23 +67,27 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
             <IonCol size="6">
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Account Holder Name</IonLabel>
-                <IonInput value={selectedUser.name} name="name" />
+                <IonInput value={name} name="name" />
               </IonItem>
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Phone</IonLabel>
-                <IonInput value={selectedUser.phone} name="phone" />
+                <IonInput value={phone} name="phone" />
               </IonItem>
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Balance</IonLabel>
-                <IonInput value={selectedUser && currentBlnc} name="phone" />
+                <IonInput value={balance} name="phone" />
               </IonItem>
 
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Amount</IonLabel>
-                <IonInput value={amount} name="amount" onIonChange={(e) => setAmount(e.detail.value)}/>
+                <IonInput
+                  name="amount"
+                  value={amount}
+                  onIonChange={(e) => setAmount(e.detail.value!)}
+                />
               </IonItem>
-           
-              <IonButton className="ion-margin">
+
+              <IonButton className="ion-margin" onClick={() => submit()}>
                 {isEdit ? "Update Entry" : "Create Entry"}
               </IonButton>
               <IonButton className="ion-margin" color="danger">
@@ -115,24 +100,8 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
                 <IonInput value="" name="invoiceID" />
               </IonItem>
               <IonItem className="ion-margin">
-                <IonSelect name="paymentOption" placeholder="Account Type">
-                  {options.map(({ value, label }) => (
-                    <IonSelectOption key={value} value={value}>
-                      {label}
-                    </IonSelectOption>
-                  ))}
-                </IonSelect>
-              </IonItem>
-              <IonItem className="ion-margin">
                 <IonLabel position="stacked">Receivable Amount</IonLabel>
-                <IonInput value= {currentBlnc-amount} name="receivableAmount" />
-               
-              </IonItem>
-              <IonItem>
-                <IonSelect name="entryType" placeholder="Entry Type">
-                  <IonSelectOption value="credit">Credit</IonSelectOption>
-                  <IonSelectOption value="debit">Debit</IonSelectOption>
-                </IonSelect>
+                <IonInput value={balance - amount} name="receivableAmount" />
               </IonItem>
             </IonCol>
           </IonRow>
