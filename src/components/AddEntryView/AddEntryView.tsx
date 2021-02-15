@@ -115,7 +115,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
                 <IonInput value="" name="invoiceID" />
               </IonItem>
               <IonItem className="ion-margin">
-                <IonSelect name="paymentOptions" placeholder="Account Type">
+                <IonSelect name="paymentOption" placeholder="Account Type">
                   {options.map(({ value, label }) => (
                     <IonSelectOption key={value} value={value}>
                       {label}

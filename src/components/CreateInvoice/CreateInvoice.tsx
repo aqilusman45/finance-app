@@ -52,28 +52,21 @@ const INITIAL_STATE = {
 const ENTRY_INITIAL_STATE = {
   uid: uuidv4(),
   date: Date.now(),
-  paymentOptions: {
+  paymentOption: {
     value: PaymentOptions.BANK,
     label: PaymentOptions.BANK,
   },
   entryType: {
     value: EntryTypes.CREDIT,
-    label: EntryTypes.DEBIT,
+    label: EntryTypes.CREDIT,
   },
   accountRef: "",
-  invoiceRef: "",
+  invoiceRef: "weeee",
   customerName: "",
   phone: "",
   createdAt: Date.now(),
   updatedAt: Date.now(),
-  entries: [
-    {
-      payableAmount: 0,
-      receivableAmount: 0,
-      remainingAmount: 0,
-      date: Date.now(),
-    },
-  ],
+  entries: [],
 };
 const CreateInvoice = () => {
   const [createInvoice, setCreateInvoice] = useState<any>(INITIAL_STATE);
@@ -81,7 +74,7 @@ const CreateInvoice = () => {
   const [userData, setUserData] = useState<any>();
   const [productID, setProductID] = useState<any>();
   const [errors, setErrors] = useState<ValidationError | undefined>();
-  const [addEntry, setAddEntry] = useState<any>(ENTRY_INITIAL_STATE);
+  const [entryData, setEntryData] = useState<any>(ENTRY_INITIAL_STATE);
 
   const dispatch = useDispatch();
   const { push } = useHistory();
@@ -235,8 +228,25 @@ const CreateInvoice = () => {
       subTotal: calculateSubTotal(),
       total: calculateTotal(),
     };
+    const firstEntry = {
+      payableAmount: calculateTotal(),
+      receivableAmount: calculateTotal() - updatedBalance,
+      remainingAmount: updatedBalance,
+      date: Date.now()
+    }
+    const entry = {
+      ...entryData,
+      accountRef: createInvoice.accountRef,
+      invoiceRef: createInvoice.uid,
+      customerName: createInvoice.detail.name,
+      phone: createInvoice.detail.phone,
+      entries: [...entryData.entries, firstEntry],
+    };
+    console.log("entry at create", entry);
+
     try {
       await invoiceSchema.validate(invoice);
+      dispatch(addEntry(entry));
       dispatch(
         addInvoice(invoice, () => {
           push("/home/manage-invoices");

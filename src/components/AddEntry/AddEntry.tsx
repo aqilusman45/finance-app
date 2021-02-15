@@ -18,7 +18,7 @@ const INITIAL_STATE = {
   },
   accountRef: "",
   invoiceRef: "",
-  name: "",
+  customerName: "",
   phone: "",
   description: "",
   createdAt: Date.now(),

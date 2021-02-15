@@ -25,7 +25,7 @@ const entriesSlice = createSlice({
       state.isLoading = false;
     },
     addNewEntry: (state, action: PayloadAction<IEntryDocument>) => {
-      const entry = action.payload;
+      const entry = action.payload;      
       state.entries?.unshift(transformEntry(entry));
       state.isLoading = false;
     },
@@ -37,14 +37,12 @@ export default entriesSlice.reducer;
 
 export const addEntry = (
     entry: IEntry,
-    cb: () => void
 ): AppThunk => async dispatch => {
     try {
         dispatch(startLoading());
-        await addEntryMutation(entry as any);
+        await addEntryMutation(entry as any);                
         dispatch(addNewEntry(entry as any));
-        cb();
-        dispatch(doneLoading());
+         dispatch(doneLoading());
     } catch (error) {
         throw error
     }
