@@ -6,6 +6,7 @@ import {
   IonContent,
   IonSearchbar,
   IonButton,
+  IonLoading
 } from "@ionic/react";
 import Table from "react-bootstrap/Table";
 import EntriesViewModel from "../EntriesView/EntriesViewModel";
@@ -14,49 +15,30 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { fetchEntries } from "../../store/reducers/entries";
 import "./ManageEntries.css";
-
-const INITIAL_STATE = {
-  invoiceID: 23,
-  productID: 1,
-  name: "Ali",
-  phone: "032334344443",
-  amount: 3000,
-  remainingAmount: 23,
-};
-const INITIAL_STATE1 = {
-  invoiceID: 50,
-  productID: 1,
-  name: "Ahmed",
-  phone: "032334344567",
-  amount: 3000,
-  remainingAmount: 23,
-};
+import { convertDate } from "../../utils/dateConversion";
 const keys = [
-  "Invoice ID",
-  "product ID",
   "Name",
   "Phone",
-  "Payment",
+  "Date",
+  "Amount",
   "Remaining",
 ];
 
 const ManageEntries = () => {
   const { push } = useHistory();
 
-  const [entries] = useState([{ ...INITIAL_STATE }, { ...INITIAL_STATE1 }]);
   const [showModal, setShowModal] = useState(false);
   const [account, setAccount] = useState<any>();
   const dispatch = useDispatch();
-  const allEntries = useSelector((state: RootState) => {
+  const {isLoading, entries } = useSelector((state: RootState) => {
     return state.entries;
   });
-  console.log("allEntries", allEntries);
 
   useEffect(() => {
-    if (!allEntries.entries) {
+    if (!entries) {
       dispatch(fetchEntries());
     }
-  }, [allEntries.entries, dispatch]);
+  }, [entries, dispatch]);
 
   return (
     <IonContent>
@@ -84,7 +66,7 @@ const ManageEntries = () => {
             </IonButton>
           </IonCol>
         </IonRow>
-        {/* <IonLoading isOpen={isLoading} message={"Please wait..."} /> */}
+        <IonLoading isOpen={isLoading} message={"Please wait..."} />
         {!!entries?.length ? (
           <>
             <IonRow>
@@ -99,24 +81,33 @@ const ManageEntries = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {entries.map((entry, index) => {
+                    {entries.map((entry: any, index) => {
+                      const lastEntry = entry.entries[entry.entries.length - 1];
+
+                      const objValues = {
+                        customerName: entry.customerName,
+                        phone: entry.phone,
+                        date: convertDate(entry.date),
+                        payableAmount: lastEntry.payableAmount,
+                        receivableAmount: lastEntry.remainingAmount,
+                      };
                       return (
                         <tr
                           key={index}
                           className="table-row-hover"
-                          onClick={() => {
-                            setAccount(() =>
-                              entries.find(
-                                (account) =>
-                                  account.invoiceID === entry.invoiceID
-                              )
-                            );
-                            setShowModal(!showModal);
-                          }}
+                          // onClick={() => {
+                          //   setAccount(() =>
+                          //   entries.find(
+                          //       (account) =>
+                          //         account.invoiceID === entry.invoiceID
+                          //     )
+                          //   );
+                          //   setShowModal(!showModal);
+                          // }}
                         >
                           <td>{index + 1}</td>
 
-                          {Object.values(entry).map((item, index) => {
+                          {Object.values(objValues).map((item, index) => {
                             return <td key={index}>{item}</td>;
                           })}
                         </tr>

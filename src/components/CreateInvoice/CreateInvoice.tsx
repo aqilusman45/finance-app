@@ -242,8 +242,6 @@ const CreateInvoice = () => {
       phone: createInvoice.detail.phone,
       entries: [...entryData.entries, firstEntry],
     };
-    console.log("entry at create", entry);
-
     try {
       await invoiceSchema.validate(invoice);
       dispatch(addEntry(entry));
