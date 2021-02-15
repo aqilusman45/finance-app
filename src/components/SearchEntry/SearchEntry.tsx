@@ -1,7 +1,7 @@
 import React from "react";
-import SearchEnteryView from "../SearchEntryView/SearchEntryView";
+import ManageEntries from "../ManageEntries/ManageEntries";
 
 const SearchEntry: React.FC = () => {
-  return <SearchEnteryView />;
+  return <ManageEntries />;
 };
 export default SearchEntry;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   IonGrid,
   IonRow,
@@ -10,7 +10,11 @@ import {
 import Table from "react-bootstrap/Table";
 import EntriesViewModel from "../EntriesView/EntriesViewModel";
 import { useHistory } from "react-router";
-import "./SearchEntry.css";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/rootReducer";
+import { fetchEntries } from "../../store/reducers/entries";
+import "./ManageEntries.css";
+
 const INITIAL_STATE = {
   invoiceID: 23,
   productID: 1,
@@ -36,15 +40,23 @@ const keys = [
   "Remaining",
 ];
 
-const SearchEnteryView = () => {
+const ManageEntries = () => {
   const { push } = useHistory();
 
-  const [entries] = useState([
-    { ...INITIAL_STATE },
-    { ...INITIAL_STATE1 },
-  ]);
+  const [entries] = useState([{ ...INITIAL_STATE }, { ...INITIAL_STATE1 }]);
   const [showModal, setShowModal] = useState(false);
   const [account, setAccount] = useState<any>();
+  const dispatch = useDispatch();
+  const allEntries = useSelector((state: RootState) => {
+    return state.entries;
+  });
+  console.log("allEntries", allEntries);
+
+  useEffect(() => {
+    if (!allEntries.entries) {
+      dispatch(fetchEntries());
+    }
+  }, [allEntries.entries, dispatch]);
 
   return (
     <IonContent>
@@ -123,4 +135,4 @@ const SearchEnteryView = () => {
   );
 };
 
-export default SearchEnteryView;
+export default ManageEntries;

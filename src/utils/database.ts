@@ -218,3 +218,9 @@ export const addEntryMutation = async (entry: IEntryDocument) => {
     ...entry,
   });
 };
+
+export const entriesQuery = async () => {
+  const db = await get();
+  const { entries } = db.collections;
+  return entries.find().exec();
+};
