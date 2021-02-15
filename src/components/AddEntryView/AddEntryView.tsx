@@ -8,13 +8,10 @@ import {
   IonItem,
   IonInput,
   IonPage,
-  IonSelect,
-  IonSelectOption,
   IonButton,
   IonSearchbar,
 } from "@ionic/react";
 import UserSearchModel from "./../UserSearchModel/UserSearchModel";
-import { PaymentOptions } from "../../lib/enum";
 
 interface AddEntryViewProps {
   isEdit?: boolean;
