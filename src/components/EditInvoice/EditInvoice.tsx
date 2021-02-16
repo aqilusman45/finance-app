@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { RootState } from "../../store/rootReducer";
 import { PaymentOptions } from "../../lib/enum";
+import { v4 as uuidv4 } from "uuid";
 import {
   fetchInvoices,
   updateInvoiceAsync,
@@ -11,7 +12,7 @@ import {
 import { ValidationError } from "yup";
 
 const INITIAL_STATE = {
-  uid: "",
+  uid: uuidv4(),
   invoiceNumber: "",
   date: Date.now(),
   paymentOption: {
@@ -28,7 +29,7 @@ const INITIAL_STATE = {
   },
   products: [
     {
-      product: "",
+      product: 12345,
       name: "",
       quantity: 0,
       unitPrice: 0,
@@ -129,7 +130,7 @@ const EditInvoice: React.FC = () => {
       products: [
         ...createInvoice.products,
         {
-          product: Math.floor(Math.random() * 100000000000),
+          product: Math.floor(Math.random() * 10000000000),
           name: "",
           quantity: 0,
           unitPrice: 0,
@@ -143,7 +144,6 @@ const EditInvoice: React.FC = () => {
     const findIndex = createInvoice.products.findIndex(
       (index: any) => index.product === item
     );
-
     const updatedObject = [...createInvoice.products];
     updatedObject[findIndex].quantity = Number(value);
     setCreateInvoice({
