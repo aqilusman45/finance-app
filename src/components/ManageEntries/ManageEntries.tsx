@@ -6,7 +6,7 @@ import {
   IonContent,
   IonSearchbar,
   IonButton,
-  IonLoading
+  IonLoading,
 } from "@ionic/react";
 import Table from "react-bootstrap/Table";
 import EntriesViewModel from "../EntriesView/EntriesViewModel";
@@ -15,25 +15,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { fetchEntries } from "../../store/reducers/entries";
 import "./ManageEntries.css";
+import * as JsSearch from "js-search";
 import { convertDate } from "../../utils/dateConversion";
-const keys = [
-  "Name",
-  "Phone",
-  "Date",
-  "Amount",
-  "Remaining",
-];
+const keys = ["Name", "Phone", "Date", "Amount", "Balance"];
 
 const ManageEntries = () => {
   const { push } = useHistory();
 
   const [showModal, setShowModal] = useState(false);
   const [account, setAccount] = useState<any>();
+  const [filteredEntry, setFilteredEntry] = useState<any>();
   const dispatch = useDispatch();
-  const {isLoading, entries } = useSelector((state: RootState) => {
+  const { isLoading, entries } = useSelector((state: RootState) => {
     return state.entries;
   });
+  // js-search code start here
+  var search = new JsSearch.Search("customerName");
+  search.addIndex("customerName");
+  search.addIndex("phone");
 
+  if (entries) {
+    search.addDocuments(entries);
+  }
+
+  const searchEntry = (input: any) => {
+    search.search(input);
+    setFilteredEntry(search.search(input));
+  };
+  // js-search code end here
   useEffect(() => {
     if (!entries) {
       dispatch(fetchEntries());
@@ -51,7 +60,7 @@ const ManageEntries = () => {
         <IonRow>
           <IonCol size="10">
             <IonSearchbar
-              onIonChange={(e) => console.log(e.detail.value!)}
+              onIonChange={(e) => searchEntry(e.detail.value!)}
               showCancelButton="focus"
               debounce={1000}
             />
@@ -68,56 +77,65 @@ const ManageEntries = () => {
         </IonRow>
         <IonLoading isOpen={isLoading} message={"Please wait..."} />
         {!!entries?.length ? (
-          <>
-            <IonRow>
-              <IonCol size="12">
-                <Table striped hover variant="dark" responsive="sm">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      {keys.map((heading) => {
-                        return <th key={heading}>{heading.toUpperCase()}</th>;
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {entries.map((entry: any, index) => {
-                      const lastEntry = entry.entries[entry.entries.length - 1];
-
-                      const objValues = {
-                        customerName: entry.customerName,
-                        phone: entry.phone,
-                        date: convertDate(entry.date),
-                        payableAmount: lastEntry.payableAmount,
-                        receivableAmount: lastEntry.remainingAmount,
-                      };
-                      return (
-                        <tr
-                          key={index}
-                          className="table-row-hover"
-                          // onClick={() => {
-                          //   setAccount(() =>
-                          //   entries.find(
-                          //       (account) =>
-                          //         account.invoiceID === entry.invoiceID
-                          //     )
-                          //   );
-                          //   setShowModal(!showModal);
-                          // }}
-                        >
-                          <td>{index + 1}</td>
-
-                          {Object.values(objValues).map((item, index) => {
-                            return <td key={index}>{item}</td>;
-                          })}
-                        </tr>
-                      );
+          <IonRow>
+            <IonCol size="12">
+              <Table striped hover variant="dark" responsive="sm">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    {keys.map((heading) => {
+                      return <th key={heading}>{heading.toUpperCase()}</th>;
                     })}
-                  </tbody>
-                </Table>
-              </IonCol>
-            </IonRow>
-          </>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredEntry?.length
+                    ? filteredEntry.map((entry: any, index: any) => {
+                        const lastEntry =
+                          entry.entries[entry.entries.length - 1];
+
+                        const objValues = {
+                          customerName: entry.customerName,
+                          phone: entry.phone,
+                          date: convertDate(entry.date),
+                          payableAmount: lastEntry.payableAmount,
+                          receivableAmount: lastEntry.remainingAmount,
+                        };
+                        return (
+                          <tr key={index} className="table-row-hover">
+                            <td>{index + 1}</td>
+
+                            {Object.values(objValues).map((item, index) => {
+                              return <td key={index}>{item}</td>;
+                            })}
+                          </tr>
+                        );
+                      })
+                    : entries.map((entry: any, index: any) => {
+                        const lastEntry =
+                          entry.entries[entry.entries.length - 1];
+
+                        const objValues = {
+                          customerName: entry.customerName,
+                          phone: entry.phone,
+                          date: convertDate(entry.date),
+                          payableAmount: lastEntry.payableAmount,
+                          receivableAmount: lastEntry.remainingAmount,
+                        };
+                        return (
+                          <tr key={index} className="table-row-hover">
+                            <td>{index + 1}</td>
+
+                            {Object.values(objValues).map((item, index) => {
+                              return <td key={index}>{item}</td>;
+                            })}
+                          </tr>
+                        );
+                      })}
+                </tbody>
+              </Table>
+            </IonCol>
+          </IonRow>
         ) : (
           <p>No Entry found</p>
         )}

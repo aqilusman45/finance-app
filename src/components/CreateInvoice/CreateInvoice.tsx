@@ -236,7 +236,7 @@ const CreateInvoice = () => {
     };
     const firstEntry = {
       payableAmount: calculateTotal(),
-      receivableAmount: calculateTotal() - updatedBalance,
+      receivableAmount: createInvoice.currentBalance,
       remainingAmount: updatedBalance,
       date: Date.now(),
     };
