@@ -103,14 +103,14 @@ const EditInvoice: React.FC = () => {
       (index: any) => index.product === productID
     );
 
-    let updatedObject = [...createInvoice.products];
-    updatedObject[findIndex].product = product.uid;
-    updatedObject[findIndex].unitPrice = product.price;
-    updatedObject[findIndex].name = product.name;
-    setCreateInvoice({
-      ...createInvoice,
-      products: updatedObject,
-    });
+    // let updatedObject = [...createInvoice.products];
+    // updatedObject[findIndex].product = product.uid;
+    // updatedObject[findIndex].unitPrice = product.price;
+    // updatedObject[findIndex].name = product.name;
+    // setCreateInvoice({
+    //   ...createInvoice,
+    //   products: updatedObject,
+    // });
   };
 
   const RemoveItem = (remItem: any) => {
@@ -144,12 +144,12 @@ const EditInvoice: React.FC = () => {
     const findIndex = createInvoice.products.findIndex(
       (index: any) => index.product === item
     );
-    const updatedObject = [...createInvoice.products];
-    updatedObject[findIndex].quantity = Number(value);
-    setCreateInvoice({
-      ...createInvoice,
-      products: updatedObject,
-    });
+    // const updatedObject = [...createInvoice.products];
+    // updatedObject[findIndex].quantity = Number(value);
+    // setCreateInvoice({
+    //   ...createInvoice,
+    //   products: updatedObject,
+    // });
   };
 
   const getDiscountValue = (value: number, item: number) => {
@@ -157,12 +157,12 @@ const EditInvoice: React.FC = () => {
       (index: any) => index.product === item
     );
 
-    const updatedObject = [...createInvoice.products];
-    updatedObject[findIndex].discount = Number(value);
-    setCreateInvoice({
-      ...createInvoice,
-      products: updatedObject,
-    });
+    // const updatedObject = [...createInvoice.products];
+    // updatedObject[findIndex].discount = Number(value);
+    // setCreateInvoice({
+    //   ...createInvoice,
+    //   products: updatedObject,
+    // });
   };
 
   const calculateTotalDiscount = () => {
@@ -192,7 +192,7 @@ const EditInvoice: React.FC = () => {
   };
 
   const handleTaxInput = (value: number) => {
-    setTaxInput(value);
+    // setTaxInput(value);
   };
 
   const calculateTotal = () => {
