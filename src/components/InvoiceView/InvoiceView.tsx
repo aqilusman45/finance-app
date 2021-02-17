@@ -20,7 +20,7 @@ import { IonLoading } from "@ionic/react";
 import { fetchProducts } from "../../store/reducers/products";
 import { fetchAccounts } from "../../store/reducers/accounts";
 import ProductSearchModel from "../ProductSearchModel/ProductSearchModel";
-const keys = ["Description", "Quantity", "Unit Price", "Discount", "Total"];
+const keys = ["Description", "Quantity", "Unit Price", "Discount %", "Total"];
 
 interface InvoiceViewProps {
   RemoveItem?: any;
