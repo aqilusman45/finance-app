@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchInvoices } from "../../store/reducers/invoices";
 import { RootState } from "../../store/rootReducer";
 import * as JsSearch from "js-search";
-
+import Pagination from "../Pagination/Pagination";
 const keys = ["Invoice ID", "Name", "Phone", "Discount", "Tax", "Total"];
 
 const ManageInvoices: React.FC = () => {
@@ -37,32 +37,10 @@ const ManageInvoices: React.FC = () => {
 
   // pagination code start here
 
-  const todosPerPage = 3;
-  const indexOfLastTodo = currentPage * todosPerPage;
-  const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-  const currentTodos = invoices?.slice(indexOfFirstTodo, indexOfLastTodo);
-  const invoicesLength: any = invoices?.length;
-
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(invoicesLength / todosPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
-  const handleClick = (event: any) => {
-    setCurrentPage(Number(event));
-  };
-
-  const renderPageNumbers = pageNumbers.map((number) => {
-    return (
-      <li
-        key={number}
-        className="page-item"
-        onClick={() => handleClick(number)}
-      >
-        <a className="page-link">{number}</a>
-      </li>
-    );
-  });
+  const itemsPerPage = 3;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = invoices?.slice(indexOfFirstItem, indexOfLastItem);
 
   // pagination code end here
 
@@ -186,7 +164,7 @@ const ManageInvoices: React.FC = () => {
                               );
                             }
                           )
-                        : currentTodos?.map((invoice: any, index: number) => {
+                        : currentItems?.map((invoice: any, index: number) => {
                             const data = {
                               uid: invoice.uid,
                               invoiceNumber: invoice.invoiceNumber,
@@ -229,24 +207,11 @@ const ManageInvoices: React.FC = () => {
           ) : (
             <p>No Invoice found</p>
           )}
-
-          <nav aria-label="Page navigation example">
-            <ul className="pagination">
-              <li className="page-item" onClick={() => handleClick(1)}>
-                <a className="page-link" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                  <span className="sr-only">Previous</span>
-                </a>
-              </li>
-              {renderPageNumbers}
-              <li className="page-item">
-                <a className="page-link" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                  <span className="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
+          <Pagination
+            itemsPerPage={itemsPerPage}
+            data={invoices}
+            setCurrentPage={setCurrentPage}
+          />
         </IonGrid>
       </IonContent>
     </IonPage>
