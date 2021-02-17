@@ -287,6 +287,7 @@ const CreateInvoice = () => {
       submit={submit}
       errors={errors}
       setErrors={setErrors}
+      taxInput={taxInput}
     />
   );
 };

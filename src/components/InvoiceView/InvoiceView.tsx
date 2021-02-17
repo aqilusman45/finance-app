@@ -42,6 +42,7 @@ interface InvoiceViewProps {
   submit?: any;
   errors?: any;
   setErrors?: any;
+  taxInput?: any
 }
 
 const InvoiceView: React.FC<InvoiceViewProps> = ({
@@ -63,6 +64,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   submit,
   errors,
   setErrors,
+  taxInput
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
@@ -266,13 +268,13 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                       <td className="position-relative">
                         <input
                           placeholder="Enter Tax"
-                          value={createInvoice.taxRate}
                           className="inputStyle txtCenter cursor"
                           name="tax"
                           type="number"
                           onChange={(e: any) => {
                             handleTaxInput(e.target.value);
                           }}
+                          value={taxInput}
                         />
                         <IonIcon
                           className=" position-absolute createIcon"

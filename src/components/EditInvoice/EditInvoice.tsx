@@ -54,7 +54,7 @@ const EditInvoice: React.FC = () => {
   }>();
 
   const [createInvoice, setCreateInvoice] = useState<any>(INITIAL_STATE);
-  const [taxInput] = useState<any>(0);
+  const [taxInput, setTaxInput] = useState<any>(0);
   const [userData, setUserData] = useState<any>();
   const [productID, setProductID] = useState<any>();
   const [errors, setErrors] = useState<ValidationError | undefined>();
@@ -99,18 +99,27 @@ const EditInvoice: React.FC = () => {
   };
 
   const updateProductDetail = (product: any) => {
-    // const findIndex = createInvoice.products.findIndex(
-    //   (index: any) => index.product === productID
-    // );
+    const findIndex = createInvoice.products.findIndex(
+      (index: any) => index.product === productID
+    );
+    const updatedObject = createInvoice.products.map(
+      (node: any, idx: number) => {
+        if (findIndex === idx) {
+          return {
+            ...node,
+            product: product.uid,
+            name: product.name,
+            unitPrice: product.price,
+          };
+        }
+        return node;
+      }
+    );
 
-    // let updatedObject = [...createInvoice.products];
-    // updatedObject[findIndex].product = product.uid;
-    // updatedObject[findIndex].unitPrice = product.price;
-    // updatedObject[findIndex].name = product.name;
-    // setCreateInvoice({
-    //   ...createInvoice,
-    //   products: updatedObject,
-    // });
+    setCreateInvoice({
+      ...createInvoice,
+      products: updatedObject,
+    });
   };
 
   const RemoveItem = (remItem: any) => {
@@ -141,28 +150,46 @@ const EditInvoice: React.FC = () => {
   };
 
   const UpdateQuantity = (value: any, item: number) => {
-    // const findIndex = createInvoice.products.findIndex(
-    //   (index: any) => index.product === item
-    // );
-    // const updatedObject = [...createInvoice.products];
-    // updatedObject[findIndex].quantity = Number(value);
-    // setCreateInvoice({
-    //   ...createInvoice,
-    //   products: updatedObject,
-    // });
+    const findIndex = createInvoice.products.findIndex(
+      (index: any) => index.product === item
+    );
+    const updatedObject = createInvoice.products.map(
+      (node: any, idx: number) => {
+        if (findIndex === idx) {
+          return {
+            ...node,
+            quantity: Number(value),
+          };
+        }
+        return node;
+      }
+    );
+    setCreateInvoice({
+      ...createInvoice,
+      products: updatedObject,
+    });
   };
 
   const getDiscountValue = (value: number, item: number) => {
-    // const findIndex = createInvoice.products.findIndex(
-    //   (index: any) => index.product === item
-    // );
+    const findIndex = createInvoice.products.findIndex(
+      (index: any) => index.product === item
+    );
 
-    // const updatedObject = [...createInvoice.products];
-    // updatedObject[findIndex].discount = Number(value);
-    // setCreateInvoice({
-    //   ...createInvoice,
-    //   products: updatedObject,
-    // });
+    const updatedObject = createInvoice.products.map(
+      (node: any, idx: number) => {
+        if (findIndex === idx) {
+          return {
+            ...node,
+            discount: Number(value),
+          };
+        }
+        return node;
+      }
+    );
+    setCreateInvoice({
+      ...createInvoice,
+      products: updatedObject,
+    });
   };
 
   const calculateTotalDiscount = () => {
@@ -192,7 +219,7 @@ const EditInvoice: React.FC = () => {
   };
 
   const handleTaxInput = (value: number) => {
-    // setTaxInput(value);
+    setTaxInput(value);
   };
 
   const calculateTotal = () => {
@@ -201,16 +228,17 @@ const EditInvoice: React.FC = () => {
     );
   };
 
-  const submit = async  () => {
+  const submit = async () => {
     const invoice = {
       ...createInvoice,
-      updatedAt: Date.now()
-      
-    }
+      updatedAt: Date.now(),
+    };
     try {
-      dispatch(updateInvoiceAsync(invoice as any, () => {
-        push('/home/create-invoice')
-      }))      
+      dispatch(
+        updateInvoiceAsync(invoice as any, () => {
+          push("/home/create-invoice");
+        })
+      );
     } catch (error) {
       setErrors(error);
     }
@@ -237,6 +265,7 @@ const EditInvoice: React.FC = () => {
       submit={submit}
       errors={errors}
       setErrors={setErrors}
+      taxInput={taxInput}
     />
   );
 };
