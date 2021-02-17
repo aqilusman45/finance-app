@@ -15,7 +15,6 @@ import {
   ManageEntries
 } from "../components/index";
 import EditAttribute from "../components/EditAttribute/EditAttribute";
-import SearchEntry from "../components/SearchEntry/SearchEntry";
 
 export const routes = [
   {

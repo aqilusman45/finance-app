@@ -77,7 +77,7 @@ const CreateInvoice = () => {
   const [userData, setUserData] = useState<any>();
   const [productID, setProductID] = useState<any>();
   const [errors, setErrors] = useState<ValidationError | undefined>();
-  const [entryData, setEntryData] = useState<any>(ENTRY_INITIAL_STATE);
+  const [entryData] = useState<any>(ENTRY_INITIAL_STATE);
   const [accountData, setAccountData] = useState({});
 
   const dispatch = useDispatch();

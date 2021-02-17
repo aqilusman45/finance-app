@@ -54,7 +54,7 @@ const EditInvoice: React.FC = () => {
   }>();
 
   const [createInvoice, setCreateInvoice] = useState<any>(INITIAL_STATE);
-  const [taxInput, setTaxInput] = useState<any>(0);
+  const [taxInput] = useState<any>(0);
   const [userData, setUserData] = useState<any>();
   const [productID, setProductID] = useState<any>();
   const [errors, setErrors] = useState<ValidationError | undefined>();
@@ -99,9 +99,9 @@ const EditInvoice: React.FC = () => {
   };
 
   const updateProductDetail = (product: any) => {
-    const findIndex = createInvoice.products.findIndex(
-      (index: any) => index.product === productID
-    );
+    // const findIndex = createInvoice.products.findIndex(
+    //   (index: any) => index.product === productID
+    // );
 
     // let updatedObject = [...createInvoice.products];
     // updatedObject[findIndex].product = product.uid;
@@ -141,9 +141,9 @@ const EditInvoice: React.FC = () => {
   };
 
   const UpdateQuantity = (value: any, item: number) => {
-    const findIndex = createInvoice.products.findIndex(
-      (index: any) => index.product === item
-    );
+    // const findIndex = createInvoice.products.findIndex(
+    //   (index: any) => index.product === item
+    // );
     // const updatedObject = [...createInvoice.products];
     // updatedObject[findIndex].quantity = Number(value);
     // setCreateInvoice({
@@ -153,9 +153,9 @@ const EditInvoice: React.FC = () => {
   };
 
   const getDiscountValue = (value: number, item: number) => {
-    const findIndex = createInvoice.products.findIndex(
-      (index: any) => index.product === item
-    );
+    // const findIndex = createInvoice.products.findIndex(
+    //   (index: any) => index.product === item
+    // );
 
     // const updatedObject = [...createInvoice.products];
     // updatedObject[findIndex].discount = Number(value);

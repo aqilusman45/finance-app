@@ -1,11 +1,18 @@
 import React from "react";
+import "./Pagination.css";
 
 interface PaginationProps {
   data: any;
   itemsPerPage: number;
   setCurrentPage: (num: number) => void;
 }
-const Pagination = ({ data, itemsPerPage, setCurrentPage }: PaginationProps) => {
+
+const Pagination = ({
+  data,
+  itemsPerPage,
+  setCurrentPage,
+}: PaginationProps) => {
+
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(data?.length / itemsPerPage); i++) {
     pageNumbers.push(i);
@@ -22,7 +29,7 @@ const Pagination = ({ data, itemsPerPage, setCurrentPage }: PaginationProps) => 
         className="page-item"
         onClick={() => handleClick(number)}
       >
-        <a className="page-link">{number}</a>
+        <button className="page-link">{number}</button>
       </li>
     );
   });
@@ -31,17 +38,17 @@ const Pagination = ({ data, itemsPerPage, setCurrentPage }: PaginationProps) => 
     <nav aria-label="Page navigation example">
       <ul className="pagination">
         <li className="page-item" onClick={() => handleClick(1)}>
-          <a className="page-link" aria-label="Previous">
+          <button className="page-link" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
             <span className="sr-only">Previous</span>
-          </a>
+          </button>
         </li>
         {renderPageNumbers}
         <li className="page-item">
-          <a className="page-link" aria-label="Next">
+          <button className="page-link" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
             <span className="sr-only">Next</span>
-          </a>
+          </button>
         </li>
       </ul>
     </nav>

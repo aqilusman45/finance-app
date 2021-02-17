@@ -23,7 +23,7 @@ const ManageEntries = () => {
   const { push } = useHistory();
 
   const [showModal, setShowModal] = useState(false);
-  const [account, setAccount] = useState<any>();
+  const [account] = useState<any>();
   const [filteredEntry, setFilteredEntry] = useState<any>();
   const dispatch = useDispatch();
   const { isLoading, entries } = useSelector((state: RootState) => {
