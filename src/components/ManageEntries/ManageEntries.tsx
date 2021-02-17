@@ -17,11 +17,14 @@ import { fetchEntries } from "../../store/reducers/entries";
 import "./ManageEntries.css";
 import * as JsSearch from "js-search";
 import { convertDate } from "../../utils/dateConversion";
+import Pagination from "../Pagination/Pagination";
+
 const keys = ["Name", "Phone", "Date", "Amount", "Balance"];
 
 const ManageEntries = () => {
   const { push } = useHistory();
 
+  const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [account] = useState<any>();
   const [filteredEntry, setFilteredEntry] = useState<any>();
@@ -29,6 +32,16 @@ const ManageEntries = () => {
   const { isLoading, entries } = useSelector((state: RootState) => {
     return state.entries;
   });
+
+  // pagination code start here
+
+  const itemsPerPage = 3;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = entries?.slice(indexOfFirstItem, indexOfLastItem);
+
+  // pagination code end here
+
   // js-search code start here
   var search = new JsSearch.Search("customerName");
   search.addIndex("customerName");
@@ -111,7 +124,7 @@ const ManageEntries = () => {
                           </tr>
                         );
                       })
-                    : entries.map((entry: any, index: any) => {
+                    : currentItems?.map((entry: any, index: any) => {
                         const lastEntry =
                           entry.entries[entry.entries.length - 1];
 
@@ -138,6 +151,16 @@ const ManageEntries = () => {
           </IonRow>
         ) : (
           <p>No Entry found</p>
+        )}
+
+        {filteredEntry?.length ? (
+          ""
+        ) : (
+          <Pagination
+            itemsPerPage={itemsPerPage}
+            data={entries}
+            setCurrentPage={setCurrentPage}
+          />
         )}
       </IonGrid>
     </IonContent>

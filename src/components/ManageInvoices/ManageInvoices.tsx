@@ -207,11 +207,16 @@ const ManageInvoices: React.FC = () => {
           ) : (
             <p>No Invoice found</p>
           )}
-          <Pagination
-            itemsPerPage={itemsPerPage}
-            data={invoices}
-            setCurrentPage={setCurrentPage}
-          />
+
+          {filteredInvoices?.length ? (
+            ""
+          ) : (
+            <Pagination
+              itemsPerPage={itemsPerPage}
+              data={invoices}
+              setCurrentPage={setCurrentPage}
+            />
+          )}
         </IonGrid>
       </IonContent>
     </IonPage>

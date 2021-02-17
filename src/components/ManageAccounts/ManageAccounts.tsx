@@ -14,16 +14,28 @@ import Badge from "react-bootstrap/Badge";
 import AccountModal from "../ViewAccount/ViewAccount";
 import { fetchAccounts } from "../../store/reducers/accounts";
 import { IAccount } from "../../lib/accounts";
+import Pagination from "../Pagination/Pagination";
 
 const headers = ["name", "phone", "email", "accountTitle", "accountType"];
 
 const ManageAccounts: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [account, setAccount] = useState<IAccount | undefined>();
   const dispatch = useDispatch();
   const { isLoading, accounts } = useSelector((state: RootState) => {
     return state.accounts;
   });
+console.log("accounts", accounts);
+
+  // pagination code start here
+
+  const itemsPerPage = 3;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = accounts?.slice(indexOfFirstItem, indexOfLastItem);
+
+  // pagination code end here
 
   useEffect(() => {
     if (!accounts) {
@@ -60,14 +72,12 @@ const ManageAccounts: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {accounts.map((account: IAccount, index: any) => (
+                      {currentItems?.map((account: IAccount, index: any) => (
                         <tr
                           className="table-row-hover"
                           onClick={() => {
                             setAccount(() =>
                               accounts.find((acc) => acc.uid === account.uid)
-                              
-                              
                             );
                             setShowModal(!showModal);
                           }}
@@ -77,10 +87,9 @@ const ManageAccounts: React.FC = () => {
                           {Object.keys(account).map((key) => {
                             // @ts-ignore
                             const accountKey = account[key];
-                            
+
                             if (headers.includes(key)) {
                               if (typeof accountKey !== "object") {
-                                
                                 return (
                                   <td
                                     key={`${accountKey}`}
@@ -88,7 +97,7 @@ const ManageAccounts: React.FC = () => {
                                 );
                               } else {
                                 const { label } = accountKey;
-                                
+
                                 return (
                                   <td key={accountKey}>
                                     <Badge
@@ -117,6 +126,12 @@ const ManageAccounts: React.FC = () => {
           ) : (
             <p>No accounts found</p>
           )}
+          
+          <Pagination
+            itemsPerPage={itemsPerPage}
+            data={accounts}
+            setCurrentPage={setCurrentPage}
+          />
         </IonGrid>
       </IonContent>
     </>
