@@ -178,6 +178,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                   <input
                                     className="inputStyle txtCenter position-relative"
                                     name="quantity"
+                                    type="number"
                                     onChange={(e: any) => {
                                       UpdateQuantity(
                                         e.target.value,
@@ -200,6 +201,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                     className="inputStyle txtCenter "
                                     name="discount"
                                     value={product.discount}
+                                    type="number"
                                     onChange={(e: any) => {
                                       getDiscountValue(
                                         e.target.value,
@@ -267,6 +269,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                           value={createInvoice.taxRate}
                           className="inputStyle txtCenter cursor"
                           name="tax"
+                          type="number"
                           onChange={(e: any) => {
                             handleTaxInput(e.target.value);
                           }}
