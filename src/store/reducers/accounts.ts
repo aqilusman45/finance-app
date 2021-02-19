@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addAccountMutation, accountsQuery, updateAccountMutation } from "../../utils/database";
 import { AppThunk } from "..";
 import { IAccount, IAccountDocument } from "../../lib/accounts";
-import { transformAccount, transformAccounts } from "../../utils/transform";
+import { transformAccounts } from "../../utils/transform";
 
 interface IInitialState {
     accounts: IAccount[] | null;
@@ -31,7 +31,7 @@ const accountsSlice = createSlice({
         },
         addNewAccount: (state, action: PayloadAction<IAccountDocument>) => {
             const account = action.payload;
-            state.accounts?.unshift(transformAccount(account));
+            state.accounts?.unshift(account);
             state.isLoading = false;
         },
         updateAccount: (state, action: PayloadAction<IAccountDocument>) => {

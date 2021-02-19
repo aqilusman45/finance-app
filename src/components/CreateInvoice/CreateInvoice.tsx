@@ -92,7 +92,7 @@ const CreateInvoice = () => {
     }
   }, [accounts, dispatch]);
 
-  const updateUserDetail = (user: any) => {    
+  const updateUserDetail = (user: any) => {
     setAccountData(user);
 
     setCreateInvoice({
@@ -118,11 +118,12 @@ const CreateInvoice = () => {
     const findIndex = createInvoice.products.findIndex(
       (index: any) => index.product === productID
     );
-
     let updatedObject = [...createInvoice.products];
+
     updatedObject[findIndex].product = product.uid;
     updatedObject[findIndex].unitPrice = product.price;
     updatedObject[findIndex].name = product.name;
+    
     setCreateInvoice({
       ...createInvoice,
       products: updatedObject,
@@ -254,7 +255,7 @@ const CreateInvoice = () => {
     };
     try {
       await invoiceSchema.validate(invoice);
-      dispatch(updateAccountAsync(account as any))
+      dispatch(updateAccountAsync(account as any));
       dispatch(addEntry(entry));
       dispatch(
         addInvoice(invoice, () => {

@@ -64,12 +64,12 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   submit,
   errors,
   setErrors,
-  taxInput
+  taxInput,
+  
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
   const dispatch = useDispatch();
-
   const { isLoading, accounts } = useSelector((state: RootState) => {
     return state.accounts;
   });
@@ -160,7 +160,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                               (product.discount * totalPrice) / 100;
                             return (
                               <tr
-                                key={product.product}
+                                key={index}
                                 className="table-row-hover"
                               >
                                 <td>{index + 1}</td>
