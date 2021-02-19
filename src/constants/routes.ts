@@ -12,7 +12,8 @@ import {
   CreateInvoice,
   EditInvoice,
   ManageInvoices,
-  ManageEntries
+  ManageEntries,
+  EditProduct
 } from "../components/index";
 import EditAttribute from "../components/EditAttribute/EditAttribute";
 
@@ -118,7 +119,7 @@ export const routes = [
 export const nonMenuRoutes = [
   {
     link: "/edit-product/:id",
-    component: ExploreContainer,
+    component: EditProduct,
   },
   {
     link: "/edit-attribute/:id",

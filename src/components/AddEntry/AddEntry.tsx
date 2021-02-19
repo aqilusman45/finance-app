@@ -7,7 +7,6 @@ import {
 } from "../../store/reducers/accounts";
 import { fetchInvoices } from "../../store/reducers/invoices";
 import { RootState } from "../../store/rootReducer";
-import { updateUserBalance } from "../../utils/invoice";
 import { useHistory } from "react-router";
 
 const INITIAL_STATE = {
@@ -56,11 +55,10 @@ const AddEntry: React.FC = () => {
     setFormFields(user);
   };
 
-  const updatedBalance = updateUserBalance(formFields.balance, amount);
   const submit = () => {
     const account = {
       ...formFields,
-      balance: updatedBalance,
+      balance: amount - formFields.balance,
       updatedAt: Date.now(),
     };
     try {

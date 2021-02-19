@@ -28,8 +28,6 @@ const ManageProduct: React.FC = () => {
   const { isLoading, products } = useSelector((state: RootState) => {
     return state.products;
   });
-  console.log("products", products);
-
   // pagination code start here
 
   const itemsPerPage = 3;

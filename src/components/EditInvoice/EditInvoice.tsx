@@ -231,6 +231,10 @@ const EditInvoice: React.FC = () => {
   const submit = async () => {
     const invoice = {
       ...createInvoice,
+      currentBalance: createInvoice.currentBalance - calculateTotal(),
+      totalDiscount: calculateTotalDiscount(),
+      subTotal: calculateSubTotal(),
+      total: calculateTotal(),
       updatedAt: Date.now(),
     };
     try {

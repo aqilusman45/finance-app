@@ -37,6 +37,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const { name, phone, balance } = formFields;
+  console.log("formFields", formFields);
 
   return (
     <IonPage>
@@ -64,21 +65,22 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
             <IonCol size="6">
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Account Holder Name</IonLabel>
-                <IonInput value={name} name="name" />
+                <IonInput readonly value={name} name="name" />
               </IonItem>
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Phone</IonLabel>
-                <IonInput value={phone} name="phone" />
+                <IonInput readonly value={phone} name="phone" />
               </IonItem>
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Balance</IonLabel>
-                <IonInput value={balance} name="phone" />
+                <IonInput readonly value={balance} name="phone" />
               </IonItem>
 
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Amount</IonLabel>
                 <IonInput
                   name="amount"
+                  type="number"
                   value={amount}
                   onIonChange={(e) => setAmount(e.detail.value!)}
                 />
@@ -94,11 +96,15 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
             <IonCol size="6">
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">invoice ID</IonLabel>
-                <IonInput value="" name="invoiceID" />
+                <IonInput readonly value="" name="invoiceID" />
               </IonItem>
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Receivable Amount</IonLabel>
-                <IonInput value={balance - amount} name="receivableAmount" />
+                <IonInput
+                  readonly
+                  value={amount - balance}
+                  name="receivableAmount"
+                />
               </IonItem>
             </IonCol>
           </IonRow>

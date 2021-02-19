@@ -224,3 +224,14 @@ export const entriesQuery = async () => {
   const { entries } = db.collections;
   return entries.find().exec();
 };
+
+export const updateProductMutation = async (product: IProduct) => {
+  const db = await get();
+  const { products } = db.collections;
+  const prod = await products.findOne().where("uid").eq(product.uid).exec();
+  await prod?.update({
+    $set: {
+      ...product,
+    },
+  });
+};

@@ -179,7 +179,7 @@ const AddProductForm = ({
                 onIonChange={handleChange}
               />
             </IonItem>
-            {!!attributes?.length &&
+            {attributes?.length &&
               attributes.map(
                 ({
                   attributeName: { key, name },

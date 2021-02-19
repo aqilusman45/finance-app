@@ -123,7 +123,7 @@ const CreateInvoice = () => {
     updatedObject[findIndex].product = product.uid;
     updatedObject[findIndex].unitPrice = product.price;
     updatedObject[findIndex].name = product.name;
-    
+
     setCreateInvoice({
       ...createInvoice,
       products: updatedObject,
@@ -238,7 +238,7 @@ const CreateInvoice = () => {
     const firstEntry = {
       payableAmount: calculateTotal(),
       receivableAmount: createInvoice.currentBalance,
-      remainingAmount: updatedBalance,
+      remainingAmount: createInvoice.currentBalance - calculateTotal(),
       date: Date.now(),
     };
     const entry = {
@@ -251,7 +251,7 @@ const CreateInvoice = () => {
     };
     const account = {
       ...accountData,
-      balance: updatedBalance,
+      balance: createInvoice.currentBalance - calculateTotal(),
     };
     try {
       await invoiceSchema.validate(invoice);

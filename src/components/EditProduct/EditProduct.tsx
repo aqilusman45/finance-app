@@ -1,17 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import "./EditProduct.css";
+import { IOption } from "../../lib/attributes";
+import { IImages } from "../../lib/products";
+import { ValidationError } from "yup";
+import { useParams, useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
-import { v4 as uuidv4 } from "uuid";
-import { fetchAttributes } from "../../store/reducers/attributes";
-import { insertProduct } from "../../store/reducers/products";
-import { encodeImageFileAsURL } from "../../utils/toBase64";
-import { IImages } from "../../lib/products";
-import { IOption } from "../../lib/attributes";
-import { useHistory } from "react-router";
-import { productAttributesCheck, productSchema } from "../../helpers/validations";
-import { ValidationError } from "yup";
 import AddProductForm from "../AddProductView/AddProductView";
-
+import { fetchProducts } from "../../store/reducers/products";
+import { updateProductAsync } from "../../store/reducers/products";
+import { getProductAttatchments } from "../../utils/database";
+import {
+  productAttributesCheck,
+  productSchema,
+} from "../../helpers/validations";
+import { encodeImageFileAsURL } from "../../utils/toBase64";
+import { fetchAttributes } from "../../store/reducers/attributes";
 const INITIAL_STATE = {
   name: "",
   quantity: `0`,
@@ -22,27 +26,52 @@ const INITIAL_STATE = {
   description: "",
 };
 
-const AddProduct: React.FC = () => {
-  const fileIput = useRef<any>(null);
+const EditProduct: React.FC = () => {
+  const { id } = useParams<{
+    id: string;
+  }>();
 
+  const fileIput = useRef<any>(null);
   const [index, setIndex] = useState(0);
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
   const [images, setImages] = useState<IImages[]>([]);
   const [errors, setErrors] = useState<ValidationError | undefined>();
   const [selectedAttrs, setAttributes] = useState<any>({});
 
-  const { push } = useHistory();
-  const dispatch = useDispatch();
+  const { products } = useSelector((state: RootState) => {
+    return state.products;
+  });
   const { attributes, isLoading } = useSelector(
     (state: RootState) => state.attributes
   );
-  const { name, price, quantity, sku, description, cost} = formFields;
+  const { push } = useHistory();
+  const dispatch = useDispatch();
+  const { name, price, quantity, sku, description, cost } = formFields;
 
   useEffect(() => {
+    if (!products) {
+      dispatch(fetchProducts());
+    }
+
     if (!attributes) {
       dispatch(fetchAttributes());
     }
-  }, [attributes, dispatch]);
+  }, [attributes, products, dispatch]);
+
+  useEffect(() => {
+    if (products) {
+      const product = products.find(({ uid }) => uid === id);
+      if (product) {
+        setFormFields({ ...(product as any) });
+        (async () => {
+          const images = (await getProductAttatchments(product)).filter(
+            ({ base64 }) => base64
+          );
+          setImages(images as any);
+        })();
+      }
+    }
+  }, [products, id]);
 
   const handleSelect = (selectedIndex: number) => {
     setIndex(selectedIndex);
@@ -71,10 +100,10 @@ const AddProduct: React.FC = () => {
   };
 
   const removeImage = (idx: number) => {
-    const newImages = images.filter((node, index)=> idx !== index)
-    setIndex(0)
-    setImages(newImages)
-  }
+    const newImages = images.filter((node, index) => idx !== index);
+    setIndex(0);
+    setImages(newImages);
+  };
 
   const submit = async () => {
     const attrs = Object.keys(selectedAttrs).map((uid) => {
@@ -84,34 +113,30 @@ const AddProduct: React.FC = () => {
       };
     });
     const product = {
-      name,
-      uid: uuidv4(),
+      ...formFields,
       quantity: parseInt(`${quantity}`),
       price: parseInt(`${price}`),
-      sku,
       cost: parseInt(cost),
-      description,
-      enabled: true,
       createdAt: Date.now(),
       updatedAt: Date.now(),
       attributes: attrs,
       images: images.map(({ name }) => ({ name })),
     };
     try {
-      await productSchema.validate(product)
-      await productAttributesCheck(attributes, product.attributes)
+      await productSchema.validate(product);
+      await productAttributesCheck(attributes, product.attributes);
       dispatch(
-        insertProduct(product as any, images, () => {
+        updateProductAsync(product as any, images, () => {
           push("/home/manage-products");
         })
       );
     } catch (error) {
-      setErrors(error)
+      setErrors(error);
     }
   };
 
   return (
-    <AddProductForm 
+    <AddProductForm
       removeImage={removeImage}
       attributes={attributes}
       cost={cost}
@@ -135,4 +160,4 @@ const AddProduct: React.FC = () => {
   );
 };
 
-export default AddProduct;
+export default EditProduct;
