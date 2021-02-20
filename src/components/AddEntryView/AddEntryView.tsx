@@ -102,7 +102,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
                 <IonLabel position="stacked">Receivable Amount</IonLabel>
                 <IonInput
                   readonly
-                  value={amount - balance}
+                  value={Number(balance) + Number(amount)}
                   name="receivableAmount"
                 />
               </IonItem>

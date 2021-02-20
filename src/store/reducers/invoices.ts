@@ -95,7 +95,6 @@ export const updateInvoiceAsync = (
     dispatch(updateInvoice(invoice));
     cb();
     dispatch(doneLoading());
-    console.log("invoice", invoice);
   } catch (error) {
     throw error;
   }

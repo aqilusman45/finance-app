@@ -28,13 +28,12 @@ const INITIAL_STATE = {
 const AddEntry: React.FC = () => {
   const [userData, setUserData] = useState<any>();
   const [amount, setAmount] = useState<any>(0);
-  const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
+  const [formFields, setFormFields] = useState<any>({ ...INITIAL_STATE });
   const { push } = useHistory();
   const dispatch = useDispatch();
   const { accounts } = useSelector((state: RootState) => {
     return state.accounts;
   });
-
   const { invoices } = useSelector((state: RootState) => {
     return state.invoices;
   });
@@ -58,7 +57,7 @@ const AddEntry: React.FC = () => {
   const submit = () => {
     const account = {
       ...formFields,
-      balance: amount - formFields.balance,
+      balance: Number(formFields.balance) + Number(amount),
       updatedAt: Date.now(),
     };
     try {
