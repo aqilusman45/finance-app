@@ -150,6 +150,7 @@ export const getProductAttatchments = async ({ uid, images }: IProduct) => {
   return imagesWithBase64;
 };
 
+
 export const updateAttributeMutation = async (attribute: IAttribute) => {
   const db = await get();
   const { attributes } = db.collections;

@@ -9,8 +9,13 @@ import {
   fetchInvoices,
   updateInvoiceAsync,
 } from "../../store/reducers/invoices";
+import { IAccount } from "../../lib/accounts";
+import {
+  fetchAccounts,
+  updateAccountAsync,
+} from "./../../store/reducers/accounts";
 import { ValidationError } from "yup";
-
+import { updateUserBalanceAtEidtInvoice } from "../../utils/invoice";
 const INITIAL_STATE = {
   uid: uuidv4(),
   invoiceNumber: "",
@@ -58,10 +63,14 @@ const EditInvoice: React.FC = () => {
   const [userData, setUserData] = useState<any>();
   const [productID, setProductID] = useState<any>();
   const [errors, setErrors] = useState<ValidationError | undefined>();
-
+  const [prevTotal, setPrevTotal] = useState<any>();
+  const [userAccont, setUserAccont] = useState<IAccount>();
   const dispatch = useDispatch();
   const { invoices } = useSelector((state: RootState) => {
     return state.invoices;
+  });
+  const { accounts } = useSelector((state: RootState) => {
+    return state.accounts;
   });
   const { push } = useHistory();
 
@@ -69,14 +78,24 @@ const EditInvoice: React.FC = () => {
     if (!invoices) {
       dispatch(fetchInvoices());
     }
-  }, [dispatch, invoices]);
+    if (!accounts) {
+      dispatch(fetchAccounts);
+    }
+  }, [dispatch, invoices, accounts]);
 
   useEffect(() => {
+    if (accounts) {
+      const findAccount = accounts.find(
+        ({ uid }) => uid === createInvoice.accountRef
+      );
+      setUserAccont(findAccount);
+    }
     if (invoices) {
       const findInvoice = invoices.find(({ uid }) => uid === id);
       setCreateInvoice(findInvoice);
+      setPrevTotal(findInvoice?.total);
     }
-  }, [id, invoices]);
+  }, [id, invoices, accounts, createInvoice.accountRef]);
 
   const updateUserDetail = (user: any) => {
     setCreateInvoice({
@@ -237,7 +256,16 @@ const EditInvoice: React.FC = () => {
       total: calculateTotal(),
       updatedAt: Date.now(),
     };
+    const account = {
+      ...userAccont,
+      balance: updateUserBalanceAtEidtInvoice(
+        createInvoice.currentBalance,
+        prevTotal,
+        calculateTotal()
+      ),
+    };
     try {
+      dispatch(updateAccountAsync(account as any));
       dispatch(
         updateInvoiceAsync(invoice as any, () => {
           push("/home/create-invoice");
