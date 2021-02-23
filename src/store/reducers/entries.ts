@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addEntryMutation, entriesQuery } from "../../utils/database";
+import { addEntryMutation, entriesQuery, updateEntryMutation } from "../../utils/database";
 import { AppThunk } from "..";
 import { IEntry, IEntryDocument } from "../../lib/entries";
 import { transformEntry, transformEntries } from "../../utils/transform";
@@ -34,6 +34,15 @@ const entriesSlice = createSlice({
       state.entries = [...entries];
       state.isLoading = false;
     },
+    updateEntry: (state, action: PayloadAction<IEntryDocument>) => {
+      const entry = action.payload;
+      state.entries?.forEach((item, idx) => {
+        if (item.uid === entry.uid && state.entries) {
+          state.entries[idx] = entry;
+        }
+      });
+      return state;
+    },
   },
 });
 
@@ -42,6 +51,7 @@ export const {
   startLoading,
   addNewEntry,
   getEntries,
+  updateEntry
 } = entriesSlice.actions;
 export default entriesSlice.reducer;
 
@@ -61,6 +71,19 @@ export const fetchEntries = (): AppThunk => async (dispatch) => {
     dispatch(startLoading());
     const entries = await entriesQuery();
     dispatch(getEntries(transformEntries(entries)));
+    dispatch(doneLoading());
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateEntryAsync = (
+  entry: IEntryDocument,
+): AppThunk => async (dispatch) => {
+  try {
+    dispatch(startLoading());
+    await updateEntryMutation(entry);
+    dispatch(updateEntry(entry));
     dispatch(doneLoading());
   } catch (error) {
     throw error;

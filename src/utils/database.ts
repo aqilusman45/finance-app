@@ -16,7 +16,7 @@ import { RxDBEncryptionPlugin } from "rxdb/plugins/encryption";
 import { RxDBValidatePlugin } from "rxdb/plugins/validate";
 import { IAccount, IAccountDocument } from "../lib/accounts";
 import { IInvoice, IInvoiceDocument } from "../lib/invoice";
-import { IEntryDocument } from "../lib/entries";
+import { IEntry, IEntryDocument } from "../lib/entries";
 import { invoiceSchema } from "./../schema/invoices";
 import { entrySchema } from "./../schema/entries";
 addRxPlugin(RxDBValidatePlugin);
@@ -233,6 +233,17 @@ export const updateProductMutation = async (product: IProduct) => {
   await prod?.update({
     $set: {
       ...product,
+    },
+  });
+};
+
+export const updateEntryMutation = async (entry: IEntry) => {
+  const db = await get();
+  const { entries } = db.collections;
+  const entr = await entries.findOne().where("uid").eq(entry.uid).exec();
+  await entr?.update({
+    $set: {
+      ...entry,
     },
   });
 };

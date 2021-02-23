@@ -14,6 +14,7 @@ import {
   fetchAccounts,
   updateAccountAsync,
 } from "./../../store/reducers/accounts";
+import { updateEntryAsync, fetchEntries } from "../../store/reducers/entries";
 import { ValidationError } from "yup";
 import { updateUserBalanceAtEidtInvoice } from "../../utils/invoice";
 const INITIAL_STATE = {
@@ -65,6 +66,7 @@ const EditInvoice: React.FC = () => {
   const [errors, setErrors] = useState<ValidationError | undefined>();
   const [prevTotal, setPrevTotal] = useState<any>();
   const [userAccont, setUserAccont] = useState<IAccount>();
+  const [ledgerEntry, setLedgerEntry] = useState<any>();
   const dispatch = useDispatch();
   const { invoices } = useSelector((state: RootState) => {
     return state.invoices;
@@ -72,6 +74,11 @@ const EditInvoice: React.FC = () => {
   const { accounts } = useSelector((state: RootState) => {
     return state.accounts;
   });
+
+  const { entries } = useSelector((state: RootState) => {
+    return state.entries;
+  });
+
   const { push } = useHistory();
 
   useEffect(() => {
@@ -81,7 +88,11 @@ const EditInvoice: React.FC = () => {
     if (!accounts) {
       dispatch(fetchAccounts);
     }
-  }, [dispatch, invoices, accounts]);
+
+    if (!entries) {
+      dispatch(fetchEntries());
+    }
+  }, [dispatch, invoices, accounts, entries]);
 
   useEffect(() => {
     if (accounts) {
@@ -90,12 +101,25 @@ const EditInvoice: React.FC = () => {
       );
       setUserAccont(findAccount);
     }
+    if (entries) {
+      const findEntry = entries.find(
+        ({ invoiceRef }) => invoiceRef === createInvoice.uid
+      );
+      setLedgerEntry(findEntry);
+    }
     if (invoices) {
       const findInvoice = invoices.find(({ uid }) => uid === id);
       setCreateInvoice(findInvoice);
       setPrevTotal(findInvoice?.total);
     }
-  }, [id, invoices, accounts, createInvoice.accountRef]);
+  }, [
+    id,
+    invoices,
+    accounts,
+    createInvoice.accountRef,
+    createInvoice.uid,
+    entries,
+  ]);
 
   const updateUserDetail = (user: any) => {
     setCreateInvoice({
@@ -250,7 +274,11 @@ const EditInvoice: React.FC = () => {
   const submit = async () => {
     const invoice = {
       ...createInvoice,
-      currentBalance: createInvoice.currentBalance - calculateTotal(),
+      currentBalance: updateUserBalanceAtEidtInvoice(
+        userAccont?.balance!,
+        prevTotal,
+        calculateTotal()
+      ),
       totalDiscount: calculateTotalDiscount(),
       subTotal: calculateSubTotal(),
       total: calculateTotal(),
@@ -259,12 +287,31 @@ const EditInvoice: React.FC = () => {
     const account = {
       ...userAccont,
       balance: updateUserBalanceAtEidtInvoice(
-        createInvoice.currentBalance,
+        userAccont?.balance!,
         prevTotal,
         calculateTotal()
       ),
+      updatedAt: Date.now(),
     };
+    const firstEntry = {
+      payableAmount: calculateTotal(),
+      receivableAmount: userAccont?.balance!,
+      remainingAmount: updateUserBalanceAtEidtInvoice(
+        userAccont?.balance!,
+        prevTotal,
+        calculateTotal()
+      ),
+      date: Date.now(),
+    };
+
+    const entry = {
+      ...ledgerEntry,
+      entries: [...ledgerEntry.entries, firstEntry],
+      updatedAt: Date.now(),
+    };
+
     try {
+      dispatch(updateEntryAsync(entry as any));
       dispatch(updateAccountAsync(account as any));
       dispatch(
         updateInvoiceAsync(invoice as any, () => {

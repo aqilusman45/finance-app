@@ -35,7 +35,6 @@ const InvoiceViewModel: React.FC<InvoiceViewModelProps> = ({
     date,
     uid,
   } = invoice;
-  console.log("invoice model", invoice);
 
   return (
     <IonModal isOpen={showModel}>
