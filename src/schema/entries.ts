@@ -45,6 +45,9 @@ export const entrySchema: RxJsonSchema = {
         },
       },
     },
+    amount: {
+      type: "number",
+    },
     accountRef: {
       type: "string",
       ref: "accounts",
@@ -58,34 +61,7 @@ export const entrySchema: RxJsonSchema = {
     },
     updatedAt: {
       type: "number",
-    },
-    customerName: {
-      type: "string",
-    },
-    phone: {
-      type: "string",
-
-    },
-    entries: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          payableAmount: {
-            type: "number",
-          },
-          receivableAmount: {
-            type: "number",
-          },
-          remainingAmount: {
-            type: "number",
-          },
-          date: {
-            type: "number",
-          },
-        },
-      },
-    },
+    }
   },
   required: ["uid", "accountRef", "invoiceRef", "paymentOption", "entryType"],
 };
