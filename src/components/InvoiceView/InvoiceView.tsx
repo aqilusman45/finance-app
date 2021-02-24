@@ -166,7 +166,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                                 <td>{index + 1}</td>
                                 <td>
                                   <input
-                                    placeholder="select Product"
+                                    placeholder="Select Product"
                                     className="inputStyle txtCenter cursor"
                                     name="productName"
                                     onClick={() => {

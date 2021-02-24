@@ -2,7 +2,7 @@ import { RxJsonSchema } from "rxdb";
 import { PaymentOptions, EntryTypes } from "../lib/enum";
 
 export const entrySchema: RxJsonSchema = {
-  title: "ledger shcema",
+  title: "ledger schema",
   version: 0,
   description: "ledger",
   type: "object",
