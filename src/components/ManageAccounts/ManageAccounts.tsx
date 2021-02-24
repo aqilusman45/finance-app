@@ -14,16 +14,46 @@ import Badge from "react-bootstrap/Badge";
 import AccountModal from "../ViewAccount/ViewAccount";
 import { fetchAccounts } from "../../store/reducers/accounts";
 import { IAccount } from "../../lib/accounts";
+import Pagination from "../Pagination/Pagination";
+import * as JsSearch from "js-search";
 
 const headers = ["name", "phone", "email", "accountTitle", "accountType"];
 
 const ManageAccounts: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filteredAccounts, setFilteredAccounts] = useState<any>();
   const [account, setAccount] = useState<IAccount | undefined>();
   const dispatch = useDispatch();
   const { isLoading, accounts } = useSelector((state: RootState) => {
     return state.accounts;
   });
+  
+  // pagination code start here
+
+  const itemsPerPage = 3;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = accounts?.slice(indexOfFirstItem, indexOfLastItem);
+
+  // pagination code end here
+
+  // js-search code start here
+  var search = new JsSearch.Search("uid");
+  search.addIndex("name");
+  search.addIndex("phone");
+  search.addIndex("email");
+
+  if (accounts) {
+    search.addDocuments(accounts);
+  }
+
+  const searchAccount = (input: any) => {
+    search.search(input);
+    setFilteredAccounts(search.search(input));
+  };
+
+  // js-search code end here
 
   useEffect(() => {
     if (!accounts) {
@@ -42,7 +72,11 @@ const ManageAccounts: React.FC = () => {
         <IonGrid className="ion-margin">
           <IonRow>
             <IonCol size="12">
-              <IonSearchbar showCancelButton="focus" debounce={1000} />
+              <IonSearchbar
+                onIonChange={(e) => searchAccount(e.detail.value!)}
+                showCancelButton="focus"
+                debounce={1000}
+              />
             </IonCol>
           </IonRow>
           <IonLoading isOpen={isLoading} message={"Please wait..."} />
@@ -60,50 +94,105 @@ const ManageAccounts: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {accounts.map((account: IAccount, index: any) => (
-                        <tr
-                          className="table-row-hover"
-                          onClick={() => {
-                            setAccount(() =>
-                              accounts.find((acc) => acc.uid === account.uid)
-                            );
-                            setShowModal(!showModal);
-                          }}
-                          key={account.uid}
-                        >
-                          <td>{index + 1}</td>
-                          {Object.keys(account).map((key) => {
-                            // @ts-ignore
-                            const accountKey = account[key];
-                            if (headers.includes(key)) {
-                              if (typeof accountKey !== "object") {
-                                return (
-                                  <td
-                                    key={`${accountKey}`}
-                                  >{`${accountKey}`}</td>
+                      {filteredAccounts?.length
+                        ? filteredAccounts?.map(
+                            (account: IAccount, index: any) => (
+                              <tr
+                                className="table-row-hover"
+                                onClick={() => {
+                                  setAccount(() =>
+                                    accounts.find(
+                                      (acc) => acc.uid === account.uid
+                                    )
+                                  );
+                                  setShowModal(!showModal);
+                                }}
+                                key={account.uid}
+                              >
+                                <td>{index + 1}</td>
+                                {Object.keys(account).map((key) => {
+                                  // @ts-ignore
+                                  const accountKey = account[key];
+
+                                  if (headers.includes(key)) {
+                                    if (typeof accountKey !== "object") {
+                                      return (
+                                        <td
+                                          key={`${accountKey}`}
+                                        >{`${accountKey}`}</td>
+                                      );
+                                    } else {
+                                      const { label } = accountKey;
+
+                                      return (
+                                        <td key={accountKey}>
+                                          <Badge
+                                            key={label}
+                                            style={{
+                                              fontSize: 10,
+                                              padding: "10px 10px",
+                                            }}
+                                            variant="dark"
+                                          >
+                                            {label}
+                                          </Badge>
+                                        </td>
+                                      );
+                                    }
+                                  }
+                                  return null;
+                                })}
+                              </tr>
+                            )
+                          )
+                        : currentItems?.map((account: IAccount, index: any) => (
+                            <tr
+                              className="table-row-hover"
+                              onClick={() => {
+                                setAccount(() =>
+                                  accounts.find(
+                                    (acc) => acc.uid === account.uid
+                                  )
                                 );
-                              } else {
-                                const { label } = accountKey;
-                                return (
-                                  <td key={accountKey}>
-                                    <Badge
-                                      key={label}
-                                      style={{
-                                        fontSize: 10,
-                                        padding: "10px 10px",
-                                      }}
-                                      variant="dark"
-                                    >
-                                      {label}
-                                    </Badge>
-                                  </td>
-                                );
-                              }
-                            }
-                            return null;
-                          })}
-                        </tr>
-                      ))}
+                                setShowModal(!showModal);
+                              }}
+                              key={account.uid}
+                            >
+                              <td>{index + 1}</td>
+                              {Object.keys(account).map((key) => {
+                                // @ts-ignore
+                                const accountKey = account[key];
+
+                                if (headers.includes(key)) {
+                                  if (typeof accountKey !== "object") {
+                                    return (
+                                      <td
+                                        key={`${accountKey}`}
+                                      >{`${accountKey}`}</td>
+                                    );
+                                  } else {
+                                    const { label } = accountKey;
+
+                                    return (
+                                      <td key={accountKey}>
+                                        <Badge
+                                          key={label}
+                                          style={{
+                                            fontSize: 10,
+                                            padding: "10px 10px",
+                                          }}
+                                          variant="dark"
+                                        >
+                                          {label}
+                                        </Badge>
+                                      </td>
+                                    );
+                                  }
+                                }
+                                return null;
+                              })}
+                            </tr>
+                          ))}
                     </tbody>
                   </Table>
                 </IonCol>
@@ -111,6 +200,16 @@ const ManageAccounts: React.FC = () => {
             </>
           ) : (
             <p>No accounts found</p>
+          )}
+
+          {filteredAccounts?.length ? (
+            ""
+          ) : (
+            <Pagination
+              itemsPerPage={itemsPerPage}
+              data={accounts}
+              setCurrentPage={setCurrentPage}
+            />
           )}
         </IonGrid>
       </IonContent>

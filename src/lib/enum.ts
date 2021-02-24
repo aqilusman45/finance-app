@@ -10,3 +10,14 @@ export enum AccountTypes {
     EXPENSES = "EXPENSES",
     CUSTOMER = "CUSTOMER"
 }
+
+export enum PaymentOptions {
+    CASH = "CASH",
+    CHEQUE = "CHEQUE", 
+    BANK = "BANK",
+}
+
+export enum EntryTypes {
+    DEBIT = "DEBIT",
+    CREDIT = "CREDIT", 
+}

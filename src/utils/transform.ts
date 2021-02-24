@@ -1,7 +1,8 @@
 import { IAccount, IAccountDocument } from "../lib/accounts";
 import { IAttribute, IAttributeDocument } from "../lib/attributes";
 import { IProduct, IProductDocument } from "../lib/products";
-
+import { IInvoice, IInvoiceDocument } from "../lib/invoice";
+import { IEntry, IEntryDocument } from "../lib/entries";
 export function transformAttribute(doc: IAttributeDocument): IAttribute {
   const {
     attributeName,
@@ -26,8 +27,18 @@ export function transformAttribute(doc: IAttributeDocument): IAttribute {
 
 export function transformAccount(doc: IAccountDocument): IAccount {
   return {
-    ...doc._data
-  }
+    ...doc._data,
+  };
+}
+
+export function transformInvoice(doc: IInvoiceDocument): IInvoice {
+  return {
+    ...doc._data,
+  };
+}
+
+export function transformInvoices(doc: IInvoiceDocument[]): IInvoice[] {
+  return doc.map((node) => transformInvoice(node));
 }
 
 export function transformAccounts(doc: IAccountDocument[]): IAccount[] {
@@ -64,4 +75,14 @@ export function transformProduct(doc: IProductDocument): IProduct {
     attributes,
     images,
   };
+}
+
+export function transformEntry(doc: IEntryDocument): IEntry {
+  return {
+    ...doc._data,
+  };
+}
+
+export function transformEntries(doc: IEntryDocument[]): IEntry[] {
+  return doc.map((node) => transformEntry(node));
 }

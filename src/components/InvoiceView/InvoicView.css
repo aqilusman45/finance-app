@@ -1,0 +1,57 @@
+.iconSize{
+    font-size: 30px;
+}
+
+.inputStyle1{
+    width: 11%;
+}
+
+.taxInputStyle{
+    border: 2px solid black;
+    max-width: 94px !important;
+    /* text-align: center; */
+    margin-left: 30px;
+}
+.spanTaxStyle{
+    display: block;
+    margin-left: 38px;
+}
+.filteredUser{
+    position: relative;
+    top: -3px;
+    z-index: 999;
+}
+.productsTable{
+    position: fixed;
+    top: 133px;
+}
+.inputStyle2{
+    color: black;
+    text-align: center;
+    width: 94px;
+}
+.txtCenter{
+    text-align: center;
+}
+.inputStyle{
+    background-color: transparent;
+    border: none;
+}
+
+::placeholder{
+    color: white;
+}
+.cursor{
+    cursor: pointer;
+}
+.btnStyle{
+    width: 100%;
+}
+
+.txtRight {
+    text-align: right;
+}
+.createIcon {
+    right: 47px;
+    font-size: 24px;
+}

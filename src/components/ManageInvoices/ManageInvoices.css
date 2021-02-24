@@ -1,0 +1,15 @@
+.picker-toolbar.sc-ion-picker-md {
+ 
+    justify-content: space-between;
+}
+.dateInputStyle{
+    margin-top: 7px;
+    padding: 8px 24px;
+    border: none;
+    border-radius: 2px;
+
+}
+.dateFilterSpan{
+    display: inline-block;
+    margin: 0px 7px;
+}

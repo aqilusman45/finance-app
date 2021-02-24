@@ -15,7 +15,7 @@ import {
 import { ValidationError } from "yup";
 import { IOption } from "../../lib/attributes";
 import { AccountTypes } from "../../lib/enum";
-
+import './OpenAccountView.css'
 interface OpenAccountViewProps {
   errors: ValidationError | undefined;
   setErrors: (value: ValidationError | undefined) => void;
@@ -88,7 +88,7 @@ const OpenAccountForm = ({
       />
       <IonGrid className="ion-padding">
         <IonRow className="ion-justify-content-between">
-          <IonCol size="6">
+          <IonCol size="6" className="mb">
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Account Holder Name</IonLabel>
               <IonInput value={name} name="name" onIonChange={handleChange} />

@@ -6,7 +6,14 @@ import {
   ManageAttributes,
   OpenAccount,
   ManageAccounts,
-  EditAccount
+  EditAccount,
+  EditEntry,
+  AddEntry,
+  CreateInvoice,
+  EditInvoice,
+  ManageInvoices,
+  ManageEntries,
+  EditProduct
 } from "../components/index";
 import EditAttribute from "../components/EditAttribute/EditAttribute";
 
@@ -42,6 +49,24 @@ export const routes = [
     ],
   },
   {
+    menuItem: "LEDGER",
+    icon: "",
+    subMenuLinks: [
+      {
+        link: "/create-entry",
+        text: "Add Entry",
+        icon: "",
+        component: AddEntry,
+      },
+      {
+        link: "/entries",
+        text: "Entries",
+        icon: "",
+        component: ManageEntries,
+      },   
+    ],
+  },
+  {
     menuItem: "POS",
     icon: "",
     subMenuLinks: [
@@ -49,13 +74,13 @@ export const routes = [
         link: "/create-invoice",
         text: "Create Invoice",
         icon: "",
-        component: ExploreContainer,
+        component: CreateInvoice,
       },
       {
         link: "/manage-invoices",
         text: "Manage Invoices",
         icon: "",
-        component: ExploreContainer,
+        component: ManageInvoices,
       },
     ],
   },
@@ -91,13 +116,29 @@ export const routes = [
   },
 ];
 
-export const nonMenuRoutes = [{
-  link: '/edit-product/:id',
-  component: ExploreContainer,
-},{
-  link: '/edit-attribute/:id',
-  component: EditAttribute,
-},{
-  link: '/edit-account/:id',
-  component: EditAccount,
-}]
+export const nonMenuRoutes = [
+  {
+    link: "/edit-product/:id",
+    component: EditProduct,
+  },
+  {
+    link: "/edit-attribute/:id",
+    component: EditAttribute,
+  },
+  {
+    link: "/edit-account/:id",
+    component: EditAccount,
+  },
+  {
+    link: "/edit-entry/:id",
+    component: EditEntry,
+  },
+  {
+    link: "/add-entry/",
+    component: AddEntry,
+  },
+  {
+    link: "/edit-invoice/:id",
+    component: EditInvoice,
+  }
+];
