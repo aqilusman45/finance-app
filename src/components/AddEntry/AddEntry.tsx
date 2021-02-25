@@ -8,7 +8,8 @@ import {
 import { fetchInvoices } from "../../store/reducers/invoices";
 import { RootState } from "../../store/rootReducer";
 import { useHistory } from "react-router";
-
+import { v4 as uuidv4 } from "uuid";
+import { addEntry } from "../../store/reducers/entries";
 const INITIAL_STATE = {
   name: "",
   email: "",
@@ -25,9 +26,28 @@ const INITIAL_STATE = {
   },
 };
 
+const ENTRY_INITIAL_STATE = {
+  uid: uuidv4(),
+  date: Date.now(),
+  paymentOption: {
+    value: "",
+    label: "",
+  },
+  entryType: {
+    value: "",
+    label: "",
+  },
+  accountRef: "",
+  invoiceRef: "",
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
+  amount: 0,
+};
+
 const AddEntry: React.FC = () => {
   const [userData, setUserData] = useState<any>();
   const [amount, setAmount] = useState<any>(0);
+  const [entryData, setEntryData] = useState<any>(ENTRY_INITIAL_STATE);
   const [formFields, setFormFields] = useState<any>({ ...INITIAL_STATE });
   const { push } = useHistory();
   const dispatch = useDispatch();
@@ -54,13 +74,33 @@ const AddEntry: React.FC = () => {
     setFormFields(user);
   };
 
+  const handleChange = (e: any) => {
+    setEntryData((prevField: any) => ({
+      ...prevField,
+      [e.currentTarget.name]: e.currentTarget.value,
+    }));
+  };
+  const checkEntryType = () => {
+    if (entryData.entryType.value === "CREDIT") {
+      return "-";
+    } else {
+      return "+";
+    }
+  };
   const submit = () => {
     const account = {
       ...formFields,
-      balance: Number(formFields.balance) + Number(amount),
+      balance:
+        Number(formFields.balance) + Number(`${checkEntryType()}${amount}`),
       updatedAt: Date.now(),
     };
+    const entry = {
+      ...entryData,
+      accountRef: formFields.uid,
+      amount: Number(`${checkEntryType()}${amount}`),
+    };
     try {
+      dispatch(addEntry(entry as any));
       dispatch(
         updateAccountAsync(account as any, () => {
           push("/home/entries");
@@ -79,7 +119,10 @@ const AddEntry: React.FC = () => {
       amount={amount}
       setAmount={setAmount}
       formFields={formFields}
+      entryFields={entryData}
       submit={submit}
+      handleChange={handleChange}
+      checkEntryType={checkEntryType}
     />
   );
 };

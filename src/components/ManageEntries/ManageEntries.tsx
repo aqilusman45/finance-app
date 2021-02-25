@@ -14,12 +14,13 @@ import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { fetchEntries } from "../../store/reducers/entries";
+import { fetchAccounts } from "../../store/reducers/accounts";
 import "./ManageEntries.css";
 import * as JsSearch from "js-search";
 import { convertDate } from "../../utils/dateConversion";
 import Pagination from "../Pagination/Pagination";
 
-const keys = ["Name", "Phone", "Date", "Amount", "Balance"];
+const keys = ["Name", "Phone", "Date", "Amount"];
 
 const ManageEntries = () => {
   const { push } = useHistory();
@@ -33,9 +34,13 @@ const ManageEntries = () => {
     return state.entries;
   });
 
+  const { accounts } = useSelector((state: RootState) => {
+    return state.accounts;
+  });
+
   // pagination code start here
 
-  const itemsPerPage = 3;
+  const itemsPerPage = 10;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = entries?.slice(indexOfFirstItem, indexOfLastItem);
@@ -43,17 +48,17 @@ const ManageEntries = () => {
   // pagination code end here
 
   // js-search code start here
-  var search = new JsSearch.Search("customerName");
-  search.addIndex("customerName");
+  var search = new JsSearch.Search("name");
+  search.addIndex("name");
   search.addIndex("phone");
 
-  if (entries) {
-    search.addDocuments(entries);
+  if (accounts) {
+    search.addDocuments(accounts);
   }
 
   const searchEntry = (input: any) => {
-    search.search(input);
-    setFilteredEntry(search.search(input));
+    // search.search(input);    
+    // setFilteredEntry(search.search(input));
   };
   // js-search code end here
   useEffect(() => {
@@ -61,6 +66,12 @@ const ManageEntries = () => {
       dispatch(fetchEntries());
     }
   }, [entries, dispatch]);
+
+  useEffect(() => {
+    if (!accounts) {
+      dispatch(fetchAccounts());
+    }
+  }, [accounts, dispatch]);
 
   return (
     <IonContent>
@@ -104,15 +115,15 @@ const ManageEntries = () => {
                 <tbody>
                   {filteredEntry?.length
                     ? filteredEntry.map((entry: any, index: any) => {
-                        const lastEntry =
-                          entry.entries[entry.entries.length - 1];
 
+                        const findAccount = accounts?.find(
+                          (account) => account.uid === entry.accountRef
+                        );
                         const objValues = {
-                          customerName: entry.customerName,
-                          phone: entry.phone,
+                          name: findAccount?.name,
+                          phone: findAccount?.phone,
                           date: convertDate(entry.date),
-                          payableAmount: lastEntry.payableAmount,
-                          receivableAmount: lastEntry.remainingAmount,
+                          amount: entry.amount,
                         };
                         return (
                           <tr key={index} className="table-row-hover">
@@ -125,15 +136,16 @@ const ManageEntries = () => {
                         );
                       })
                     : currentItems?.map((entry: any, index: any) => {
-                        const lastEntry =
-                          entry.entries[entry.entries.length - 1];
-
+                      console.log();
+                      
+                        const findAccount = accounts?.find(
+                          (account) => account.uid === entry.accountRef
+                        );
                         const objValues = {
-                          customerName: entry.customerName,
-                          phone: entry.phone,
+                          name: findAccount?.name,
+                          phone: findAccount?.phone,
                           date: convertDate(entry.date),
-                          payableAmount: lastEntry.payableAmount,
-                          receivableAmount: lastEntry.remainingAmount,
+                          amount: entry.amount,
                         };
                         return (
                           <tr key={index} className="table-row-hover">

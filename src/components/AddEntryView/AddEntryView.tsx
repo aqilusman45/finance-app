@@ -10,9 +10,39 @@ import {
   IonPage,
   IonButton,
   IonSearchbar,
+  IonSelect,
+  IonSelectOption,
 } from "@ionic/react";
 import UserSearchModel from "./../UserSearchModel/UserSearchModel";
+import { PaymentOptions, EntryTypes } from "../../lib/enum";
+import { IOption } from "../../lib/attributes";
+import { useHistory } from "react-router";
 
+const optionsForPayment: IOption[] = [
+  {
+    value: PaymentOptions.BANK,
+    label: "Bank",
+  },
+  {
+    value: PaymentOptions.CASH,
+    label: "Cash",
+  },
+  {
+    value: PaymentOptions.CHEQUE,
+    label: "Cheque",
+  },
+];
+
+const options: IOption[] = [
+  {
+    value: EntryTypes.CREDIT,
+    label: "Credit",
+  },
+  {
+    value: EntryTypes.DEBIT,
+    label: "Debit",
+  },
+];
 interface AddEntryViewProps {
   isEdit?: boolean;
   accounts?: any;
@@ -23,6 +53,9 @@ interface AddEntryViewProps {
   setAmount?: any;
   formFields?: any;
   submit?: any;
+  handleChange?: any;
+  entryFields?: any;
+  checkEntryType?: any;
 }
 const AddEntryView: React.FC<AddEntryViewProps> = ({
   isEdit,
@@ -34,10 +67,15 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
   setAmount,
   formFields,
   submit,
+  handleChange,
+  entryFields,
+  checkEntryType
 }) => {
   const [showModal, setShowModal] = useState(false);
   const { name, phone, balance } = formFields;
-  console.log("formFields", formFields);
+  const { paymentOption, entryType } = entryFields;
+  const { push } = useHistory();
+
 
   return (
     <IonPage>
@@ -89,20 +127,62 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
               <IonButton className="ion-margin" onClick={() => submit()}>
                 {isEdit ? "Update Entry" : "Create Entry"}
               </IonButton>
-              <IonButton className="ion-margin" color="danger">
+              <IonButton onClick={() => push('/home')} className="ion-margin" color="danger">
                 Cancel
               </IonButton>
             </IonCol>
             <IonCol size="6">
               <IonItem className="ion-margin">
-                <IonLabel position="stacked">invoice ID</IonLabel>
-                <IonInput readonly value="" name="invoiceID" />
+                <IonSelect
+                    onIonChange={(e) => {
+                      const option = options.find(({ value }) => value === e.detail.value)
+                      handleChange({
+                        currentTarget: {
+                          name: "entryType",
+                          value: option
+                        }
+                      })
+                    }}
+                    value={entryType.value}
+                  name="entryType"
+                  multiple={false}
+                  placeholder="Entry Type"
+                >
+                  {options.map(({ value, label }) => (
+                    <IonSelectOption key={value} value={value}>
+                      {label}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
+              <IonItem className="ion-margin">
+                <IonSelect
+                     onIonChange={(e) => {
+                      const option = optionsForPayment.find(({ value }) => value === e.detail.value)
+                      handleChange({
+                        currentTarget: {
+                          name: "paymentOption",
+                          value: option
+                        }
+                      })
+                    }}
+                    value={paymentOption.value}
+                  name="paymentOption"
+                  multiple={false}
+                  placeholder="Entry Type"
+                >
+                  {optionsForPayment.map(({ value, label }) => (
+                    <IonSelectOption key={value} value={value}>
+                      {label}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
               </IonItem>
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Receivable Amount</IonLabel>
                 <IonInput
                   readonly
-                  value={Number(balance) + Number(amount)}
+                  value={Number(balance) + Number(`${checkEntryType()}${amount}`) }
                   name="receivableAmount"
                 />
               </IonItem>

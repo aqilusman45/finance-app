@@ -16,14 +16,7 @@ export interface IEntry {
   invoiceRef: string;
   createdAt: number;
   updatedAt: number;
-  customerName: string,
-  phone: string,
-  entries: {
-    payableAmount: number;
-    receivableAmount: number;
-    remainingAmount: number;
-    date: number;
-  };
+  amount: number
 }
 
 export interface IEntryDocument extends RxDocument<IEntry> {}
