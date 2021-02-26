@@ -9,7 +9,9 @@ import { fetchInvoices } from "../../store/reducers/invoices";
 import { RootState } from "../../store/rootReducer";
 import { useHistory } from "react-router";
 import { v4 as uuidv4 } from "uuid";
+import { ValidationError } from "yup";
 import { addEntry } from "../../store/reducers/entries";
+import { addEntrySchema } from "../../helpers/validations";
 const INITIAL_STATE = {
   name: "",
   email: "",
@@ -47,6 +49,7 @@ const ENTRY_INITIAL_STATE = {
 const AddEntry: React.FC = () => {
   const [userData, setUserData] = useState<any>();
   const [amount, setAmount] = useState<any>(0);
+  const [errors, setErrors] = useState<ValidationError | undefined>();
   const [entryData, setEntryData] = useState<any>(ENTRY_INITIAL_STATE);
   const [formFields, setFormFields] = useState<any>({ ...INITIAL_STATE });
   const { push } = useHistory();
@@ -87,7 +90,8 @@ const AddEntry: React.FC = () => {
       return "+";
     }
   };
-  const submit = () => {
+
+  const submit = async () => {
     const account = {
       ...formFields,
       balance:
@@ -100,13 +104,16 @@ const AddEntry: React.FC = () => {
       amount: Number(`${checkEntryType()}${amount}`),
     };
     try {
+      await addEntrySchema.validate(entry)
       dispatch(addEntry(entry as any));
       dispatch(
         updateAccountAsync(account as any, () => {
           push("/home/entries");
         })
       );
-    } catch (error) {}
+    } catch (error) {
+      setErrors(error);
+    }
   };
 
   return (
@@ -123,6 +130,8 @@ const AddEntry: React.FC = () => {
       submit={submit}
       handleChange={handleChange}
       checkEntryType={checkEntryType}
+      setErrors={setErrors}
+      errors={errors}
     />
   );
 };

@@ -12,6 +12,7 @@ import {
   IonSearchbar,
   IonSelect,
   IonSelectOption,
+  IonToast
 } from "@ionic/react";
 import UserSearchModel from "./../UserSearchModel/UserSearchModel";
 import { PaymentOptions, EntryTypes } from "../../lib/enum";
@@ -56,6 +57,9 @@ interface AddEntryViewProps {
   handleChange?: any;
   entryFields?: any;
   checkEntryType?: any;
+  setErrors?: any;
+  errors?: any;
+  
 }
 const AddEntryView: React.FC<AddEntryViewProps> = ({
   isEdit,
@@ -69,7 +73,9 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
   submit,
   handleChange,
   entryFields,
-  checkEntryType
+  checkEntryType,
+  setErrors,
+  errors
 }) => {
   const [showModal, setShowModal] = useState(false);
   const { name, phone, balance } = formFields;
@@ -80,6 +86,22 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
   return (
     <IonPage>
       <IonContent>
+      <IonToast
+        isOpen={!!errors}
+        message={errors && errors.message}
+        position="bottom"
+        color="danger"
+        duration={2000}
+        onDidDismiss={() => {
+          setErrors(undefined);
+        }}
+        buttons={[
+          {
+            text: "Cancel",
+            role: "cancel",
+          },
+        ]}
+      />
         <UserSearchModel
           accounts={accounts}
           showModal={showModal}

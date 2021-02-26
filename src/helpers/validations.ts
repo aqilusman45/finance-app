@@ -49,14 +49,9 @@ export const accountSchema = yup.object().shape({
 });
 
 export const addEntrySchema = yup.object().shape({
-  name: yup.string().max(20).required(),
-  invoiceID: yup.number(),
+  name: yup.string().required(),
   amount: yup.number(),
-  entryType: yup.string().required(),
   phone: yup.string().required(),
-  receivableAmount: yup.number().required(),
-  acountType: yup.string(),
-
 })
 
 export const invoiceSchema = yup.object().shape({
