@@ -15,16 +15,24 @@ import { IAttribute } from "../../lib/attributes";
 import Badge from "react-bootstrap/Badge";
 import "./ManageAttributes.css";
 import AttributeModal from "../ViewAttribute/ViewAttribute";
+import Pagination from "../Pagination/Pagination";
 
 const headers = ["attributeName", "attributeType", "required", "options"];
 
 const ManageAttributes: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [attribute, setAttribute] = useState<IAttribute | undefined>();
+  const [, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   const { isLoading, attributes } = useSelector((state: RootState) => {
     return state.attributes;
   });
+
+   // pagination code start here
+
+   const itemsPerPage = 3;
+ 
+   // pagination code end here
 
   useEffect(() => {
     if (!attributes) {
@@ -129,6 +137,11 @@ const ManageAttributes: React.FC = () => {
           ) : (
             <p>No attributes found</p>
           )}
+          <Pagination
+              itemsPerPage={itemsPerPage}
+              data={attributes}
+              setCurrentPage={setCurrentPage}
+            />
         </IonGrid>
       </IonContent>
     </>

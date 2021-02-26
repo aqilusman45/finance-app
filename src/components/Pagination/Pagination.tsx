@@ -12,7 +12,6 @@ const Pagination = ({
   itemsPerPage,
   setCurrentPage,
 }: PaginationProps) => {
-
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(data?.length / itemsPerPage); i++) {
     pageNumbers.push(i);
@@ -35,23 +34,34 @@ const Pagination = ({
   });
 
   return (
-    <nav aria-label="Page navigation example">
-      <ul className="pagination">
-        <li className="page-item" onClick={() => handleClick(1)}>
-          <button className="page-link" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-            <span className="sr-only">Previous</span>
-          </button>
-        </li>
-        {renderPageNumbers}
-        <li className="page-item">
-          <button className="page-link" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-            <span className="sr-only">Next</span>
-          </button>
-        </li>
-      </ul>
-    </nav>
+    <>
+      <nav aria-label="Page navigation example">
+        <ul className="pagination">
+          {data?.length ? (
+            <li className="page-item" onClick={() => handleClick(1)}>
+              <button className="page-link" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span className="sr-only">Previous</span>
+              </button>
+            </li>
+          ) : (
+            ""
+          )}
+
+          {renderPageNumbers}
+          {data?.length ? (
+            <li className="page-item">
+              <button className="page-link" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span className="sr-only">Next</span>
+              </button>
+            </li>
+          ) : (
+            ""
+          )}
+        </ul>
+      </nav>
+    </>
   );
 };
 
