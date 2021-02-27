@@ -263,13 +263,17 @@ const EditInvoice: React.FC = () => {
     let totalTax = 0;
     createInvoice.products.map((item: any) => {
       return (totalTax =
-        totalTax + (item.quantity * item.unitPrice * taxInput) / 100);
+        totalTax + (item.quantity * item.unitPrice * createInvoice.taxRate) / 100);
     });
     return Math.round(totalTax);
   };
 
   const handleTaxInput = (value: number) => {
     setTaxInput(value);
+    setCreateInvoice({
+      ...createInvoice,
+      taxRate: Number(value),
+    });
   };
 
   const calculateTotal = () => {
@@ -350,7 +354,6 @@ const EditInvoice: React.FC = () => {
       submit={submit}
       errors={errors}
       setErrors={setErrors}
-      taxInput={taxInput}
       handleChange={handleChange}
     />
   );

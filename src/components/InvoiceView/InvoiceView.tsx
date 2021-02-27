@@ -64,7 +64,6 @@ interface InvoiceViewProps {
   submit?: any;
   errors?: any;
   setErrors?: any;
-  taxInput?: any;
   handleChange?: any;
 }
 
@@ -87,11 +86,11 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   submit,
   errors,
   setErrors,
-  taxInput,
   handleChange,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
+  const [isDisable, setDisable] = useState(true);
   const dispatch = useDispatch();
   const { paymentOption, invoiceNumber,taxRate } = createInvoice;
   const { isLoading, accounts } = useSelector((state: RootState) => {
@@ -110,6 +109,14 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
       dispatch(fetchProducts());
     }
   }, [accounts, products, dispatch]);
+
+  const validate = (e: any) => {
+    if (e.currentTarget.value) {
+      setDisable(false);
+    } else {
+      setDisable(true);
+    }
+  }
   return (
     <IonPage>
       <IonContent>
@@ -357,8 +364,8 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
               </IonCol>
 
               <IonCol size="12">
-                <IonButton onClick={() => submit()} color="primary">
-                  {isEdit ? "Update" : "Submit"}
+                <IonButton disabled={createInvoice.products[0].name.length && createInvoice.products[0].quantity && createInvoice.detail.name && createInvoice.paymentOption.value  ? false : true}  onClick={() => submit()} color="primary">
+                  {isEdit ? "Update" : "Submit"} 
                 </IonButton>
               </IonCol>
             </IonRow>

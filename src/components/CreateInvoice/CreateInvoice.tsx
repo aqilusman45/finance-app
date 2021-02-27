@@ -72,7 +72,7 @@ const ENTRY_INITIAL_STATE = {
 };
 const CreateInvoice = () => {
   const [createInvoice, setCreateInvoice] = useState<any>(INITIAL_STATE);
-  const [taxInput, setTaxInput] = useState<any>(0);
+  const [, setTaxInput] = useState<any>(0);
   const [userData, setUserData] = useState<any>();
   const [productID, setProductID] = useState<any>();
   const [errors, setErrors] = useState<ValidationError | undefined>();
@@ -295,7 +295,6 @@ const CreateInvoice = () => {
       submit={submit}
       errors={errors}
       setErrors={setErrors}
-      taxInput={taxInput}
       handleChange={handleChange}
     />
   );
