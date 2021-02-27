@@ -11,7 +11,6 @@ import { useHistory } from "react-router";
 import { v4 as uuidv4 } from "uuid";
 import { ValidationError } from "yup";
 import { addEntry } from "../../store/reducers/entries";
-import { addEntrySchema } from "../../helpers/validations";
 const INITIAL_STATE = {
   name: "",
   email: "",
@@ -104,7 +103,6 @@ const AddEntry: React.FC = () => {
       amount: Number(`${checkEntryType()}${amount}`),
     };
     try {
-      await addEntrySchema.validate(entry)
       dispatch(addEntry(entry as any));
       dispatch(
         updateAccountAsync(account as any, () => {
