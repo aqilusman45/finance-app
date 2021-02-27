@@ -6,3 +6,7 @@ nav {
   display: flex !important;
   justify-content: center;
 }
+
+.active {
+  background-color: #80808040 !important;
+}

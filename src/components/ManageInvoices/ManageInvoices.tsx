@@ -215,6 +215,7 @@ const ManageInvoices: React.FC = () => {
               itemsPerPage={itemsPerPage}
               data={invoices}
               setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
             />
           )}
         </IonGrid>

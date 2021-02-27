@@ -209,6 +209,7 @@ const ManageAccounts: React.FC = () => {
               itemsPerPage={itemsPerPage}
               data={accounts}
               setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
             />
           )}
         </IonGrid>
