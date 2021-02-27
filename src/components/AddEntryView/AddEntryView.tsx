@@ -146,7 +146,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
                 />
               </IonItem>
 
-              <IonButton className="ion-margin" onClick={() => submit()}>
+              <IonButton disabled={!name || !paymentOption || !entryType || !amount ? true : false} className="ion-margin" onClick={() => submit()}>
                 {isEdit ? "Update Entry" : "Create Entry"}
               </IonButton>
               <IonButton onClick={() => push('/home')} className="ion-margin" color="danger">

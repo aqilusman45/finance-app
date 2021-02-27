@@ -28,7 +28,7 @@ const ManageEntries = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [account] = useState<any>();
-  const [filteredEntry, setFilteredEntry] = useState<any>();
+  const [filteredEntry,] = useState<any>();
   const dispatch = useDispatch();
   const { isLoading, entries } = useSelector((state: RootState) => {
     return state.entries;
