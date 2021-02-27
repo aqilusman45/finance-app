@@ -3,7 +3,6 @@ import InvoiceView from "../InvoiceView/InvoiceView";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { RootState } from "../../store/rootReducer";
-import { PaymentOptions } from "../../lib/enum";
 import { v4 as uuidv4 } from "uuid";
 import {
   fetchInvoices,
@@ -22,8 +21,8 @@ const INITIAL_STATE = {
   invoiceNumber: "",
   date: Date.now(),
   paymentOption: {
-    value: PaymentOptions.BANK,
-    label: PaymentOptions.BANK,
+    value: '',
+    label: '',
   },
   detail: {
     name: "",
@@ -35,7 +34,7 @@ const INITIAL_STATE = {
   },
   products: [
     {
-      product: 12345,
+      product: "",
       name: "",
       quantity: 0,
       unitPrice: 0,
@@ -52,6 +51,7 @@ const INITIAL_STATE = {
   accountRef: "",
   createdAt: 0,
   updatedAt: 0,
+  quantity: 0,
 };
 
 const EditInvoice: React.FC = () => {
@@ -235,6 +235,13 @@ const EditInvoice: React.FC = () => {
     });
   };
 
+  const handleChange = (e: any) => {
+    setCreateInvoice((prevField: any) => ({
+      ...prevField,
+      [e.currentTarget.name]: e.currentTarget.value,
+    }));
+  };
+
   const calculateTotalDiscount = () => {
     let totalDiscount = 0;
     createInvoice.products.map((item: any) => {
@@ -271,6 +278,14 @@ const EditInvoice: React.FC = () => {
     );
   };
 
+  const calculateQuantities = () => {
+    let count = 0;
+    createInvoice.products.map(() => {
+      return count++;
+    });
+    return count;
+  };
+
   const submit = async () => {
     const invoice = {
       ...createInvoice,
@@ -283,6 +298,7 @@ const EditInvoice: React.FC = () => {
       subTotal: calculateSubTotal(),
       total: calculateTotal(),
       updatedAt: Date.now(),
+      quantity: calculateQuantities(),
     };
     const account = {
       ...userAccont,
@@ -293,20 +309,10 @@ const EditInvoice: React.FC = () => {
       ),
       updatedAt: Date.now(),
     };
-    const firstEntry = {
-      payableAmount: calculateTotal(),
-      receivableAmount: userAccont?.balance!,
-      remainingAmount: updateUserBalanceAtEidtInvoice(
-        userAccont?.balance!,
-        prevTotal,
-        calculateTotal()
-      ),
-      date: Date.now(),
-    };
-
+    
     const entry = {
       ...ledgerEntry,
-      entries: [...ledgerEntry.entries, firstEntry],
+      amount: -calculateTotal(),
       updatedAt: Date.now(),
     };
 
@@ -315,7 +321,7 @@ const EditInvoice: React.FC = () => {
       dispatch(updateAccountAsync(account as any));
       dispatch(
         updateInvoiceAsync(invoice as any, () => {
-          push("/home/create-invoice");
+          push("/home/manage-invoices");
         })
       );
     } catch (error) {
@@ -345,6 +351,7 @@ const EditInvoice: React.FC = () => {
       errors={errors}
       setErrors={setErrors}
       taxInput={taxInput}
+      handleChange={handleChange}
     />
   );
 };

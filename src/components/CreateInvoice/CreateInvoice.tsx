@@ -8,7 +8,7 @@ import {
 } from "./../../store/reducers/accounts";
 import { addInvoice } from "../../store/reducers/invoices";
 import { v4 as uuidv4 } from "uuid";
-import { PaymentOptions, EntryTypes } from "../../lib/enum";
+import { EntryTypes } from "../../lib/enum";
 import { ValidationError } from "yup";
 import { invoiceSchema } from "../../helpers/validations";
 import { useHistory } from "react-router";
@@ -17,11 +17,11 @@ import { addEntry } from "../../store/reducers/entries";
 
 const INITIAL_STATE = {
   uid: uuidv4(),
-  invoiceNumber: "999999999",
+  invoiceNumber: "",
   date: Date.now(),
   paymentOption: {
-    value: PaymentOptions.BANK,
-    label: PaymentOptions.BANK,
+    value: '',
+    label: '',
   },
   detail: {
     name: "",
@@ -33,7 +33,7 @@ const INITIAL_STATE = {
   },
   products: [
     {
-      product: 12345,
+      product: "",
       name: "",
       quantity: 0,
       unitPrice: 0,
@@ -50,14 +50,15 @@ const INITIAL_STATE = {
   accountRef: "",
   createdAt: Date.now(),
   updatedAt: Date.now(),
+  quantity: 0,
 };
 
 const ENTRY_INITIAL_STATE = {
   uid: uuidv4(),
   date: Date.now(),
   paymentOption: {
-    value: PaymentOptions.BANK,
-    label: PaymentOptions.BANK,
+    value: '',
+    label: '',
   },
   entryType: {
     value: EntryTypes.CREDIT,
@@ -154,7 +155,12 @@ const CreateInvoice = () => {
       ],
     });
   };
-
+  const handleChange = (e: any) => {
+    setCreateInvoice((prevField: any) => ({
+      ...prevField,
+      [e.currentTarget.name]: e.currentTarget.value,
+    }));
+  };
   const UpdateQuantity = (value: any, item: number) => {
     const findIndex = createInvoice.products.findIndex(
       (index: any) => index.product === item
@@ -201,7 +207,7 @@ const CreateInvoice = () => {
     let totalTax = 0;
     createInvoice.products.map((item: any) => {
       return (totalTax =
-        totalTax + (item.quantity * item.unitPrice * taxInput) / 100);
+        totalTax + (item.quantity * item.unitPrice * createInvoice.taxRate) / 100);
     });
     return Math.round(totalTax);
   };
@@ -225,6 +231,14 @@ const CreateInvoice = () => {
     calculateTotal()
   );
 
+  const calculateQuantities = () => {
+    let count = 0;
+    createInvoice.products.map(() => {
+      return count++;
+    });
+    return count;
+  };
+
   const submit = async () => {
     const invoice = {
       ...createInvoice,
@@ -232,17 +246,20 @@ const CreateInvoice = () => {
       totalDiscount: calculateTotalDiscount(),
       subTotal: calculateSubTotal(),
       total: calculateTotal(),
+      quantity: calculateQuantities(),
     };
     const entry = {
       ...entryData,
       accountRef: createInvoice.accountRef,
       invoiceRef: createInvoice.uid,
-      amount: -calculateTotal()
+      amount: -calculateTotal(),
+      paymentOption: createInvoice.paymentOption
     };
     const account = {
       ...accountData,
       balance: createInvoice.currentBalance - calculateTotal(),
     };
+    
     try {
       await invoiceSchema.validate(invoice);
       dispatch(updateAccountAsync(account as any));
@@ -279,6 +296,7 @@ const CreateInvoice = () => {
       errors={errors}
       setErrors={setErrors}
       taxInput={taxInput}
+      handleChange={handleChange}
     />
   );
 };

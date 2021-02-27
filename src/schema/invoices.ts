@@ -106,6 +106,9 @@ export const invoiceSchema: RxJsonSchema = {
     },
     updatedAt: {
       type: "number",
+    },
+    quantity: {
+      type: "number",
     }
   },
   required: ["uid", "invoiceNumber", "paymentOption", "accountRef"],
