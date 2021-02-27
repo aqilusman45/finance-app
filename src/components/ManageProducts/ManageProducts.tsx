@@ -173,6 +173,7 @@ const ManageProduct: React.FC = () => {
               itemsPerPage={itemsPerPage}
               data={products}
               setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
             />
           )}
         </IonGrid>

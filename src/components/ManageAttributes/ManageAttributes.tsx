@@ -22,7 +22,7 @@ const headers = ["attributeName", "attributeType", "required", "options"];
 const ManageAttributes: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [attribute, setAttribute] = useState<IAttribute | undefined>();
-  const [, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   const { isLoading, attributes } = useSelector((state: RootState) => {
     return state.attributes;
@@ -141,6 +141,7 @@ const ManageAttributes: React.FC = () => {
               itemsPerPage={itemsPerPage}
               data={attributes}
               setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
             />
         </IonGrid>
       </IonContent>
