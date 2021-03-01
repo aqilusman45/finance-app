@@ -1,6 +1,8 @@
 .pagination {
   position: absolute;
   bottom: 37px;
+  overflow-x: scroll;
+  width: 363px;
 }
 nav {
   display: flex !important;
