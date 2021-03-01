@@ -12,7 +12,7 @@ import {
   IonSearchbar,
   IonSelect,
   IonSelectOption,
-  IonToast
+  IonToast,
 } from "@ionic/react";
 import UserSearchModel from "./../UserSearchModel/UserSearchModel";
 import { PaymentOptions, EntryTypes } from "../../lib/enum";
@@ -59,7 +59,6 @@ interface AddEntryViewProps {
   checkEntryType?: any;
   setErrors?: any;
   errors?: any;
-  
 }
 const AddEntryView: React.FC<AddEntryViewProps> = ({
   isEdit,
@@ -75,33 +74,32 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
   entryFields,
   checkEntryType,
   setErrors,
-  errors
+  errors,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const { name, phone, balance } = formFields;
   const { paymentOption, entryType } = entryFields;
   const { push } = useHistory();
 
-
   return (
     <IonPage>
       <IonContent>
-      <IonToast
-        isOpen={!!errors}
-        message={errors && errors.message}
-        position="bottom"
-        color="danger"
-        duration={2000}
-        onDidDismiss={() => {
-          setErrors(undefined);
-        }}
-        buttons={[
-          {
-            text: "Cancel",
-            role: "cancel",
-          },
-        ]}
-      />
+        <IonToast
+          isOpen={!!errors}
+          message={errors && errors.message}
+          position="bottom"
+          color="danger"
+          duration={2000}
+          onDidDismiss={() => {
+            setErrors(undefined);
+          }}
+          buttons={[
+            {
+              text: "Cancel",
+              role: "cancel",
+            },
+          ]}
+        />
         <UserSearchModel
           accounts={accounts}
           showModal={showModal}
@@ -139,33 +137,38 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Amount</IonLabel>
                 <IonInput
+                  value={amount}
                   name="amount"
                   type="number"
-                  value={amount}
                   onIonChange={(e) => setAmount(e.detail.value!)}
                 />
               </IonItem>
-
-              <IonButton disabled={!name || !paymentOption || !entryType || !amount ? true : false} className="ion-margin" onClick={() => submit()}>
+              <IonButton className="ion-margin" onClick={() => submit()}>
                 {isEdit ? "Update Entry" : "Create Entry"}
               </IonButton>
-              <IonButton onClick={() => push('/home')} className="ion-margin" color="danger">
+              <IonButton
+                onClick={() => push("/home")}
+                className="ion-margin"
+                color="danger"
+              >
                 Cancel
               </IonButton>
             </IonCol>
             <IonCol size="6">
               <IonItem className="ion-margin">
                 <IonSelect
-                    onIonChange={(e) => {
-                      const option = options.find(({ value }) => value === e.detail.value)
-                      handleChange({
-                        currentTarget: {
-                          name: "entryType",
-                          value: option
-                        }
-                      })
-                    }}
-                    value={entryType.value}
+                  onIonChange={(e) => {
+                    const option = options.find(
+                      ({ value }) => value === e.detail.value
+                    );
+                    handleChange({
+                      currentTarget: {
+                        name: "entryType",
+                        value: option,
+                      },
+                    });
+                  }}
+                  value={entryType.value}
                   name="entryType"
                   multiple={false}
                   placeholder="Entry Type"
@@ -179,16 +182,18 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
               </IonItem>
               <IonItem className="ion-margin">
                 <IonSelect
-                     onIonChange={(e) => {
-                      const option = optionsForPayment.find(({ value }) => value === e.detail.value)
-                      handleChange({
-                        currentTarget: {
-                          name: "paymentOption",
-                          value: option
-                        }
-                      })
-                    }}
-                    value={paymentOption.value}
+                  onIonChange={(e) => {
+                    const option = optionsForPayment.find(
+                      ({ value }) => value === e.detail.value
+                    );
+                    handleChange({
+                      currentTarget: {
+                        name: "paymentOption",
+                        value: option,
+                      },
+                    });
+                  }}
+                  value={paymentOption.value}
                   name="paymentOption"
                   multiple={false}
                   placeholder="Entry Type"
@@ -204,7 +209,9 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
                 <IonLabel position="stacked">Receivable Amount</IonLabel>
                 <IonInput
                   readonly
-                  value={Number(balance) + Number(`${checkEntryType()}${amount}`) }
+                  value={
+                    Number(balance) + Number(`${checkEntryType()}${amount}`)
+                  }
                   name="receivableAmount"
                 />
               </IonItem>
