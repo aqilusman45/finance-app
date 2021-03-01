@@ -1,8 +1,7 @@
 .pagination {
   position: absolute;
-  bottom: 37px;
-  overflow-x: scroll;
-  width: 363px;
+  bottom: 20px;
+  
 }
 nav {
   display: flex !important;
@@ -11,4 +10,9 @@ nav {
 
 .active {
   background-color: #80808040 !important;
+}
+
+.verticalScroll {
+  overflow-x: scroll;
+  width: 363px;
 }

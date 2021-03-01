@@ -41,7 +41,7 @@ const Pagination = ({
   return (
     <div>
       <nav aria-label="Page navigation example">
-        <ul className="pagination">
+        <ul className={`pagination ${pageNumbers.length > 9 ? "verticalScroll" : ""}`}>
           {renderPageNumbers}
         </ul>
       </nav>
