@@ -24,8 +24,6 @@ const Pagination = ({
     setCurrentPage(Number(event));
     active = Number(event);
   };
-  console.log("active", active);
-
   const renderPageNumbers = pageNumbers.map((number) => {
     return (
       <li
@@ -41,13 +39,13 @@ const Pagination = ({
   });
 
   return (
-    <>
+    <div>
       <nav aria-label="Page navigation example">
         <ul className="pagination">
           {renderPageNumbers}
         </ul>
       </nav>
-    </>
+    </div>
   );
 };
 
