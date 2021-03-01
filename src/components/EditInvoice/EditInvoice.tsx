@@ -10,6 +10,12 @@ import {
 } from "../../store/reducers/invoices";
 import { IAccount } from "../../lib/accounts";
 import {
+  addEntrySchema,
+  accountTypeCheck,
+  checkProduct,
+  invoiceSchema,
+} from "../../helpers/validations";
+import {
   fetchAccounts,
   updateAccountAsync,
 } from "./../../store/reducers/accounts";
@@ -21,8 +27,8 @@ const INITIAL_STATE = {
   invoiceNumber: "",
   date: Date.now(),
   paymentOption: {
-    value: '',
-    label: '',
+    value: "",
+    label: "",
   },
   detail: {
     name: "",
@@ -60,7 +66,7 @@ const EditInvoice: React.FC = () => {
   }>();
 
   const [createInvoice, setCreateInvoice] = useState<any>(INITIAL_STATE);
-  const [taxInput, setTaxInput] = useState<any>(0);
+  const [, setTaxInput] = useState<any>(0);
   const [userData, setUserData] = useState<any>();
   const [productID, setProductID] = useState<any>();
   const [errors, setErrors] = useState<ValidationError | undefined>();
@@ -263,7 +269,8 @@ const EditInvoice: React.FC = () => {
     let totalTax = 0;
     createInvoice.products.map((item: any) => {
       return (totalTax =
-        totalTax + (item.quantity * item.unitPrice * createInvoice.taxRate) / 100);
+        totalTax +
+        (item.quantity * item.unitPrice * createInvoice.taxRate) / 100);
     });
     return Math.round(totalTax);
   };
@@ -313,7 +320,7 @@ const EditInvoice: React.FC = () => {
       ),
       updatedAt: Date.now(),
     };
-    
+
     const entry = {
       ...ledgerEntry,
       amount: -calculateTotal(),
@@ -321,6 +328,10 @@ const EditInvoice: React.FC = () => {
     };
 
     try {
+      await accountTypeCheck(invoice);
+      await invoiceSchema(invoice);
+      await addEntrySchema.validate(invoice.detail);
+      await checkProduct(invoice);
       dispatch(updateEntryAsync(entry as any));
       dispatch(updateAccountAsync(account as any));
       dispatch(

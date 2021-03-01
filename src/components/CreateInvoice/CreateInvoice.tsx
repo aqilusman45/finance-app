@@ -10,18 +10,22 @@ import { addInvoice } from "../../store/reducers/invoices";
 import { v4 as uuidv4 } from "uuid";
 import { EntryTypes } from "../../lib/enum";
 import { ValidationError } from "yup";
-import { invoiceSchema } from "../../helpers/validations";
 import { useHistory } from "react-router";
 import { updateUserBalance } from "../../utils/invoice";
 import { addEntry } from "../../store/reducers/entries";
-
+import {
+  addEntrySchema,
+  accountTypeCheck,
+  checkProduct,
+  invoiceSchema,
+} from "../../helpers/validations";
 const INITIAL_STATE = {
   uid: uuidv4(),
   invoiceNumber: "",
   date: Date.now(),
   paymentOption: {
-    value: '',
-    label: '',
+    value: "",
+    label: "",
   },
   detail: {
     name: "",
@@ -57,8 +61,8 @@ const ENTRY_INITIAL_STATE = {
   uid: uuidv4(),
   date: Date.now(),
   paymentOption: {
-    value: '',
-    label: '',
+    value: "",
+    label: "",
   },
   entryType: {
     value: EntryTypes.CREDIT,
@@ -70,6 +74,7 @@ const ENTRY_INITIAL_STATE = {
   updatedAt: Date.now(),
   amount: "",
 };
+
 const CreateInvoice = () => {
   const [createInvoice, setCreateInvoice] = useState<any>(INITIAL_STATE);
   const [, setTaxInput] = useState<any>(0);
@@ -207,7 +212,8 @@ const CreateInvoice = () => {
     let totalTax = 0;
     createInvoice.products.map((item: any) => {
       return (totalTax =
-        totalTax + (item.quantity * item.unitPrice * createInvoice.taxRate) / 100);
+        totalTax +
+        (item.quantity * item.unitPrice * createInvoice.taxRate) / 100);
     });
     return Math.round(totalTax);
   };
@@ -253,15 +259,17 @@ const CreateInvoice = () => {
       accountRef: createInvoice.accountRef,
       invoiceRef: createInvoice.uid,
       amount: -calculateTotal(),
-      paymentOption: createInvoice.paymentOption
+      paymentOption: createInvoice.paymentOption,
     };
     const account = {
       ...accountData,
       balance: createInvoice.currentBalance - calculateTotal(),
     };
-    
     try {
-      await invoiceSchema.validate(invoice);
+      await accountTypeCheck(invoice);
+      await invoiceSchema(invoice);
+      await addEntrySchema.validate(invoice.detail);
+      await checkProduct(invoice);
       dispatch(updateAccountAsync(account as any));
       dispatch(addEntry(entry));
       dispatch(
