@@ -64,12 +64,10 @@ const ENTRY_INITIAL_STATE = {
     label: EntryTypes.CREDIT,
   },
   accountRef: "",
-  invoiceRef: "weeee",
-  customerName: "",
-  phone: "",
+  invoiceRef: "",
   createdAt: Date.now(),
   updatedAt: Date.now(),
-  entries: [],
+  amount: "",
 };
 const CreateInvoice = () => {
   const [createInvoice, setCreateInvoice] = useState<any>(INITIAL_STATE);
@@ -235,19 +233,11 @@ const CreateInvoice = () => {
       subTotal: calculateSubTotal(),
       total: calculateTotal(),
     };
-    const firstEntry = {
-      payableAmount: calculateTotal(),
-      receivableAmount: createInvoice.currentBalance,
-      remainingAmount: createInvoice.currentBalance - calculateTotal(),
-      date: Date.now(),
-    };
     const entry = {
       ...entryData,
       accountRef: createInvoice.accountRef,
       invoiceRef: createInvoice.uid,
-      customerName: createInvoice.detail.name,
-      phone: createInvoice.detail.phone,
-      entries: [...entryData.entries, firstEntry],
+      amount: -calculateTotal()
     };
     const account = {
       ...accountData,

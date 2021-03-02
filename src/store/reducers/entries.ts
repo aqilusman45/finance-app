@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addEntryMutation, entriesQuery, updateEntryMutation } from "../../utils/database";
 import { AppThunk } from "..";
 import { IEntry, IEntryDocument } from "../../lib/entries";
-import { transformEntry, transformEntries } from "../../utils/transform";
+import { transformEntries } from "../../utils/transform";
 
 interface IInitialState {
   entries: IEntry[] | null;
@@ -26,7 +26,7 @@ const entriesSlice = createSlice({
     },
     addNewEntry: (state, action: PayloadAction<IEntryDocument>) => {
       const entry = action.payload;
-      state.entries?.unshift(transformEntry(entry));
+      state.entries?.unshift(entry);
       state.isLoading = false;
     },
     getEntries: (state, action: PayloadAction<IEntry[]>) => {

@@ -63,5 +63,5 @@ export const entrySchema: RxJsonSchema = {
       type: "number",
     }
   },
-  required: ["uid", "accountRef", "invoiceRef", "paymentOption", "entryType"],
+  required: ["uid", "accountRef",],
 };
