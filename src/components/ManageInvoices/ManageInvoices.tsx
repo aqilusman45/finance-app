@@ -37,7 +37,7 @@ const ManageInvoices: React.FC = () => {
 
   // pagination code start here
 
-  const itemsPerPage = 3;
+  const itemsPerPage = 9;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = invoices?.slice(indexOfFirstItem, indexOfLastItem);
