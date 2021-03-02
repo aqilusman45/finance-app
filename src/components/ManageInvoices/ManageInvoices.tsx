@@ -131,7 +131,7 @@ const ManageInvoices: React.FC = () => {
                             (invoice: any, index: number) => {
                               const data = {
                                 uid: invoice.uid,
-                                invoiceNumber: invoice.invoiceNumber && "____",
+                                invoiceNumber: invoice.invoiceNumber,
                                 phone: invoice.detail.phone,
                                 name: invoice.detail.name,
                                 totalDiscount: invoice.totalDiscount,
@@ -167,7 +167,7 @@ const ManageInvoices: React.FC = () => {
                         : currentItems?.map((invoice: any, index: number) => {
                             const data = {
                               uid: invoice.uid,
-                              invoiceNumber: invoice.invoiceNumber  && "____",
+                              invoiceNumber: invoice.invoiceNumber,
                               phone: invoice.detail.phone,
                               name: invoice.detail.name,
                               totalDiscount: invoice.totalDiscount,
