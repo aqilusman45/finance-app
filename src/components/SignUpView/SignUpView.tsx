@@ -11,15 +11,42 @@ import {
   IonInput,
   IonButton,
   IonText,
+  IonToast,
 } from "@ionic/react";
 import { Link } from "react-router-dom";
 import "./SignUpView.css";
+import { ValidationError } from "yup";
+
 interface SignUpProps {
   handleChange: (e: any) => void;
+  submit: () => void;
+  errors: ValidationError | undefined;
+  setErrors: (value: ValidationError | undefined) => void;
 }
-const SignUpView = ({ handleChange }: SignUpProps) => {
+const SignUpView = ({
+  errors,
+  setErrors,
+  handleChange,
+  submit,
+}: SignUpProps) => {
   return (
     <IonContent>
+      <IonToast
+        isOpen={!!errors}
+        message={errors && errors.message}
+        position="bottom"
+        color="danger"
+        duration={2000}
+        onDidDismiss={() => {
+          setErrors(undefined);
+        }}
+        buttons={[
+          {
+            text: "Cancel",
+            role: "cancel",
+          },
+        ]}
+      />
       <IonGrid>
         <IonRow
           style={{ height: "96vh" }}
@@ -63,16 +90,19 @@ const SignUpView = ({ handleChange }: SignUpProps) => {
               </IonItemDivider>
               <IonItem>
                 <IonLabel>
-                  <IonInput
-                    type="password"
-                    name="password"
-                    onIonChange={handleChange}
-                  />
+                  <IonInput name="password" onIonChange={handleChange} />
                 </IonLabel>
               </IonItem>
               <IonItemDivider />
               <Link to="/home">
-                <IonButton size="large" expand="block" color="primary">
+                <IonButton
+                  onClick={() => {
+                    submit();
+                  }}
+                  size="large"
+                  expand="block"
+                  color="primary"
+                >
                   Sign Up
                 </IonButton>
               </Link>
