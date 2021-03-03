@@ -49,6 +49,7 @@ const SignIn: React.FC = () => {
                   Sign In
                 </IonButton>
               </Link>
+              <Link to="/sign-up" className="ion-margin">Create New Account</Link>
             </IonItemGroup>
           </IonCol>
         </IonRow>

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { IonApp } from '@ionic/react';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 /* Core CSS required for Ionic components to work properly */
@@ -30,6 +31,7 @@ const App: React.FC = () => (
       <Switch>
         <Route path="/home" component={Home} />
         <Route exact path="/" component={SignIn} />
+        <Route path="/sign-up" component={SignUp} />
       </Switch>
     </Router>
   </IonApp>
