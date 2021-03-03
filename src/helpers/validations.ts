@@ -59,9 +59,14 @@ export const invoiceSchema = yup.object().shape({
 
 })
 
-export const authSchema = yup.object().shape({
+export const signUpSchema = yup.object().shape({
   name: yup.string().required(),
   email: yup.string().email().required(),
   phone: yup.string().required(),
-  password: yup.string().min(6).required("Password must be 6 characters long"),
+  password: yup.string().required('Password must be 6 characters logn !'),
+})
+
+export const signInSchema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().required(),
 })

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SignUpView from "../components/SignUpView/SignUpView";
 import { ValidationError } from "yup";
 import { v4 as uuidv4 } from "uuid";
-import { authSchema } from "../helpers/validations";
+import { signUpSchema } from "../helpers/validations";
 import { addUserAsync } from "../store/reducers/user";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
@@ -35,7 +35,7 @@ const SignUp: React.FC = () => {
       updatedAt: Date.now(),
     };
     try {
-      await authSchema.validate(user);
+      await signUpSchema.validate(user);
       dispatch(
         addUserAsync(user as any, () => {
           push("/home");

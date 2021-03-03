@@ -1,60 +1,38 @@
-import React from "react";
-import {
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonContent,
-  IonItemGroup,
-  IonItemDivider,
-  IonLabel,
-  IonItem,
-  IonInput,
-  IonButton
-} from "@ionic/react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import SignInView from "../components/SignInView/SignInView";
+import { ValidationError } from "yup";
+import { signInSchema } from "../helpers/validations";
 
+const INITIAL_STATE = {
+  email: "",
+  password: "",
+};
 const SignIn: React.FC = () => {
+  const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
+  const [errors, setErrors] = useState<ValidationError | undefined>();
+
+  const handleChange = (e: any) => {
+    setFormFields((prevField) => ({
+      ...prevField,
+      [e.currentTarget.name]: e.currentTarget.value,
+    }));
+  };
+
+  const submit = async () => {
+    try {
+      await signInSchema.validate(formFields);
+    } catch (error) {
+      setErrors(error);
+    }
+  };
+
   return (
-    <IonContent>
-      <IonGrid>
-        <IonRow
-          style={{ height: "96vh" }}
-          class="ion-justify-content-start ion-align-items-center"
-        >
-          <IonCol class="ion-text-center" size="4" offset="4">
-            <IonItemGroup>
-              <IonItemDivider>
-                <IonLabel>Email</IonLabel>
-              </IonItemDivider>
-              <IonItem>
-                <IonLabel>
-                  <IonInput />
-                </IonLabel>
-              </IonItem>
-              <IonItemDivider>
-                <IonLabel>Password</IonLabel>
-              </IonItemDivider>
-              <IonItem>
-                <IonLabel>
-                  <IonInput />
-                </IonLabel>
-              </IonItem>
-              <IonItemDivider />
-              <Link to="/home">
-                <IonButton
-                  size="large"
-                  expand="block"
-                  color="primary"
-                >
-                  Sign In
-                </IonButton>
-              </Link>
-              <Link to="/sign-up" className="ion-margin">Create New Account</Link>
-            </IonItemGroup>
-          </IonCol>
-        </IonRow>
-      </IonGrid>
-    </IonContent>
+    <SignInView
+      setErrors={setErrors}
+      errors={errors}
+      handleChange={handleChange}
+      submit={submit}
+    />
   );
 };
 
