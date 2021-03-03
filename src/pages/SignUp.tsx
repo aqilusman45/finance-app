@@ -3,6 +3,9 @@ import SignUpView from "../components/SignUpView/SignUpView";
 import { ValidationError } from "yup";
 import { v4 as uuidv4 } from "uuid";
 import { authSchema } from "../helpers/validations";
+import { addUserAsync } from "../store/reducers/user";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 
 const INITIAL_STATE = {
   name: "",
@@ -14,6 +17,9 @@ const SignUp: React.FC = () => {
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
   const [errors, setErrors] = useState<ValidationError | undefined>();
 
+  const dispatch = useDispatch();
+  const { push } = useHistory();
+
   const handleChange = (e: any) => {
     setFormFields((prevField) => ({
       ...prevField,
@@ -22,14 +28,19 @@ const SignUp: React.FC = () => {
   };
 
   const submit = async () => {
-    const account = {
+    const user = {
       ...formFields,
       uid: uuidv4(),
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
     try {
-      await authSchema.validate(account);
+      await authSchema.validate(user);
+      dispatch(
+        addUserAsync(user as any, () => {
+          push("/home");
+        })
+      );
     } catch (error) {
       setErrors(error);
     }

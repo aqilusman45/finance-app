@@ -13,6 +13,9 @@ export const userSchema: RxJsonSchema = {
     createdAt: {
       type: "number",
     },
+    phone: {
+      type: "string",
+    },
     updatedAt: {
       type: "number",
     },
@@ -26,5 +29,5 @@ export const userSchema: RxJsonSchema = {
       type: "string",
     },
   },
-  required: ["uid", "name", "email", "password"],
+  required: ["uid", "name", "phone", "password", "email"],
 };

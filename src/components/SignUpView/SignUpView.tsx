@@ -94,18 +94,16 @@ const SignUpView = ({
                 </IonLabel>
               </IonItem>
               <IonItemDivider />
-              <Link to="/home">
-                <IonButton
-                  onClick={() => {
-                    submit();
-                  }}
-                  size="large"
-                  expand="block"
-                  color="primary"
-                >
-                  Sign Up
-                </IonButton>
-              </Link>
+              <IonButton
+                onClick={() => {
+                  submit();
+                }}
+                size="large"
+                expand="block"
+                color="primary"
+              >
+                Sign Up
+              </IonButton>
               <Link to="/" className="ion-margin">
                 Already have an Account ?
               </Link>
