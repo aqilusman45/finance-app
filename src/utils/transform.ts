@@ -3,6 +3,7 @@ import { IAttribute, IAttributeDocument } from "../lib/attributes";
 import { IProduct, IProductDocument } from "../lib/products";
 import { IInvoice, IInvoiceDocument } from "../lib/invoice";
 import { IEntry, IEntryDocument } from "../lib/entries";
+import { IUser, IUserDocument } from "../lib/users";
 export function transformAttribute(doc: IAttributeDocument): IAttribute {
   const {
     attributeName,
@@ -43,6 +44,16 @@ export function transformInvoices(doc: IInvoiceDocument[]): IInvoice[] {
 
 export function transformAccounts(doc: IAccountDocument[]): IAccount[] {
   return doc.map((node) => transformAccount(node));
+}
+
+export function transformUser(doc: IUserDocument): IUser {
+  return {
+    ...doc._data,
+  };
+}
+
+export function transformUsers(doc: IUserDocument[]): IUser[] {
+  return doc.map((node) => transformUser(node));
 }
 
 export function transformProduct(doc: IProductDocument): IProduct {

@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addUser } from "../../utils/database";
+import { addUser, usersQuery } from "../../utils/database";
 import { AppThunk } from "..";
 import { IUser, IUserDocument } from "../../lib/users";
+import { transformUsers } from "../../utils/transform";
 
 interface IInitialState {
   users: IUser[] | null;
@@ -28,10 +29,20 @@ const userSlice = createSlice({
       state.users?.unshift(user);
       state.isLoading = false;
     },
+    getUsers: (state, action: PayloadAction<IUser[]>) => {
+      const user = action.payload;
+      state.users = [...user];
+      state.isLoading = false;
+    },
   },
 });
 
-export const { addNewUser, doneLoading, startLoading } = userSlice.actions;
+export const {
+  addNewUser,
+  doneLoading,
+  startLoading,
+  getUsers,
+} = userSlice.actions;
 
 export default userSlice.reducer;
 
@@ -43,6 +54,17 @@ export const addUserAsync = (user: IUser, cb: () => void): AppThunk => async (
     await addUser(user as any);
     dispatch(addNewUser(user as any));
     cb();
+    dispatch(doneLoading());
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const fetchUsers = (): AppThunk => async (dispatch) => {
+  try {
+    dispatch(startLoading());
+    const users = await usersQuery();
+    dispatch(getUsers(transformUsers(users)));
     dispatch(doneLoading());
   } catch (error) {
     throw error;

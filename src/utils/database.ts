@@ -92,6 +92,12 @@ export const addUser = async (user: IUserDocument) => {
   });
 };
 
+export const usersQuery = async () => {
+  const db = await get();
+  const { users } = db.collections;
+  return users.find().exec();
+};
+
 export const productsQuery = async () => {
   const db = await get();
   const { products } = db.collections;
