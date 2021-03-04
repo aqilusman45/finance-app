@@ -68,7 +68,7 @@ const SignUpView = ({
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Password</IonLabel>
-              <IonInput name="password" onIonChange={handleChange} />
+              <IonInput type="password" name="password" onIonChange={handleChange} />
             </IonItem>
             <IonButton
               onClick={() => {

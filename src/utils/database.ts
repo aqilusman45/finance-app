@@ -19,6 +19,9 @@ import { IInvoice, IInvoiceDocument } from "../lib/invoice";
 import { IEntry, IEntryDocument } from "../lib/entries";
 import { invoiceSchema } from "./../schema/invoices";
 import { entrySchema } from "./../schema/entries";
+import { authSchema } from "./../schema/auth";
+import { IAuthDocument } from "../lib/auth";
+
 addRxPlugin(RxDBValidatePlugin);
 addRxPlugin(RxDBEncryptionPlugin);
 addRxPlugin(require("pouchdb-adapter-idb"));
@@ -37,6 +40,7 @@ const _create = async () => {
   await createCollection(db, userAccountsSchema, "accounts");
   await createCollection(db, invoiceSchema, "invoices");
   await createCollection(db, entrySchema, "entries");
+  await createCollection(db, authSchema, "auth");
   return db;
 };
 
@@ -156,7 +160,6 @@ export const getProductAttatchments = async ({ uid, images }: IProduct) => {
   return imagesWithBase64;
 };
 
-
 export const updateAttributeMutation = async (attribute: IAttribute) => {
   const db = await get();
   const { attributes } = db.collections;
@@ -252,4 +255,18 @@ export const updateEntryMutation = async (entry: IEntry) => {
       ...entry,
     },
   });
+};
+
+export const addUserAuth = async (user: IAuthDocument) => {
+  const db = await get();
+  const { auth } = db.collections;
+  return auth.insert({
+    ...user,
+  });
+};
+
+export const userAuthQuery = async () => {
+  const db = await get();
+  const { auth } = db.collections;
+  return auth.find().exec();
 };

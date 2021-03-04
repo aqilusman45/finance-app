@@ -5,8 +5,9 @@ import { signInSchema, authenticateUser } from "../helpers/validations";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/rootReducer";
 import { fetchUsers } from "../store/reducers/user";
-import { setUser } from "../store/reducers/auth";
+import { addUserAuthAsync } from "../store/reducers/auth";
 import { useHistory } from "react-router";
+import { v4 as uuidv4 } from "uuid";
 
 const INITIAL_STATE = {
   email: "",
@@ -34,7 +35,6 @@ const SignIn: React.FC = () => {
         user.email === formFields.email &&
         user.password === formFields.password
       ) {
-        dispatch(setUser(user as any));
         push("/home");
       } else {
         authenticateUser();
@@ -43,9 +43,18 @@ const SignIn: React.FC = () => {
   };
 
   const submit = async () => {
+    const userAuth = {
+      email: formFields.email,
+      name: users?.find((user) => user.email === formFields.email)?.name,
+      uid: uuidv4(),
+      createdAt: Date.now(),
+      token: "34345345dfkjkldfg",
+    };
+
     try {
       await signInSchema.validate(formFields);
       verifyUser(formFields);
+      dispatch(addUserAuthAsync(userAuth as any));
     } catch (error) {
       setErrors(error);
     }
