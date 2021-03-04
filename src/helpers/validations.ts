@@ -71,3 +71,7 @@ export const signInSchema = yup.object().shape({
 export const authenticateUser = () => {
   throw new Error(`Email and/or Password is not matched !`);
 };
+
+export const checkDuplication = () => {
+  throw new Error(`A User with that Email or Phone Already Exists !`);
+};

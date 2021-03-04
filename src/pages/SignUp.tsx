@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SignUpView from "../components/SignUpView/SignUpView";
 import { ValidationError } from "yup";
 import { v4 as uuidv4 } from "uuid";
-import { signUpSchema } from "../helpers/validations";
+import { signUpSchema, checkDuplication } from "../helpers/validations";
 import { addUserAsync } from "../store/reducers/user";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/rootReducer";
+import { fetchUsers } from "../store/reducers/user";
 const INITIAL_STATE = {
   name: "",
   email: "",
@@ -19,12 +20,29 @@ const SignUp: React.FC = () => {
 
   const dispatch = useDispatch();
   const { push } = useHistory();
+  const { users } = useSelector((state: RootState) => {
+    return state.users;
+  });
+
+  useEffect(() => {
+    if (!users) {
+      dispatch(fetchUsers());
+    }
+  }, [users, dispatch]);
 
   const handleChange = (e: any) => {
     setFormFields((prevField) => ({
       ...prevField,
       [e.currentTarget.name]: e.currentTarget.value,
     }));
+  };
+
+  const avoidDuplication = (user: any) => {
+    users?.map((exUser) => {
+      if (exUser.email === user.email || exUser.phone === user.phone) {
+        checkDuplication();
+      }
+    });
   };
 
   const submit = async () => {
@@ -36,6 +54,7 @@ const SignUp: React.FC = () => {
     };
     try {
       await signUpSchema.validate(user);
+      avoidDuplication(formFields);
       dispatch(
         addUserAsync(user as any, () => {
           push("/home");

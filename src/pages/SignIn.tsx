@@ -16,11 +16,11 @@ const SignIn: React.FC = () => {
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
   const [errors, setErrors] = useState<ValidationError | undefined>();
   const dispatch = useDispatch();
-  const {push} = useHistory()
+  const { push } = useHistory();
   const { users } = useSelector((state: RootState) => {
     return state.users;
   });
-  
+
   const handleChange = (e: any) => {
     setFormFields((prevField) => ({
       ...prevField,
@@ -28,19 +28,20 @@ const SignIn: React.FC = () => {
     }));
   };
 
-  const verifyUser =  (formFields: any) => {
-    users?.map((user)  => {
+  const verifyUser = (formFields: any) => {
+    users?.map((user) => {
       if (
         user.email === formFields.email &&
         user.password === formFields.password
       ) {
         dispatch(setUser(user as any));
-        push('/home')
+        push("/home");
       } else {
-        authenticateUser()
-      } 
+        authenticateUser();
+      }
     });
   };
+
   const submit = async () => {
     try {
       await signInSchema.validate(formFields);
