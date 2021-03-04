@@ -4,6 +4,7 @@ import { IAttributeCollection } from "./attributes";
 import { IAccountCollection } from "./accounts";
 import { IInvoiceCollection } from "./invoice";
 import { IEntryCollection } from "./entries";
+import { IAuthCollection } from "./auth";
 
 export interface MyDatabaseCollections {
   users: IUserCollection;
@@ -12,4 +13,5 @@ export interface MyDatabaseCollections {
   accounts: IAccountCollection;
   invoices: IInvoiceCollection;
   entries: IEntryCollection;
+  auth: IAuthCollection
 }
