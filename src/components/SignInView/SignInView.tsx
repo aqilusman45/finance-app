@@ -55,9 +55,7 @@ const SignIn = ({ errors, setErrors, handleChange, submit }: SignInProps) => {
             </IonItem>
             <IonItem className="ion-margin">
               <IonLabel position="stacked">Password</IonLabel>
-              <IonLabel>
-                <IonInput name="password" onIonChange={handleChange} />
-              </IonLabel>
+              <IonInput name="password" onIonChange={handleChange} />
             </IonItem>
             <IonButton
               onClick={() => submit()}
