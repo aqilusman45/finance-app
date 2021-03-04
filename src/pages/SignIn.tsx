@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import SignInView from "../components/SignInView/SignInView";
 import { ValidationError } from "yup";
-import { signInSchema } from "../helpers/validations";
+import { signInSchema, authenticateUser } from "../helpers/validations";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/rootReducer";
 import { fetchUsers } from "../store/reducers/user";
 import { setUser } from "../store/reducers/auth";
+import { useHistory } from "react-router";
 
 const INITIAL_STATE = {
   email: "",
@@ -15,9 +16,11 @@ const SignIn: React.FC = () => {
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
   const [errors, setErrors] = useState<ValidationError | undefined>();
   const dispatch = useDispatch();
+  const {push} = useHistory()
   const { users } = useSelector((state: RootState) => {
     return state.users;
   });
+  
   const handleChange = (e: any) => {
     setFormFields((prevField) => ({
       ...prevField,
@@ -25,14 +28,17 @@ const SignIn: React.FC = () => {
     }));
   };
 
-  const verifyUser = (formFields: any) => {
-    users?.map((user) => {
+  const verifyUser =  (formFields: any) => {
+    users?.map((user)  => {
       if (
         user.email === formFields.email &&
         user.password === formFields.password
       ) {
         dispatch(setUser(user as any));
-      }
+        push('/home')
+      } else {
+        authenticateUser()
+      } 
     });
   };
   const submit = async () => {
