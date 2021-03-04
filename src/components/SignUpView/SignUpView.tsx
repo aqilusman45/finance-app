@@ -4,8 +4,6 @@ import {
   IonRow,
   IonCol,
   IonContent,
-  IonItemGroup,
-  IonItemDivider,
   IonLabel,
   IonItem,
   IonInput,
@@ -56,58 +54,35 @@ const SignUpView = ({
             <IonText>
               <h1 className="fontSize">Sign Up</h1>
             </IonText>
-            <IonItemGroup>
-              <IonItemDivider>
-                <IonLabel>Name</IonLabel>
-              </IonItemDivider>
-              <IonItem>
-                <IonLabel>
-                  <IonInput name="name" onIonChange={handleChange} />
-                </IonLabel>
-              </IonItem>
-              <IonItemDivider>
-                <IonLabel>Email</IonLabel>
-              </IonItemDivider>
-              <IonItem>
-                <IonLabel>
-                  <IonInput
-                    type="email"
-                    name="email"
-                    onIonChange={handleChange}
-                  />
-                </IonLabel>
-              </IonItem>
-              <IonItemDivider>
-                <IonLabel>Phone</IonLabel>
-              </IonItemDivider>
-              <IonItem>
-                <IonLabel>
-                  <IonInput name="phone" onIonChange={handleChange} />
-                </IonLabel>
-              </IonItem>
-              <IonItemDivider>
-                <IonLabel>Password</IonLabel>
-              </IonItemDivider>
-              <IonItem>
-                <IonLabel>
-                  <IonInput name="password" onIonChange={handleChange} />
-                </IonLabel>
-              </IonItem>
-              <IonItemDivider />
-              <IonButton
-                onClick={() => {
-                  submit();
-                }}
-                size="large"
-                expand="block"
-                color="primary"
-              >
-                Sign Up
-              </IonButton>
-              <Link to="/" className="ion-margin">
-                Already have an Account ?
-              </Link>
-            </IonItemGroup>
+            <IonItem className="ion-margin">
+              <IonLabel position="stacked">Name</IonLabel>
+              <IonInput name="name" onIonChange={handleChange} />
+            </IonItem>
+            <IonItem className="ion-margin">
+              <IonLabel position="stacked">Email</IonLabel>
+              <IonInput type="email" name="email" onIonChange={handleChange} />
+            </IonItem>
+            <IonItem className="ion-margin">
+              <IonLabel position="stacked">Phone</IonLabel>
+              <IonInput name="phone" onIonChange={handleChange} />
+            </IonItem>
+            <IonItem className="ion-margin">
+              <IonLabel position="stacked">Password</IonLabel>
+              <IonInput name="password" onIonChange={handleChange} />
+            </IonItem>
+            <IonButton
+              onClick={() => {
+                submit();
+              }}
+              size="large"
+              expand="block"
+              color="primary"
+            >
+              Sign Up
+            </IonButton>
+            <Link to="/" className="ion-margin">
+              Already have an Account ?
+            </Link>
           </IonCol>
         </IonRow>
       </IonGrid>
