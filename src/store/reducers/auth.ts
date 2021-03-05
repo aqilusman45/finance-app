@@ -2,7 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "..";
 import { transformUsersAuth } from "../../utils/transform";
 import { IAuthDocument, IAuth } from "../../lib/auth";
-import { addUserAuth, userAuthQuery } from "../../utils/database";
+import {
+  addUserAuth,
+  userAuthQuery,
+  removeUserAuth,
+} from "../../utils/database";
 
 interface IInitialState {
   user: IAuth[] | null;
@@ -34,6 +38,11 @@ const authSlice = createSlice({
       state.user = [...user];
       state.isLoading = false;
     },
+    updateUserAuth: (state, action: PayloadAction<IAuthDocument>) => {
+      const user = action.payload;
+      state.user?.filter((item) => item.uid !== user.uid);
+      return state;
+    },
   },
 });
 
@@ -42,13 +51,12 @@ export const {
   startLoading,
   doneLoading,
   getUserAuth,
+  updateUserAuth,
 } = authSlice.actions;
 
 export default authSlice.reducer;
 
-export const addUserAuthAsync = (
-  user: IAuth,
-): AppThunk => async (dispatch) => {
+export const addUserAuthAsync = (user: IAuth): AppThunk => async (dispatch) => {
   try {
     dispatch(startLoading());
     await addUserAuth(user as any);
@@ -64,6 +72,21 @@ export const fetchUserAuth = (): AppThunk => async (dispatch) => {
     dispatch(startLoading());
     const users = await userAuthQuery();
     dispatch(getUserAuth(transformUsersAuth(users)));
+    dispatch(doneLoading());
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const removeUserAuthAsync = (
+  user: IAuthDocument,
+  cb: () => void
+): AppThunk => async (dispatch) => {
+  try {
+    dispatch(startLoading());
+    await removeUserAuth(user);
+    dispatch(updateUserAuth(user));
+    cb();
     dispatch(doneLoading());
   } catch (error) {
     throw error;

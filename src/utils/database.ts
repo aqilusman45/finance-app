@@ -20,7 +20,7 @@ import { IEntry, IEntryDocument } from "../lib/entries";
 import { invoiceSchema } from "./../schema/invoices";
 import { entrySchema } from "./../schema/entries";
 import { authSchema } from "./../schema/auth";
-import { IAuthDocument } from "../lib/auth";
+import { IAuthDocument, IAuth } from "../lib/auth";
 
 addRxPlugin(RxDBValidatePlugin);
 addRxPlugin(RxDBEncryptionPlugin);
@@ -269,4 +269,11 @@ export const userAuthQuery = async () => {
   const db = await get();
   const { auth } = db.collections;
   return auth.find().exec();
+};
+
+export const removeUserAuth = async (data: IAuth) => {
+  const db = await get();
+  const { auth } = db.collections;
+  const user = await auth.find().where("uid").eq(data.uid);
+  await user?.remove();
 };
