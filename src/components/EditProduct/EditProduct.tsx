@@ -62,6 +62,16 @@ const EditProduct: React.FC = () => {
     if (products) {
       const product = products.find(({ uid }) => uid === id);
       if (product) {
+        setAttributes(() => {
+          let attr = {};
+          for (const { attributeRef, options } of product.attributes) {
+            attr = {
+              ...attr,
+              [attributeRef]: options
+            }
+          }
+          return attr;
+        })
         setFormFields({ ...(product as any) });
         (async () => {
           const images = (await getProductAttatchments(product)).filter(
@@ -142,6 +152,7 @@ const EditProduct: React.FC = () => {
       cost={cost}
       description={description}
       errors={errors}
+      selectedAttrs={selectedAttrs}
       fileIput={fileIput}
       handleAttributes={handleAttributes}
       handleChange={handleChange}

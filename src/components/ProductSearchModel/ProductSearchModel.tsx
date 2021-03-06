@@ -223,6 +223,7 @@ const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
               removeImage={removeImage}
               attributes={attributes}
               cost={cost}
+              selectedAttrs={selectedAttrs}
               description={description}
               errors={errors}
               fileIput={fileIput}
