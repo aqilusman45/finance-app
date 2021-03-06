@@ -115,6 +115,7 @@ const AddProduct: React.FC = () => {
       removeImage={removeImage}
       attributes={attributes}
       cost={cost}
+      selectedAttrs={selectedAttrs}
       description={description}
       errors={errors}
       fileIput={fileIput}

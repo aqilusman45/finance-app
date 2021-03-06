@@ -38,6 +38,7 @@ interface AddProductFormProps {
   removeImage: (idx: number) => void;
   index: number;
   sku: string;
+  selectedAttrs: any;
   price: string;
   cost: string;
   description: string;
@@ -53,6 +54,7 @@ const AddProductForm = ({
   fileIput,
   onFileSelect,
   submit,
+  selectedAttrs,
   images,
   attributes,
   handleAttributes,
@@ -189,6 +191,7 @@ const AddProductForm = ({
                 }) => (
                   <IonItem key={key} className="ion-margin">
                     <CheckBox
+                      selected={selectedAttrs[uid]}
                       handleChange={handleAttributes}
                       multiple={attributeType === AttributeType.CHECKBOXES}
                       label={name}
