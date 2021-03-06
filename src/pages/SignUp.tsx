@@ -1,26 +1,34 @@
 import React, { useState, useEffect } from "react";
-import SignInView from "../components/SignInView/SignInView";
+import SignUpView from "../components/SignUpView/SignUpView";
 import { ValidationError } from "yup";
-import { signInSchema, authenticateUser } from "../helpers/validations";
+import { v4 as uuidv4 } from "uuid";
+import { signUpSchema, checkDuplication } from "../helpers/validations";
+import { addUserAsync } from "../store/reducers/user";
+import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/rootReducer";
 import { fetchUsers } from "../store/reducers/user";
-import { addUserAuthAsync } from "../store/reducers/auth";
-import { useHistory } from "react-router";
-import { v4 as uuidv4 } from "uuid";
-
 const INITIAL_STATE = {
+  name: "",
   email: "",
   password: "",
+  phone: "",
 };
-const SignIn: React.FC = () => {
+const SignUp: React.FC = () => {
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
   const [errors, setErrors] = useState<ValidationError | undefined>();
+
   const dispatch = useDispatch();
   const { push } = useHistory();
   const { users } = useSelector((state: RootState) => {
     return state.users;
   });
+
+  useEffect(() => {
+    if (!users) {
+      dispatch(fetchUsers());
+    }
+  }, [users, dispatch]);
 
   const handleChange = (e: any) => {
     setFormFields((prevField) => ({
@@ -29,45 +37,36 @@ const SignIn: React.FC = () => {
     }));
   };
 
-  const verifyUser = (formFields: any) => {
-    users?.map((user) => {
-      if (
-        user.email === formFields.email &&
-        user.password === formFields.password
-      ) {
-        push("/home");
-      } else {
-        authenticateUser();
+  const avoidDuplication = (user: any) => {
+    users?.map((exUser) => {
+      if (exUser.email === user.email || exUser.phone === user.phone) {
+        checkDuplication();
       }
     });
   };
 
   const submit = async () => {
-    const userAuth = {
-      email: formFields.email,
-      name: users?.find((user) => user.email === formFields.email)?.name,
+    const user = {
+      ...formFields,
       uid: uuidv4(),
       createdAt: Date.now(),
-      token: "34345345dfkjkldfg",
+      updatedAt: Date.now(),
     };
-
     try {
-      await signInSchema.validate(formFields);
-      verifyUser(formFields);
-      dispatch(addUserAuthAsync(userAuth as any));
+      await signUpSchema.validate(user);
+      avoidDuplication(formFields);
+      dispatch(
+        addUserAsync(user as any, () => {
+          push("/home");
+        })
+      );
     } catch (error) {
       setErrors(error);
     }
   };
 
-  useEffect(() => {
-    if (!users) {
-      dispatch(fetchUsers());
-    }
-  }, [users, dispatch]);
-
   return (
-    <SignInView
+    <SignUpView
       setErrors={setErrors}
       errors={errors}
       handleChange={handleChange}
@@ -76,4 +75,4 @@ const SignIn: React.FC = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;

@@ -80,4 +80,19 @@ export const invoiceSchema = async (invoice: any) => {
   if (invoice.taxRate > 99 || invoice.taxRate < 0) {
     throw new Error(`Tax between 0 and 99`);
   }
+}
+
+export const signUpSchema = yup.object().shape({
+  name: yup.string().required(),
+  email: yup.string().email().required(),
+  phone: yup.string().required(),
+  password: yup.string().required("Password must be 6 characters logn !"),
+});
+
+export const authenticateUser = () => {
+  throw new Error(`Email and/or Password is not matched !`);
+};
+
+export const checkDuplication = () => {
+  throw new Error(`A User with that Email or Phone Already Exists !`);
 };

@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import {
   IonContent,
   IonHeader,
@@ -15,7 +16,9 @@ import {
 } from "@ionic/react";
 import { Link, match, Route, Switch } from "react-router-dom";
 import { nonMenuRoutes, routes } from "../constants/routes";
-import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/rootReducer";
+import { fetchUserAuth } from "../store/reducers/auth";
 
 const Home: React.FC<{
   match: match;
@@ -23,7 +26,16 @@ const Home: React.FC<{
     pathname: string;
   };
 }> = ({ match, location }) => {
-  
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => {
+    return state.auth;
+  });
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(fetchUserAuth());
+    }
+  }, [user, dispatch]);
   return (
     <IonContent>
       <IonSplitPane when="lg" contentId="main">
@@ -50,9 +62,7 @@ const Home: React.FC<{
                     {subMenuLinks.map(({ text, link }) => {
                       return (
                         <Link key={link} to={`${match.url}${link}`}>
-                          <IonItem>
-                            {text}
-                          </IonItem>
+                          <IonItem>{text}</IonItem>
                         </Link>
                       );
                     })}
@@ -73,11 +83,7 @@ const Home: React.FC<{
               </IonTitle>
               <IonButtons slot="primary">
                 <Link to="/">
-                  <IonButton
-                    fill="solid"
-                    size="large"
-                    color="primary"
-                  >
+                  <IonButton fill="solid" size="large" color="primary">
                     Log out
                   </IonButton>
                 </Link>
@@ -99,14 +105,14 @@ const Home: React.FC<{
                 })
               )}
               {nonMenuRoutes.map(({ component, link }) => {
-                  return (
-                    <Route
-                      key={link}
-                      exact
-                      path={`${match.url}${link}`}
-                      component={component}
-                    />
-                  );
+                return (
+                  <Route
+                    key={link}
+                    exact
+                    path={`${match.url}${link}`}
+                    component={component}
+                  />
+                );
               })}
             </Switch>
           </IonContent>
