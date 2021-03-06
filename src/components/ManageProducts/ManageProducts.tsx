@@ -30,7 +30,7 @@ const ManageProduct: React.FC = () => {
   });
   // pagination code start here
 
-  const itemsPerPage = 3;
+  const itemsPerPage = 10;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = products?.slice(indexOfFirstItem, indexOfLastItem);
