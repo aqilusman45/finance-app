@@ -16,6 +16,7 @@ import Badge from "react-bootstrap/Badge";
 import "./ManageAttributes.css";
 import AttributeModal from "../ViewAttribute/ViewAttribute";
 import Pagination from "../Pagination/Pagination";
+import * as JsSearch from "js-search";
 
 const headers = ["attributeName", "attributeType", "required", "options"];
 
@@ -23,6 +24,8 @@ const ManageAttributes: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [attribute, setAttribute] = useState<IAttribute | undefined>();
   const [currentPage, setCurrentPage] = useState(1);
+  const [filteredAttributes, setFilteredAttributes] = useState<any>();
+
   const dispatch = useDispatch();
   const { isLoading, attributes } = useSelector((state: RootState) => {
     return state.attributes;
@@ -30,11 +33,25 @@ const ManageAttributes: React.FC = () => {
 
   // pagination code start here
 
-  const itemsPerPage = 9;
+  const itemsPerPage = 10;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = attributes?.slice(indexOfFirstItem, indexOfLastItem);
   // pagination code end here
+
+  // js-search code start here
+  var search = new JsSearch.Search("uid");
+  search.addIndex(["attributeName", "name"]);
+
+  if (attributes) {
+    search.addDocuments(attributes);
+  }
+
+  const searcheAttributes = (input: any) => {
+    setFilteredAttributes(search.search(input));
+  };
+
+  // js-search code end here
 
   useEffect(() => {
     if (!attributes) {
@@ -53,7 +70,11 @@ const ManageAttributes: React.FC = () => {
         <IonGrid className="ion-margin">
           <IonRow>
             <IonCol size="12">
-              <IonSearchbar showCancelButton="focus" debounce={1000} />
+              <IonSearchbar
+                onIonChange={(e) => searcheAttributes(e.detail.value!)}
+                showCancelButton="focus"
+                debounce={1000}
+              />
             </IonCol>
           </IonRow>
           <IonLoading isOpen={isLoading} message={"Please wait..."} />
@@ -71,68 +92,139 @@ const ManageAttributes: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {currentItems?.map(
-                        (attribute: IAttribute, index: any) => (
-                          <tr
-                            className="table-row-hover"
-                            onClick={() => {
-                              setAttribute(() =>
-                                attributes.find(
-                                  (attr) => attr.uid === attribute.uid
-                                )
-                              );
-                              setShowModal(!showModal);
-                            }}
-                            key={attribute.uid}
-                          >
-                            <td>{index + 1}</td>
-                            {Object.keys(attribute).map((key) => {
-                              // @ts-ignore
-                              const attributeKey = attribute[key];
-                              if (headers.includes(key)) {
-                                if (typeof attributeKey !== "object") {
-                                  return (
-                                    <td
-                                      key={`${attributeKey}`}
-                                    >{`${attributeKey}`}</td>
+                      {filteredAttributes?.length
+                        ? filteredAttributes?.map(
+                            (attribute: IAttribute, index: any) => (
+                              <tr
+                                className="table-row-hover"
+                                onClick={() => {
+                                  setAttribute(() =>
+                                    attributes.find(
+                                      (attr) => attr.uid === attribute.uid
+                                    )
                                   );
-                                } else if (Array.isArray(attributeKey)) {
-                                  return (
-                                    <td key={attributeKey[0]}>
-                                      {attributeKey.map(({ label }, idx) => {
-                                        if (idx < 2) {
-                                          return (
-                                            <Badge
-                                              key={label}
-                                              style={{
-                                                fontSize: 10,
-                                                padding: "10px 10px",
-                                                margin:
-                                                  idx === 0 ? "0" : "0 10px",
-                                              }}
-                                              variant="dark"
-                                            >
-                                              {label}
-                                            </Badge>
-                                          );
-                                        }
-                                        return null;
-                                      })}
-                                    </td>
+                                  setShowModal(!showModal);
+                                }}
+                                key={attribute.uid}
+                              >
+                                <td>{index + 1}</td>
+                                {Object.keys(attribute).map((key) => {
+                                  // @ts-ignore
+                                  const attributeKey = attribute[key];
+                                  if (headers.includes(key)) {
+                                    if (typeof attributeKey !== "object") {
+                                      return (
+                                        <td
+                                          key={`${attributeKey}`}
+                                        >{`${attributeKey}`}</td>
+                                      );
+                                    } else if (Array.isArray(attributeKey)) {
+                                      return (
+                                        <td key={attributeKey[0]}>
+                                          {attributeKey.map(
+                                            ({ label }, idx) => {
+                                              if (idx < 2) {
+                                                return (
+                                                  <Badge
+                                                    key={label}
+                                                    style={{
+                                                      fontSize: 10,
+                                                      padding: "10px 10px",
+                                                      margin:
+                                                        idx === 0
+                                                          ? "0"
+                                                          : "0 10px",
+                                                    }}
+                                                    variant="dark"
+                                                  >
+                                                    {label}
+                                                  </Badge>
+                                                );
+                                              }
+                                              return null;
+                                            }
+                                          )}
+                                        </td>
+                                      );
+                                    } else {
+                                      return (
+                                        <td
+                                          key={`${attributeKey.name}`}
+                                        >{`${attributeKey.name}`}</td>
+                                      );
+                                    }
+                                  }
+                                  return null;
+                                })}
+                              </tr>
+                            )
+                          )
+                        : currentItems?.map(
+                            (attribute: IAttribute, index: any) => (
+                              <tr
+                                className="table-row-hover"
+                                onClick={() => {
+                                  setAttribute(() =>
+                                    attributes.find(
+                                      (attr) => attr.uid === attribute.uid
+                                    )
                                   );
-                                } else {
-                                  return (
-                                    <td
-                                      key={`${attributeKey.name}`}
-                                    >{`${attributeKey.name}`}</td>
-                                  );
-                                }
-                              }
-                              return null;
-                            })}
-                          </tr>
-                        )
-                      )}
+                                  setShowModal(!showModal);
+                                }}
+                                key={attribute.uid}
+                              >
+                                <td>{index + 1}</td>
+                                {Object.keys(attribute).map((key) => {
+                                  // @ts-ignore
+                                  const attributeKey = attribute[key];
+                                  if (headers.includes(key)) {
+                                    if (typeof attributeKey !== "object") {
+                                      return (
+                                        <td
+                                          key={`${attributeKey}`}
+                                        >{`${attributeKey}`}</td>
+                                      );
+                                    } else if (Array.isArray(attributeKey)) {
+                                      return (
+                                        <td key={attributeKey[0]}>
+                                          {attributeKey.map(
+                                            ({ label }, idx) => {
+                                              if (idx < 2) {
+                                                return (
+                                                  <Badge
+                                                    key={label}
+                                                    style={{
+                                                      fontSize: 10,
+                                                      padding: "10px 10px",
+                                                      margin:
+                                                        idx === 0
+                                                          ? "0"
+                                                          : "0 10px",
+                                                    }}
+                                                    variant="dark"
+                                                  >
+                                                    {label}
+                                                  </Badge>
+                                                );
+                                              }
+                                              return null;
+                                            }
+                                          )}
+                                        </td>
+                                      );
+                                    } else {
+                                      return (
+                                        <td
+                                          key={`${attributeKey.name}`}
+                                        >{`${attributeKey.name}`}</td>
+                                      );
+                                    }
+                                  }
+                                  return null;
+                                })}
+                              </tr>
+                            )
+                          )}
                     </tbody>
                   </Table>
                 </IonCol>
@@ -141,12 +233,16 @@ const ManageAttributes: React.FC = () => {
           ) : (
             <p>No attributes found</p>
           )}
-          <Pagination
-            itemsPerPage={itemsPerPage}
-            data={attributes}
-            setCurrentPage={setCurrentPage}
-            currentPage={currentPage}
-          />
+          {filteredAttributes?.length ? (
+            ""
+          ) : (
+            <Pagination
+              itemsPerPage={itemsPerPage}
+              data={attributes}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+            />
+          )}
         </IonGrid>
       </IonContent>
     </>
