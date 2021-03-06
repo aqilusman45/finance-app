@@ -28,19 +28,31 @@ const ManageEntries = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [account] = useState<any>();
-  const [filteredEntry,] = useState<any>();
+  const [filteredEntry, setFilteredEntry] = useState<any>();
   const dispatch = useDispatch();
-  const { isLoading, entries } = useSelector((state: RootState) => {
-    return state.entries;
-  });
-
-  const { accounts } = useSelector((state: RootState) => {
-    return state.accounts;
-  });
+  const { isLoading, entries, accounts } = useSelector(
+    ({
+      entries: { entries, isLoading: entriesIsLoading },
+      accounts: { accounts, isLoading: accountsIsLoading },
+    }: RootState) => {
+      return {
+        isLoading: entriesIsLoading || accountsIsLoading,
+        accounts,
+        entries: entries?.map((entry: any) => {
+          return {
+            ...entry,
+            account: accounts?.find(
+              (account) => account.uid === entry.accountRef
+            ),
+          };
+        }),
+      };
+    }
+  );
 
   // pagination code start here
 
-  const itemsPerPage = 1;
+  const itemsPerPage = 9;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = entries?.slice(indexOfFirstItem, indexOfLastItem);
@@ -48,17 +60,16 @@ const ManageEntries = () => {
   // pagination code end here
 
   // js-search code start here
-  var search = new JsSearch.Search("name");
-  search.addIndex("name");
-  search.addIndex("phone");
+  var search = new JsSearch.Search("uid");
+  search.addIndex(["account", "name"]);
+  search.addIndex(["account", "phone"]);
 
-  if (accounts) {
-    search.addDocuments(accounts);
+  if (entries) {
+    search.addDocuments(entries);
   }
 
   const searchEntry = (input: any) => {
-    // search.search(input);    
-    // setFilteredEntry(search.search(input));
+    setFilteredEntry(search.search(input));
   };
   // js-search code end here
   useEffect(() => {
@@ -115,20 +126,15 @@ const ManageEntries = () => {
                 <tbody>
                   {filteredEntry?.length
                     ? filteredEntry.map((entry: any, index: any) => {
-
-                        const findAccount = accounts?.find(
-                          (account) => account.uid === entry.accountRef
-                        );
                         const objValues = {
-                          name: findAccount?.name,
-                          phone: findAccount?.phone,
+                          name: entry.account?.name,
+                          phone: entry.account?.phone,
                           date: convertDate(entry.date),
                           amount: entry.amount,
                         };
                         return (
                           <tr key={index} className="table-row-hover">
                             <td>{index + 1}</td>
-
                             {Object.values(objValues).map((item, index) => {
                               return <td key={index}>{item}</td>;
                             })}
@@ -136,14 +142,9 @@ const ManageEntries = () => {
                         );
                       })
                     : currentItems?.map((entry: any, index: any) => {
-                      console.log();
-                      
-                        const findAccount = accounts?.find(
-                          (account) => account.uid === entry.accountRef
-                        );
                         const objValues = {
-                          name: findAccount?.name,
-                          phone: findAccount?.phone,
+                          name: entry.account?.name,
+                          phone: entry.account?.phone,
                           date: convertDate(entry.date),
                           amount: entry.amount,
                         };
