@@ -96,3 +96,8 @@ export const authenticateUser = () => {
 export const checkDuplication = () => {
   throw new Error(`A User with that Email or Phone Already Exists !`);
 };
+
+export const signInSchema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().required(),
+});
