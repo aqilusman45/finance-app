@@ -3,13 +3,18 @@ import InvoiceView from "../InvoiceView/InvoiceView";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { RootState } from "../../store/rootReducer";
-import { PaymentOptions } from "../../lib/enum";
 import { v4 as uuidv4 } from "uuid";
 import {
   fetchInvoices,
   updateInvoiceAsync,
 } from "../../store/reducers/invoices";
 import { IAccount } from "../../lib/accounts";
+import {
+  addEntrySchema,
+  accountTypeCheck,
+  checkProduct,
+  invoiceSchema,
+} from "../../helpers/validations";
 import {
   fetchAccounts,
   updateAccountAsync,
@@ -22,8 +27,8 @@ const INITIAL_STATE = {
   invoiceNumber: "",
   date: Date.now(),
   paymentOption: {
-    value: PaymentOptions.BANK,
-    label: PaymentOptions.BANK,
+    value: "",
+    label: "",
   },
   detail: {
     name: "",
@@ -35,7 +40,7 @@ const INITIAL_STATE = {
   },
   products: [
     {
-      product: 12345,
+      product: "",
       name: "",
       quantity: 0,
       unitPrice: 0,
@@ -52,6 +57,7 @@ const INITIAL_STATE = {
   accountRef: "",
   createdAt: 0,
   updatedAt: 0,
+  quantity: 0,
 };
 
 const EditInvoice: React.FC = () => {
@@ -60,7 +66,7 @@ const EditInvoice: React.FC = () => {
   }>();
 
   const [createInvoice, setCreateInvoice] = useState<any>(INITIAL_STATE);
-  const [taxInput, setTaxInput] = useState<any>(0);
+  const [, setTaxInput] = useState<any>(0);
   const [userData, setUserData] = useState<any>();
   const [productID, setProductID] = useState<any>();
   const [errors, setErrors] = useState<ValidationError | undefined>();
@@ -235,6 +241,13 @@ const EditInvoice: React.FC = () => {
     });
   };
 
+  const handleChange = (e: any) => {
+    setCreateInvoice((prevField: any) => ({
+      ...prevField,
+      [e.currentTarget.name]: e.currentTarget.value,
+    }));
+  };
+
   const calculateTotalDiscount = () => {
     let totalDiscount = 0;
     createInvoice.products.map((item: any) => {
@@ -256,19 +269,32 @@ const EditInvoice: React.FC = () => {
     let totalTax = 0;
     createInvoice.products.map((item: any) => {
       return (totalTax =
-        totalTax + (item.quantity * item.unitPrice * taxInput) / 100);
+        totalTax +
+        (item.quantity * item.unitPrice * createInvoice.taxRate) / 100);
     });
     return Math.round(totalTax);
   };
 
   const handleTaxInput = (value: number) => {
     setTaxInput(value);
+    setCreateInvoice({
+      ...createInvoice,
+      taxRate: Number(value),
+    });
   };
 
   const calculateTotal = () => {
     return Math.round(
       calculateSubTotal() + calculateTax() - calculateTotalDiscount()
     );
+  };
+
+  const calculateQuantities = () => {
+    let count = 0;
+    createInvoice.products.map(() => {
+      return count++;
+    });
+    return count;
   };
 
   const submit = async () => {
@@ -283,6 +309,7 @@ const EditInvoice: React.FC = () => {
       subTotal: calculateSubTotal(),
       total: calculateTotal(),
       updatedAt: Date.now(),
+      quantity: calculateQuantities(),
     };
     const account = {
       ...userAccont,
@@ -293,29 +320,23 @@ const EditInvoice: React.FC = () => {
       ),
       updatedAt: Date.now(),
     };
-    const firstEntry = {
-      payableAmount: calculateTotal(),
-      receivableAmount: userAccont?.balance!,
-      remainingAmount: updateUserBalanceAtEidtInvoice(
-        userAccont?.balance!,
-        prevTotal,
-        calculateTotal()
-      ),
-      date: Date.now(),
-    };
 
     const entry = {
       ...ledgerEntry,
-      entries: [...ledgerEntry.entries, firstEntry],
+      amount: -calculateTotal(),
       updatedAt: Date.now(),
     };
 
     try {
+      await accountTypeCheck(invoice);
+      await invoiceSchema(invoice);
+      await addEntrySchema.validate(invoice.detail);
+      await checkProduct(invoice);
       dispatch(updateEntryAsync(entry as any));
       dispatch(updateAccountAsync(account as any));
       dispatch(
         updateInvoiceAsync(invoice as any, () => {
-          push("/home/create-invoice");
+          push("/home/manage-invoices");
         })
       );
     } catch (error) {
@@ -344,7 +365,7 @@ const EditInvoice: React.FC = () => {
       submit={submit}
       errors={errors}
       setErrors={setErrors}
-      taxInput={taxInput}
+      handleChange={handleChange}
     />
   );
 };

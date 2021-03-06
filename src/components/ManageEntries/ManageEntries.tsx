@@ -28,7 +28,7 @@ const ManageEntries = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [account] = useState<any>();
-  const [filteredEntry] = useState<any>();
+  const [filteredEntry,] = useState<any>();
   const dispatch = useDispatch();
   const { isLoading, entries } = useSelector((state: RootState) => {
     return state.entries;
@@ -40,7 +40,7 @@ const ManageEntries = () => {
 
   // pagination code start here
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 1;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = entries?.slice(indexOfFirstItem, indexOfLastItem);
@@ -172,6 +172,7 @@ const ManageEntries = () => {
             itemsPerPage={itemsPerPage}
             data={entries}
             setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
           />
         )}
       </IonGrid>

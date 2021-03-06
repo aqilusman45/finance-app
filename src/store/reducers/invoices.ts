@@ -5,7 +5,7 @@ import {
   invoicesQuery,
   updateInvoiceMutation,
 } from "../../utils/database";
-import { transformInvoice, transformInvoices } from "../../utils/transform";
+import { transformInvoices } from "../../utils/transform";
 import { AppThunk } from "..";
 
 interface IInitialState {
@@ -35,7 +35,7 @@ const invoiceSlice = createSlice({
     },
     addNewInvoice: (state, action: PayloadAction<IInvoiceDocument>) => {
       const invoice = action.payload;
-      state.invoices?.unshift(transformInvoice(invoice));
+      state.invoices?.unshift(invoice);
       state.isLoading = false;
     },
     updateInvoice: (state, action: PayloadAction<IInvoiceDocument>) => {

@@ -28,7 +28,7 @@ export const productAttributesCheck = async (
           message: `${attributeName.name} is a required field`,
         };
       }
-      return null
+      return null;
     })
     .filter((node) => node);
   if (errors.length > 0) {
@@ -50,11 +50,34 @@ export const accountSchema = yup.object().shape({
 
 export const addEntrySchema = yup.object().shape({
   name: yup.string().required("Please Select a User"),
-})
+});
 
-export const invoiceSchema = yup.object().shape({
-  
-  tax: yup.number().min(0).max(99)
+export const accountTypeCheck = async (invoice: any) => {
+  if (!invoice) return;
+  if (!invoice.paymentOption.value) {
+    throw new Error(`Payment Option is a required field`);
+  }
+};
 
+export const checkProduct = async (invoice: any) => {
+  if (!invoice) return;
+  let prod = invoice.products;
+  prod.forEach((item: any, idx: number) => {
+    if (!item.name.length || item.quantity < 1) {
+      throw new Error(
+        `Please Select at Least 1 Product with atleast 1 Quantity at line ${
+          idx + 1
+        }`
+      );
+    } else if (item.discount > 100 || item.discount < 0) {
+      throw new Error(`Discount between 0 and 100 at line${idx + 1}`);
+    }
+  });
+};
 
-})
+export const invoiceSchema = async (invoice: any) => {
+  if (!invoice) return;
+  if (invoice.taxRate > 99 || invoice.taxRate < 0) {
+    throw new Error(`Tax between 0 and 99`);
+  }
+};

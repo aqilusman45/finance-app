@@ -9,6 +9,11 @@ import {
   IonButton,
   IonSearchbar,
   IonToast,
+  IonLabel,
+  IonItem,
+  IonSelect,
+  IonInput,
+  IonSelectOption,
 } from "@ionic/react";
 import { useSelector, useDispatch } from "react-redux";
 import { closeSharp, create } from "ionicons/icons";
@@ -20,7 +25,24 @@ import { IonLoading } from "@ionic/react";
 import { fetchProducts } from "../../store/reducers/products";
 import { fetchAccounts } from "../../store/reducers/accounts";
 import ProductSearchModel from "../ProductSearchModel/ProductSearchModel";
+import { IOption } from "../../lib/attributes";
+import { PaymentOptions } from "../../lib/enum";
 const keys = ["Description", "Quantity", "Unit Price", "Discount %", "Total"];
+
+const options: IOption[] = [
+  {
+    value: PaymentOptions.BANK,
+    label: "Bank",
+  },
+  {
+    value: PaymentOptions.CASH,
+    label: "Cash",
+  },
+  {
+    value: PaymentOptions.CHEQUE,
+    label: "Cheque",
+  },
+];
 
 interface InvoiceViewProps {
   RemoveItem?: any;
@@ -42,7 +64,7 @@ interface InvoiceViewProps {
   submit?: any;
   errors?: any;
   setErrors?: any;
-  taxInput?: any
+  handleChange?: any;
 }
 
 const InvoiceView: React.FC<InvoiceViewProps> = ({
@@ -64,12 +86,12 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   submit,
   errors,
   setErrors,
-  taxInput,
-  
+  handleChange,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
   const dispatch = useDispatch();
+  const { paymentOption, invoiceNumber,taxRate } = createInvoice;
   const { isLoading, accounts } = useSelector((state: RootState) => {
     return state.accounts;
   });
@@ -86,6 +108,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
       dispatch(fetchProducts());
     }
   }, [accounts, products, dispatch]);
+
   return (
     <IonPage>
       <IonContent>
@@ -132,6 +155,46 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
               />
             </IonCol>
           </IonRow>
+          <IonRow>
+            <IonCol size="6">
+              <IonItem>
+                <IonLabel position="stacked">Invoice Number</IonLabel>
+                <IonInput
+                  onIonChange={handleChange}
+                  name="invoiceNumber"
+                  type="number"
+                  value={invoiceNumber}
+                />
+              </IonItem>
+            </IonCol>
+            <IonCol size="6">
+              <IonItem className="ion-margin">
+                <IonSelect
+                  onIonChange={(e) => {
+                    const option = options.find(
+                      ({ value }) => value === e.detail.value
+                    );
+                    handleChange({
+                      currentTarget: {
+                        name: "paymentOption",
+                        value: option,
+                      },
+                    });
+                  }}
+                  value={paymentOption.value}
+                  name="paymentOption"
+                  multiple={false}
+                  placeholder="Entry Type"
+                >
+                  {options.map(({ value, label }) => (
+                    <IonSelectOption key={value} value={value}>
+                      {label}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
+            </IonCol>
+          </IonRow>
           {createInvoice.products?.length ? (
             <IonRow>
               <IonCol size="12">
@@ -159,10 +222,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                             const discount =
                               (product.discount * totalPrice) / 100;
                             return (
-                              <tr
-                                key={index}
-                                className="table-row-hover"
-                              >
+                              <tr key={index} className="table-row-hover">
                                 <td>{index + 1}</td>
                                 <td>
                                   <input
@@ -274,7 +334,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                           onChange={(e: any) => {
                             handleTaxInput(e.target.value);
                           }}
-                          value={taxInput}
+                          value={taxRate}
                         />
                         <IonIcon
                           className=" position-absolute createIcon"
@@ -297,7 +357,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
 
               <IonCol size="12">
                 <IonButton onClick={() => submit()} color="primary">
-                  {isEdit ? "Update" : "Submit"}
+                  {isEdit ? "Update" : "Submit"} 
                 </IonButton>
               </IonCol>
             </IonRow>

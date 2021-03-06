@@ -26,8 +26,8 @@ const keys = ["Invoice ID", "Name", "Phone", "Discount", "Tax", "Total"];
 const ManageInvoices: React.FC = () => {
   const [showModel, setShowModel] = useState<boolean>(false);
   const [invoice, setInvoice] = useState<IInvoice | null>();
-  const [gender, setGender] = useState<string>("all");
-  const [filteredInvoices, setFilteredInvoices] = useState<any>();
+  const [payment, setPayment] = useState<string>("all");
+  const [filteredInvoices, ,] = useState<any>();
   const [currentPage, setCurrentPage] = useState(1);
 
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ const ManageInvoices: React.FC = () => {
 
   // pagination code start here
 
-  const itemsPerPage = 3;
+  const itemsPerPage = 9;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = invoices?.slice(indexOfFirstItem, indexOfLastItem);
@@ -55,7 +55,7 @@ const ManageInvoices: React.FC = () => {
 
   const searchedInvoic = (input: any) => {
     search.search(input);
-    setFilteredInvoices(search.search(input));
+    // setFilteredInvoices(search.search(input));
   };
 
   // js-search code end here
@@ -102,8 +102,8 @@ const ManageInvoices: React.FC = () => {
               <IonItem>
                 <IonLabel>PAYMENT</IonLabel>
                 <IonSelect
-                  value={gender}
-                  onIonChange={(e) => setGender(e.detail.value)}
+                  value={payment}
+                  onIonChange={(e) => setPayment(e.detail.value)}
                 >
                   <IonSelectOption value="all">All</IonSelectOption>
                   <IonSelectOption value="bank">Bank</IonSelectOption>
@@ -215,6 +215,7 @@ const ManageInvoices: React.FC = () => {
               itemsPerPage={itemsPerPage}
               data={invoices}
               setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
             />
           )}
         </IonGrid>
