@@ -34,7 +34,7 @@ const ManageInvoices: React.FC = () => {
   const { isLoading, invoices } = useSelector((state: RootState) => {
     return state.invoices;
   });
-
+  
   // pagination code start here
 
   const itemsPerPage = 9;

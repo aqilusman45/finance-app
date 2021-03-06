@@ -11,7 +11,15 @@ import {
   IonCardContent,
 } from "@ionic/react";
 import { Link } from "react-router-dom";
-import { text, cube, keyOutline, callOutline, walletOutline, calendar,cashOutline } from "ionicons/icons";
+import {
+  text,
+  cube,
+  keyOutline,
+  callOutline,
+  walletOutline,
+  calendar,
+  cashOutline,
+} from "ionicons/icons";
 interface InvoiceViewModelProps {
   showModel: boolean;
   setShowModel: (show: boolean) => void;
@@ -34,7 +42,9 @@ const InvoiceViewModel: React.FC<InvoiceViewModelProps> = ({
     currentBalance,
     date,
     uid,
+    products,
   } = invoice;
+  console.log("invoice", invoice);
 
   return (
     <IonModal isOpen={showModel}>
@@ -81,6 +91,17 @@ const InvoiceViewModel: React.FC<InvoiceViewModelProps> = ({
               <IonIcon icon={cashOutline} slot="start" />
               <IonLabel>Payment Option: {paymentOption.value}</IonLabel>
             </IonItem>
+            {products.map((prod: any) => {
+              return (
+                <IonItem key={prod.product}>
+                  <IonIcon icon={cube} slot="start" />
+                  <IonLabel>
+                    <h2>{prod.name}</h2>
+                    <h3>Quantity: {prod.quantity}</h3>
+                  </IonLabel>
+                </IonItem>
+              );
+            })}
           </IonCard>
           <IonCard>
             <IonCardContent>
@@ -90,9 +111,7 @@ const InvoiceViewModel: React.FC<InvoiceViewModelProps> = ({
             </IonCardContent>
           </IonCard>
         </IonContent>
-        <IonButton onClick={() => setShowModel(!showModel)}>
-          Close
-        </IonButton>
+        <IonButton onClick={() => setShowModel(!showModel)}>Close</IonButton>
       </IonPage>
     </IonModal>
   );
