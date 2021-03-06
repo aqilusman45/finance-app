@@ -27,7 +27,7 @@ const ManageInvoices: React.FC = () => {
   const [showModel, setShowModel] = useState<boolean>(false);
   const [invoice, setInvoice] = useState<IInvoice | null>();
   const [payment, setPayment] = useState<string>("all");
-  const [filteredInvoices, ,] = useState<any>();
+  const [filteredInvoices, setFilteredInvoices] = useState<any>();
   const [currentPage, setCurrentPage] = useState(1);
 
   const dispatch = useDispatch();
@@ -47,7 +47,8 @@ const ManageInvoices: React.FC = () => {
   // js-search code start here
   var search = new JsSearch.Search("uid");
   search.addIndex("invoiceNumber");
-  search.addIndex("uid");
+  search.addIndex(["detail", "phone"]);
+  search.addIndex(["detail", "name"]);
 
   if (invoices) {
     search.addDocuments(invoices);
@@ -55,7 +56,7 @@ const ManageInvoices: React.FC = () => {
 
   const searchedInvoic = (input: any) => {
     search.search(input);
-    // setFilteredInvoices(search.search(input));
+    setFilteredInvoices(search.search(input));
   };
 
   // js-search code end here
