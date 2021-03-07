@@ -25,13 +25,17 @@ const PaginationView = ({
 
   return (
     <div className="pgStyle">
-      <Pagination
-        activePage={active}
-        itemsCountPerPage={itemsPerPage}
-        totalItemsCount={pageNumbers}
-        pageRangeDisplayed={10}
-        onChange={(e: any) => handleClick(e)}
-      />
+      {data?.length ? (
+        <Pagination
+          activePage={active}
+          itemsCountPerPage={itemsPerPage}
+          totalItemsCount={pageNumbers}
+          pageRangeDisplayed={10}
+          onChange={(e: any) => handleClick(e)}
+        />
+      ) : (
+        ""
+      )}
     </div>
   );
 };
