@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SignInView from "../components/SignInView/SignInView";
 import { ValidationError } from "yup";
-import { signInSchema, authenticateUser } from "../helpers/validations";
+import { signInSchema, authenticateUser, checkExistedUser } from "../helpers/validations";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/rootReducer";
 import { fetchUsers } from "../store/reducers/user";
@@ -48,13 +48,16 @@ const SignIn: React.FC = () => {
       name: users?.find((user) => user.email === formFields.email)?.name,
       uid: uuidv4(),
       createdAt: Date.now(),
-      token: "34345345dfkjkldfg",
     };
 
     try {
       await signInSchema.validate(formFields);
       verifyUser(formFields);
-      dispatch(addUserAuthAsync(userAuth as any));
+      if(users?.length){
+        dispatch(addUserAuthAsync(userAuth as any));
+      } else {
+        checkExistedUser()
+      }
     } catch (error) {
       setErrors(error);
     }

@@ -101,3 +101,7 @@ export const signInSchema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().required(),
 });
+
+export const checkExistedUser = () => {
+  throw new Error(`If you are new User Please Sign Up First !`);
+};

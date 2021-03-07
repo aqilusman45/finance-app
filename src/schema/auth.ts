@@ -23,6 +23,6 @@ export const authSchema: RxJsonSchema = {
         type: "string",
       },
     },
-    required: ["uid", "name", "token", "email"],
+    required: ["uid", "name", "email"],
   };
   
