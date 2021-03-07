@@ -14,7 +14,7 @@ import { fetchProducts } from "../../store/reducers/products";
 import { IProduct } from "../../lib/products";
 import ProductModal from "../ViewProduct/ViewProduct";
 import * as JsSearch from "js-search";
-import Pagination from "../Pagination/Pagination";
+import PaginationView from "../Pagination/Pagination";
 
 const keys = ["name", "sku", "price", "description", "enabled"];
 
@@ -169,7 +169,7 @@ const ManageProduct: React.FC = () => {
           {filteredProducts?.length ? (
             ""
           ) : (
-            <Pagination
+            <PaginationView
               itemsPerPage={itemsPerPage}
               data={products}
               setCurrentPage={setCurrentPage}

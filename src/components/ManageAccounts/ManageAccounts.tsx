@@ -14,7 +14,7 @@ import Badge from "react-bootstrap/Badge";
 import AccountModal from "../ViewAccount/ViewAccount";
 import { fetchAccounts } from "../../store/reducers/accounts";
 import { IAccount } from "../../lib/accounts";
-import Pagination from "../Pagination/Pagination";
+import PaginationView from "../Pagination/Pagination";
 import * as JsSearch from "js-search";
 
 const headers = ["name", "phone", "email", "accountTitle", "accountType"];
@@ -205,7 +205,7 @@ const ManageAccounts: React.FC = () => {
           {filteredAccounts?.length ? (
             ""
           ) : (
-            <Pagination
+            <PaginationView
               itemsPerPage={itemsPerPage}
               data={accounts}
               setCurrentPage={setCurrentPage}
