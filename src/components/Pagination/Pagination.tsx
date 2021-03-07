@@ -1,5 +1,6 @@
 import React from "react";
 import "./Pagination.css";
+import Pagination from "react-js-pagination";
 
 interface PaginationProps {
   data: any;
@@ -8,45 +9,31 @@ interface PaginationProps {
   currentPage: number;
 }
 
-const Pagination = ({
+const PaginationView = ({
   data,
   itemsPerPage,
   setCurrentPage,
   currentPage,
 }: PaginationProps) => {
   let active = currentPage;
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(data?.length / itemsPerPage); i++) {
-    pageNumbers.push(i);
-  }
+  const pageNumbers = data?.length;
 
-  const handleClick = (event: any) => {
-    setCurrentPage(Number(event));
-    active = Number(event);
+  const handleClick = (data: any) => {
+    setCurrentPage(Number(data));
+    active = Number(data);
   };
-  const renderPageNumbers = pageNumbers.map((number) => {
-    return (
-      <li
-        key={number}
-        onClick={() => handleClick(number)}
-        className={`page-item `}
-      >
-        <button className={`page-link  ${active === number ? "active" : ""}`}>
-          {number}
-        </button>
-      </li>
-    );
-  });
 
   return (
-    <div>
-      <nav aria-label="Page navigation example">
-        <ul className={`pagination ${pageNumbers.length > 9 ? "verticalScroll" : ""}`}>
-          {renderPageNumbers}
-        </ul>
-      </nav>
+    <div className="pgStyle">
+      <Pagination
+        activePage={active}
+        itemsCountPerPage={itemsPerPage}
+        totalItemsCount={pageNumbers}
+        pageRangeDisplayed={10}
+        onChange={(e: any) => handleClick(e)}
+      />
     </div>
   );
 };
 
-export default Pagination;
+export default PaginationView;

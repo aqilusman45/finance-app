@@ -18,7 +18,7 @@ import { fetchAccounts } from "../../store/reducers/accounts";
 import "./ManageEntries.css";
 import * as JsSearch from "js-search";
 import { convertDate } from "../../utils/dateConversion";
-import Pagination from "../Pagination/Pagination";
+import PaginationView from "../Pagination/Pagination";
 
 const keys = ["Name", "Phone", "Date", "Amount"];
 
@@ -169,7 +169,7 @@ const ManageEntries = () => {
         {filteredEntry?.length ? (
           ""
         ) : (
-          <Pagination
+          <PaginationView
             itemsPerPage={itemsPerPage}
             data={entries}
             setCurrentPage={setCurrentPage}

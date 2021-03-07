@@ -15,7 +15,9 @@ import { IAttribute } from "../../lib/attributes";
 import Badge from "react-bootstrap/Badge";
 import "./ManageAttributes.css";
 import AttributeModal from "../ViewAttribute/ViewAttribute";
-import Pagination from "../Pagination/Pagination";
+import PaginationView from "../Pagination/Pagination";
+// import Pagination from "react-js-pagination";
+
 import * as JsSearch from "js-search";
 
 const headers = ["attributeName", "attributeType", "required", "options"];
@@ -25,7 +27,6 @@ const ManageAttributes: React.FC = () => {
   const [attribute, setAttribute] = useState<IAttribute | undefined>();
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredAttributes, setFilteredAttributes] = useState<any>();
-
   const dispatch = useDispatch();
   const { isLoading, attributes } = useSelector((state: RootState) => {
     return state.attributes;
@@ -33,7 +34,7 @@ const ManageAttributes: React.FC = () => {
 
   // pagination code start here
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 9;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = attributes?.slice(indexOfFirstItem, indexOfLastItem);
@@ -233,13 +234,14 @@ const ManageAttributes: React.FC = () => {
           ) : (
             <p>No attributes found</p>
           )}
+
           {filteredAttributes?.length ? (
             ""
           ) : (
-            <Pagination
-              itemsPerPage={itemsPerPage}
-              data={attributes}
+            <PaginationView
               setCurrentPage={setCurrentPage}
+              data={attributes}
+              itemsPerPage={itemsPerPage}
               currentPage={currentPage}
             />
           )}

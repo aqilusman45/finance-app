@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchInvoices } from "../../store/reducers/invoices";
 import { RootState } from "../../store/rootReducer";
 import * as JsSearch from "js-search";
-import Pagination from "../Pagination/Pagination";
+import PaginationView from "../Pagination/Pagination";
 const keys = ["Invoice ID", "Name", "Phone", "Discount", "Tax", "Total"];
 
 const ManageInvoices: React.FC = () => {
@@ -212,7 +212,7 @@ const ManageInvoices: React.FC = () => {
           {filteredInvoices?.length ? (
             ""
           ) : (
-            <Pagination
+            <PaginationView
               itemsPerPage={itemsPerPage}
               data={invoices}
               setCurrentPage={setCurrentPage}
