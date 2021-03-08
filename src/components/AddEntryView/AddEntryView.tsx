@@ -196,7 +196,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
                   value={paymentOption.value}
                   name="paymentOption"
                   multiple={false}
-                  placeholder="Entry Type"
+                  placeholder="Pay Option"
                 >
                   {optionsForPayment.map(({ value, label }) => (
                     <IonSelectOption key={value} value={value}>

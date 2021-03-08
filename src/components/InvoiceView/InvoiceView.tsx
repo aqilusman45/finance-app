@@ -184,7 +184,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                   value={paymentOption.value}
                   name="paymentOption"
                   multiple={false}
-                  placeholder="Entry Type"
+                  placeholder="Pay Option"
                 >
                   {options.map(({ value, label }) => (
                     <IonSelectOption key={value} value={value}>
