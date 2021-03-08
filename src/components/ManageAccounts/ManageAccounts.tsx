@@ -69,7 +69,7 @@ const ManageAccounts: React.FC = () => {
           showModal={showModal}
           account={account}
         />
-        <IonGrid className="ion-margin">
+        <IonGrid className="ion-margin-horizontal">
           <IonRow>
             <IonCol size="12">
               <IonSearchbar

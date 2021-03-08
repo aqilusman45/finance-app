@@ -69,7 +69,7 @@ const ManageProduct: React.FC = () => {
           showModal={showModal}
           product={product}
         />
-        <IonGrid className="ion-margin">
+        <IonGrid className="ion-margin-horizontal">
           <IonRow>
             <IonCol size="12">
               <IonSearchbar
