@@ -16,7 +16,7 @@ import { fetchAccounts } from "../../store/reducers/accounts";
 import { IAccount } from "../../lib/accounts";
 import PaginationView from "../Pagination/Pagination";
 import * as JsSearch from "js-search";
-
+import { seriolNumber } from "../../utils/utilities";
 const headers = ["name", "phone", "email", "accountTitle", "accountType"];
 
 const ManageAccounts: React.FC = () => {
@@ -28,10 +28,10 @@ const ManageAccounts: React.FC = () => {
   const { isLoading, accounts } = useSelector((state: RootState) => {
     return state.accounts;
   });
-  
+
   // pagination code start here
 
-  const itemsPerPage = 3;
+  const itemsPerPage = 9;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = accounts?.slice(indexOfFirstItem, indexOfLastItem);
@@ -54,7 +54,6 @@ const ManageAccounts: React.FC = () => {
   };
 
   // js-search code end here
-
   useEffect(() => {
     if (!accounts) {
       dispatch(fetchAccounts());
@@ -109,7 +108,7 @@ const ManageAccounts: React.FC = () => {
                                 }}
                                 key={account.uid}
                               >
-                                <td>{index + 1}</td>
+                                <td>{index + 1 * currentPage}</td>
                                 {Object.keys(account).map((key) => {
                                   // @ts-ignore
                                   const accountKey = account[key];
@@ -145,54 +144,56 @@ const ManageAccounts: React.FC = () => {
                               </tr>
                             )
                           )
-                        : currentItems?.map((account: IAccount, index: any) => (
-                            <tr
-                              className="table-row-hover"
-                              onClick={() => {
-                                setAccount(() =>
-                                  accounts.find(
-                                    (acc) => acc.uid === account.uid
-                                  )
-                                );
-                                setShowModal(!showModal);
-                              }}
-                              key={account.uid}
-                            >
-                              <td>{index + 1}</td>
-                              {Object.keys(account).map((key) => {
-                                // @ts-ignore
-                                const accountKey = account[key];
+                        : currentItems?.map((account: IAccount, index: any) => {
+                            return (
+                              <tr
+                                className="table-row-hover"
+                                onClick={() => {
+                                  setAccount(() =>
+                                    accounts.find(
+                                      (acc) => acc.uid === account.uid
+                                    )
+                                  );
+                                  setShowModal(!showModal);
+                                }}
+                                key={account.uid}
+                              >
+                                <td>{seriolNumber(accounts, account.uid)} </td>
+                                {Object.keys(account).map((key) => {
+                                  // @ts-ignore
+                                  const accountKey = account[key];
 
-                                if (headers.includes(key)) {
-                                  if (typeof accountKey !== "object") {
-                                    return (
-                                      <td
-                                        key={`${accountKey}`}
-                                      >{`${accountKey}`}</td>
-                                    );
-                                  } else {
-                                    const { label } = accountKey;
+                                  if (headers.includes(key)) {
+                                    if (typeof accountKey !== "object") {
+                                      return (
+                                        <td
+                                          key={`${accountKey}`}
+                                        >{`${accountKey}`}</td>
+                                      );
+                                    } else {
+                                      const { label } = accountKey;
 
-                                    return (
-                                      <td key={accountKey}>
-                                        <Badge
-                                          key={label}
-                                          style={{
-                                            fontSize: 10,
-                                            padding: "10px 10px",
-                                          }}
-                                          variant="dark"
-                                        >
-                                          {label}
-                                        </Badge>
-                                      </td>
-                                    );
+                                      return (
+                                        <td key={accountKey}>
+                                          <Badge
+                                            key={label}
+                                            style={{
+                                              fontSize: 10,
+                                              padding: "10px 10px",
+                                            }}
+                                            variant="dark"
+                                          >
+                                            {label}
+                                          </Badge>
+                                        </td>
+                                      );
+                                    }
                                   }
-                                }
-                                return null;
-                              })}
-                            </tr>
-                          ))}
+                                  return null;
+                                })}
+                              </tr>
+                            );
+                          })}
                     </tbody>
                   </Table>
                 </IonCol>

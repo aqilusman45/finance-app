@@ -180,8 +180,9 @@ const OpenAccountForm = ({
               </IonSelect>
             </IonItem>
             <IonItem className="ion-margin">
-              <IonLabel position="stacked">Balance</IonLabel>
+              <IonLabel  position="stacked">Balance</IonLabel>
               <IonInput
+                disabled={isEdit ? true : false}
                 value={balance}
                 name="balance"
                 onIonChange={handleChange}
