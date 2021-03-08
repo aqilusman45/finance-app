@@ -25,6 +25,8 @@ const keys = ["Invoice ID", "Name", "Phone", "Discount", "Tax", "Total"];
 
 const ManageInvoices: React.FC = () => {
   const [showModel, setShowModel] = useState<boolean>(false);
+  const [dateFrom, setDateFrom] = useState<any>();
+  const [dateTill, setDateTill] = useState<any>();
   const [invoice, setInvoice] = useState<IInvoice | null>();
   const [payment, setPayment] = useState<string>("all");
   const [filteredInvoices, setFilteredInvoices] = useState<any>();
@@ -34,7 +36,7 @@ const ManageInvoices: React.FC = () => {
   const { isLoading, invoices } = useSelector((state: RootState) => {
     return state.invoices;
   });
-  
+
   // pagination code start here
 
   const itemsPerPage = 9;
@@ -49,17 +51,28 @@ const ManageInvoices: React.FC = () => {
   search.addIndex("invoiceNumber");
   search.addIndex(["detail", "phone"]);
   search.addIndex(["detail", "name"]);
-
+  search.addIndex(["paymentOption", "label"]);
   if (invoices) {
     search.addDocuments(invoices);
   }
 
-  const searchedInvoic = (input: any) => {
+  const searchedInvoice = (input: any) => {
     search.search(input);
     setFilteredInvoices(search.search(input));
   };
 
   // js-search code end here
+
+  useEffect(() => {
+    if (invoices) {
+      const convertFrom = Number(new Date(dateFrom?.toString()));
+      const convertTill = Number(new Date(dateTill?.toString()));
+      const filter = invoices.filter((inv) => {
+        return inv.updatedAt > convertFrom && inv.updatedAt < convertTill;
+      });
+      setFilteredInvoices(filter);
+    }
+  }, [dateFrom, dateTill, invoices]);
 
   useEffect(() => {
     if (!invoices) {
@@ -79,7 +92,7 @@ const ManageInvoices: React.FC = () => {
           <IonRow>
             <IonCol size="12">
               <IonSearchbar
-                onIonChange={(e) => searchedInvoic(e.detail.value!)}
+                onIonChange={(e) => searchedInvoice(e.detail.value!)}
                 showCancelButton="focus"
                 debounce={1000}
               />
@@ -91,12 +104,14 @@ const ManageInvoices: React.FC = () => {
                 className="dateInputStyle shadow-sm"
                 type="date"
                 name="dateFrom"
+                onChange={(e) => setDateFrom(e.target.value)}
               />
               <span className="dateFilterSpan">To</span>
               <input
                 className="dateInputStyle shadow-sm"
                 type="date"
                 name="dateTill"
+                onChange={(e) => setDateTill(e.target.value)}
               />
             </IonCol>
             <IonCol size="6">
@@ -104,10 +119,15 @@ const ManageInvoices: React.FC = () => {
                 <IonLabel>PAYMENT</IonLabel>
                 <IonSelect
                   value={payment}
-                  onIonChange={(e) => setPayment(e.detail.value)}
+                  onIonChange={(e) => {
+                    setPayment(e.detail.value);
+                    searchedInvoice(e.detail.value!);
+                  }}
                 >
                   <IonSelectOption value="all">All</IonSelectOption>
                   <IonSelectOption value="bank">Bank</IonSelectOption>
+                  <IonSelectOption value="cash">CASH</IonSelectOption>
+                  <IonSelectOption value="cheque">CHEQUE</IonSelectOption>
                 </IonSelect>
               </IonItem>
             </IonCol>
