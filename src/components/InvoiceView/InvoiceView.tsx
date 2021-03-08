@@ -150,7 +150,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                 showCancelButton="focus"
                 debounce={1000}
                 value={createInvoice ? createInvoice.detail.name : ""}
-                placeholder="Select User"
+                placeholder="Select Account"
                 onClick={() => setShowModal(!showModal)}
               />
             </IonCol>

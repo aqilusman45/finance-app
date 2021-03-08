@@ -51,7 +51,6 @@ const INITIAL_STATE = {
 };
 
 const ENTRY_INITIAL_STATE = {
-  uid: uuidv4(),
   date: Date.now(),
   paymentOption: {
     value: "",
@@ -122,6 +121,7 @@ const AddEntry: React.FC = () => {
     };
     const entry = {
       ...entryData,
+      uid: uuidv4(),
       accountRef: formFields.uid,
       amount: Number(`${checkEntryType()}${amount}`),
     };
@@ -129,7 +129,11 @@ const AddEntry: React.FC = () => {
     try {
       await addEntrySchema.validate(account);
       await entryTypeCheck(entry);
-      await paymentOptionCheck(entry);
+      if (entry.entryType.value === "Debit") {
+        await paymentOptionCheck(entry);
+      } else {
+        delete entry.paymentOption
+      }
       await checkAmount(entry);
       dispatch(addEntry(entry as any));
       dispatch(

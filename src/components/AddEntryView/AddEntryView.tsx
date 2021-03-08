@@ -9,7 +9,6 @@ import {
   IonInput,
   IonPage,
   IonButton,
-  IonSearchbar,
   IonSelect,
   IonSelectOption,
   IonToast,
@@ -110,18 +109,11 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
         />
         <IonGrid className="ion-margin">
           <IonRow>
-            <IonCol size="12">
-              <IonSearchbar
-                showCancelButton="focus"
-                debounce={1000}
-                placeholder="Select User"
-                onClick={() => setShowModal(!showModal)}
-              />
-            </IonCol>
-          </IonRow>
-          <IonRow>
             <IonCol size="6">
-              <IonItem className="ion-margin">
+              <IonItem
+                onFocus={() => setShowModal(!showModal)}
+                className="ion-margin"
+              >
                 <IonLabel position="stacked">Account Holder Name</IonLabel>
                 <IonInput readonly value={name} name="name" />
               </IonItem>
@@ -180,31 +172,33 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
                   ))}
                 </IonSelect>
               </IonItem>
-              <IonItem className="ion-margin">
-                <IonSelect
-                  onIonChange={(e) => {
-                    const option = optionsForPayment.find(
-                      ({ value }) => value === e.detail.value
-                    );
-                    handleChange({
-                      currentTarget: {
-                        name: "paymentOption",
-                        value: option,
-                      },
-                    });
-                  }}
-                  value={paymentOption.value}
-                  name="paymentOption"
-                  multiple={false}
-                  placeholder="Entry Type"
-                >
-                  {optionsForPayment.map(({ value, label }) => (
-                    <IonSelectOption key={value} value={value}>
-                      {label}
-                    </IonSelectOption>
-                  ))}
-                </IonSelect>
-              </IonItem>
+              {entryType.value === "DEBIT" && (
+                <IonItem className="ion-margin">
+                  <IonSelect
+                    onIonChange={(e) => {
+                      const option = optionsForPayment.find(
+                        ({ value }) => value === e.detail.value
+                      );
+                      handleChange({
+                        currentTarget: {
+                          name: "paymentOption",
+                          value: option,
+                        },
+                      });
+                    }}
+                    value={paymentOption.value}
+                    name="paymentOption"
+                    multiple={false}
+                    placeholder="Payment Method"
+                  >
+                    {optionsForPayment.map(({ value, label }) => (
+                      <IonSelectOption key={value} value={value}>
+                        {label}
+                      </IonSelectOption>
+                    ))}
+                  </IonSelect>
+                </IonItem>
+              )}
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Receivable Amount</IonLabel>
                 <IonInput

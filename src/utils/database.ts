@@ -171,9 +171,10 @@ export const updateAttributeMutation = async (attribute: IAttribute) => {
   });
 };
 
-export const updateAccountMutation = async (account: IAccount) => {
+export const updateAccountMutation = async (account: Partial<IAccount>) => {
   const db = await get();
   const { accounts } = db.collections;
+  delete account.uid
   const acc = await accounts.findOne().where("uid").eq(account.uid).exec();
   await acc?.update({
     $set: {
