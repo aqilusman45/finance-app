@@ -95,7 +95,7 @@ const ManageAccounts: React.FC = () => {
                     <tbody>
                       {filteredAccounts?.length
                         ? filteredAccounts?.map(
-                            (account: IAccount, index: any) => (
+                            (account: IAccount) => (
                               <tr
                                 className="table-row-hover"
                                 onClick={() => {
@@ -108,7 +108,7 @@ const ManageAccounts: React.FC = () => {
                                 }}
                                 key={account.uid}
                               >
-                                <td>{index + 1 * currentPage}</td>
+                                <td>{seriolNumber(accounts, account.uid)} </td>
                                 {Object.keys(account).map((key) => {
                                   // @ts-ignore
                                   const accountKey = account[key];
@@ -144,7 +144,7 @@ const ManageAccounts: React.FC = () => {
                               </tr>
                             )
                           )
-                        : currentItems?.map((account: IAccount, index: any) => {
+                        : currentItems?.map((account: IAccount) => {
                             return (
                               <tr
                                 className="table-row-hover"

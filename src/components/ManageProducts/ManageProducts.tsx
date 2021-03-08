@@ -15,6 +15,7 @@ import { IProduct } from "../../lib/products";
 import ProductModal from "../ViewProduct/ViewProduct";
 import * as JsSearch from "js-search";
 import PaginationView from "../Pagination/Pagination";
+import {seriolNumber  } from "../../utils/utilities";
 
 const keys = ["name", "sku", "price", "description", "enabled"];
 
@@ -96,7 +97,7 @@ const ManageProduct: React.FC = () => {
                     <tbody>
                       {filteredProducts?.length
                         ? filteredProducts.map(
-                            (product: IProduct, index: any) => (
+                            (product: IProduct) => (
                               <tr
                                 className="table-row-hover"
                                 onClick={() => {
@@ -109,7 +110,7 @@ const ManageProduct: React.FC = () => {
                                 }}
                                 key={product.uid}
                               >
-                                <td>{index + 1}</td>
+                                <td>{seriolNumber(products, product.uid)}</td>
                                 {keys.map((key) => {
                                   // @ts-ignore
                                   const productKey = product[key];
@@ -127,7 +128,7 @@ const ManageProduct: React.FC = () => {
                               </tr>
                             )
                           )
-                        : currentItems?.map((product: IProduct, index: any) => (
+                        : currentItems?.map((product: IProduct) => (
                             <tr
                               className="table-row-hover"
                               onClick={() => {
@@ -140,7 +141,7 @@ const ManageProduct: React.FC = () => {
                               }}
                               key={product.uid}
                             >
-                              <td>{index + 1}</td>
+                              <td>{seriolNumber(products, product.uid)}</td>
                               {keys.map((key) => {
                                 // @ts-ignore
                                 const productKey = product[key];

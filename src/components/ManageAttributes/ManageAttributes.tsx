@@ -16,8 +16,7 @@ import Badge from "react-bootstrap/Badge";
 import "./ManageAttributes.css";
 import AttributeModal from "../ViewAttribute/ViewAttribute";
 import PaginationView from "../Pagination/Pagination";
-// import Pagination from "react-js-pagination";
-
+import { seriolNumber } from "../../utils/utilities";
 import * as JsSearch from "js-search";
 
 const headers = ["attributeName", "attributeType", "required", "options"];
@@ -95,7 +94,7 @@ const ManageAttributes: React.FC = () => {
                     <tbody>
                       {filteredAttributes?.length
                         ? filteredAttributes?.map(
-                            (attribute: IAttribute, index: any) => (
+                            (attribute: IAttribute) => (
                               <tr
                                 className="table-row-hover"
                                 onClick={() => {
@@ -108,7 +107,7 @@ const ManageAttributes: React.FC = () => {
                                 }}
                                 key={attribute.uid}
                               >
-                                <td>{index + 1}</td>
+                                <td>{seriolNumber(attributes, attribute.uid)}</td>
                                 {Object.keys(attribute).map((key) => {
                                   // @ts-ignore
                                   const attributeKey = attribute[key];
@@ -161,7 +160,7 @@ const ManageAttributes: React.FC = () => {
                             )
                           )
                         : currentItems?.map(
-                            (attribute: IAttribute, index: any) => (
+                            (attribute: IAttribute) => (
                               <tr
                                 className="table-row-hover"
                                 onClick={() => {
@@ -174,7 +173,7 @@ const ManageAttributes: React.FC = () => {
                                 }}
                                 key={attribute.uid}
                               >
-                                <td>{index + 1}</td>
+                                <td>{seriolNumber(attributes, attribute.uid)}</td>
                                 {Object.keys(attribute).map((key) => {
                                   // @ts-ignore
                                   const attributeKey = attribute[key];
