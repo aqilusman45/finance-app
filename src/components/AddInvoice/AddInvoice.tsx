@@ -22,12 +22,10 @@ import UserSearchModal from "../UserSearchModel/UserSearchModel";
 import { RootState } from "../../store/rootReducer";
 import { fetchProducts } from "../../store/reducers/products";
 import { IProduct } from "../../lib/products";
-import "./AddInvoice.css";
 import { PaymentOptions } from "../../lib/enum";
+import "./AddInvoice.css";
 
 const INITIAL_STATE = {
-  name: "",
-  invoiceNumber: "",
   shippingAddress: "",
   phone: "",
   remarks: "",
@@ -35,8 +33,24 @@ const INITIAL_STATE = {
     value: "",
     label: "",
   },
+  detail: {
+    name: "",
+    companyName: "",
+    shippingAddress: "",
+    phone: "",
+    address: "",
+    email: "",
+  },
   companyName: "",
   products: [] as any,
+  totalDiscount: 0,
+  subTotal: 0,
+  taxRate: 0,
+  shipping: 0,
+  currentBalance: "",
+  total: 0,
+  accountRef: "",
+  payment: 0,
 };
 
 const PAYMENT_OPTIONS = [
@@ -58,14 +72,17 @@ const AddInvoice: React.FC = () => {
   const [state, setState] = useState({ ...INITIAL_STATE });
   const [showAccountModal, setShowAccountModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
-  const [userData, setUserData] = useState<any>();
 
-  const { accounts, productList, isLoading } = useSelector(
+  const { accounts, productList, isLoading, invoices } = useSelector(
     (state: RootState) => {
       return {
         accounts: state.accounts.accounts,
         productList: state.products.products,
-        isLoading: state.products.isLoading || state.accounts.isLoading,
+        invoices: state.invoices.invoices,
+        isLoading:
+          state.products.isLoading ||
+          state.accounts.isLoading ||
+          state.invoices.isLoading,
       };
     }
   );
@@ -85,9 +102,34 @@ const AddInvoice: React.FC = () => {
   }, [productList, dispatch]);
 
   const handleChange = (e: any) => {
+    const key = e.target.name;
+    const val = e.target.value;
     setState((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [key]: val,
+    }));
+  };
+
+  const handleAccountDetails = (e: any) => {
+    const key = e.target.name;
+    const val = e.target.value;
+    setState((prevState) => ({
+      ...prevState,
+      detail: {
+        ...prevState.detail,
+        [key]: val,
+      },
+    }));
+  };
+
+  const pickAccount = (data: any) => {
+    setState((prevState) => ({
+      ...prevState,
+      detail: {
+        ...data,
+        shippingAddress: data.address,
+      },
+      accountRef: data.uid,
     }));
   };
 
@@ -108,11 +150,14 @@ const AddInvoice: React.FC = () => {
 
   const handleProductChange = (e: any, idx: number) => {
     const key = e.target.name;
-    const val = e.target.value;
+    let val = parseInt(e.target.value || 0);
+    if (key === "discount" && val >= 100) {
+      val = 100;
+    }
     setState((prevState) => {
       prevState.products[idx] = {
         ...prevState.products[idx],
-        [key]: parseInt(val),
+        [key]: val,
       };
       return {
         ...prevState,
@@ -131,24 +176,43 @@ const AddInvoice: React.FC = () => {
     });
   };
 
-  const calculateDiscount = (
+  const calculateTotal = (
     price: number,
     quantity: number,
     discount: number
   ) => {
     const total = price * quantity;
-    return (total * discount) / 100;
+    const dis = (total * discount) / 100;
+    return total - dis;
+  };
+
+  const getSubTotal = (products: any) => {
+    return products.reduce((total: number, prod: any) => {
+      return total + calculateTotal(prod.price, prod.quantity, prod.discount);
+    }, 0);
+  };
+
+  const getTotal = (subTotal: number, totalDiscount: number, tax: number) => {
+    const dis = (subTotal * totalDiscount) / 100;
+    const tx = (dis * tax) / 100;
+    return (subTotal - dis) + tx;
+  };
+
+  const submit = (e: any) => {
+    e.preventDefault();
+    // create invoice
+    // add entry if partial payment on account
+    // update inventory
   };
 
   const {
-    name,
-    companyName,
-    invoiceNumber,
-    phone,
+    detail: { name, shippingAddress, phone, companyName, email },
     remarks,
-    shippingAddress,
     paymentOption,
     products,
+    taxRate,
+    totalDiscount,
+    payment,
   } = state;
 
   if (isLoading) {
@@ -161,8 +225,7 @@ const AddInvoice: React.FC = () => {
         accounts={accounts}
         showModal={showAccountModal}
         setShowModal={setShowAccountModal}
-        userData={userData}
-        setUserData={setUserData}
+        pickAccount={pickAccount}
       />
       <ProductSearchModal
         showProductModal={showProductModal}
@@ -175,17 +238,33 @@ const AddInvoice: React.FC = () => {
           <IonCol size="6" className="mb">
             <IonItem className="ion-margin">
               <IonInput
-                onIonChange={handleChange}
+                onIonChange={handleAccountDetails}
                 name="name"
                 value={name}
-                placeholder="Name"
+                placeholder="Particulars"
+              />
+              <IonButton
+                onClick={() => setShowAccountModal(!showAccountModal)}
+                color="primary"
+              >
+                Select Account
+              </IonButton>
+            </IonItem>
+            <IonItem className="ion-margin">
+              <IonInput
+                onIonChange={handleAccountDetails}
+                name="email"
+                value={email}
+                placeholder="Email"
               />
             </IonItem>
             <IonItem className="ion-margin">
               <IonInput
-                onIonChange={handleChange}
                 name="invoiceNumber"
-                value={invoiceNumber}
+                value={`Invoice Number: ${
+                  (invoices && invoices?.length + 1000) || 1001
+                }`}
+                disabled={true}
                 placeholder="Invoice Number"
               />
             </IonItem>
@@ -198,7 +277,9 @@ const AddInvoice: React.FC = () => {
               >
                 {PAYMENT_OPTIONS.map((node) => {
                   return (
-                    <IonSelectOption key={node.value} value={node}>{node.label}</IonSelectOption>
+                    <IonSelectOption key={node.value} value={node}>
+                      {node.label}
+                    </IonSelectOption>
                   );
                 })}
               </IonSelect>
@@ -207,7 +288,7 @@ const AddInvoice: React.FC = () => {
           <IonCol size="6">
             <IonItem className="ion-margin">
               <IonInput
-                onIonChange={handleChange}
+                onIonChange={handleAccountDetails}
                 name="shippingAddress"
                 value={shippingAddress}
                 placeholder="Shipping Address"
@@ -215,10 +296,18 @@ const AddInvoice: React.FC = () => {
             </IonItem>
             <IonItem className="ion-margin">
               <IonInput
-                onIonChange={handleChange}
+                onIonChange={handleAccountDetails}
                 name="phone"
                 value={phone}
                 placeholder="Phone"
+              />
+            </IonItem>
+            <IonItem className="ion-margin">
+              <IonInput
+                onIonChange={handleAccountDetails}
+                name="companyName"
+                value={companyName}
+                placeholder="Company Name"
               />
             </IonItem>
             <IonItem className="ion-margin">
@@ -227,14 +316,6 @@ const AddInvoice: React.FC = () => {
                 name="remarks"
                 value={remarks}
                 placeholder="Remarks"
-              />
-            </IonItem>
-            <IonItem className="ion-margin">
-              <IonInput
-                onIonChange={handleChange}
-                name="companyName"
-                value={companyName}
-                placeholder="Company Name"
               />
             </IonItem>
           </IonCol>
@@ -262,7 +343,12 @@ const AddInvoice: React.FC = () => {
                 <tbody>
                   {products.map(
                     (
-                      { discount, product: { name, uid }, quantity, price }: any,
+                      {
+                        discount,
+                        product: { name, uid },
+                        quantity,
+                        price,
+                      }: any,
                       idx: number
                     ) => {
                       return (
@@ -295,7 +381,7 @@ const AddInvoice: React.FC = () => {
                               width: "23%",
                             }}
                           >
-                            Rs. {calculateDiscount(price, quantity, discount)}
+                            Rs. {calculateTotal(price, quantity, discount)}
                           </td>
                           <td>
                             <IonIcon
@@ -337,7 +423,7 @@ const AddInvoice: React.FC = () => {
           </IonCol>
         </IonRow>
         <IonRow>
-          <IonCol offset="9" size="3">
+          <IonCol offset="8" size="4">
             <Table
               striped
               hover
@@ -348,34 +434,62 @@ const AddInvoice: React.FC = () => {
               <tbody>
                 <tr>
                   <td>SubTotal</td>
-                  <td>Rs. 0</td>
+                  <td>Rs. {products.length && getSubTotal(products)}</td>
                 </tr>
                 <tr>
-                  <th>Discount (%)</th>
+                  <th>Discount %</th>
                   <td>
-                    <input className="inputStyle txtCenter" type="number" />
+                    <input
+                      value={totalDiscount}
+                      name="totalDiscount"
+                      onChange={handleChange}
+                      className="inputStyle txtCenter"
+                      type="number"
+                    />
                     <IonIcon slot="start" icon={create} />
                   </td>
                 </tr>
                 <tr>
-                  <td>Tax (%)</td>
+                  <td>Tax %</td>
                   <td>
-                    <input className="inputStyle txtCenter" type="number" />
+                    <input
+                      value={taxRate}
+                      name="taxRate"
+                      onChange={handleChange}
+                      className="inputStyle txtCenter"
+                      type="number"
+                    />
                     <IonIcon slot="start" icon={create} />
                   </td>
                 </tr>
-                {(paymentOption.value === PaymentOptions.CASH ||
-                  paymentOption.value === PaymentOptions.PARTIAL) && (
+                <tr>
+                  <td>Total</td>
+                  <td>
+                    Rs.
+                    {products.length &&
+                      getTotal(getSubTotal(products), totalDiscount, taxRate)}
+                  </td>
+                </tr>
+                {paymentOption.value === PaymentOptions.PARTIAL && (
                   <tr>
-                    <td>Cash</td>
+                    <td>Payment (Rs.)</td>
                     <td>
-                      <input className="inputStyle txtCenter" type="number" />
+                      <input
+                        value={payment}
+                        name="payment"
+                        onChange={handleChange}
+                        className="inputStyle txtCenter"
+                        type="number"
+                      />
                       <IonIcon slot="start" icon={create} />
                     </td>
                   </tr>
                 )}
               </tbody>
             </Table>
+            <IonButton onClick={submit} color="primary">
+              Submit
+            </IonButton>
           </IonCol>
         </IonRow>
       </IonGrid>

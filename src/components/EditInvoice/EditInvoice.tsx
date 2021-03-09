@@ -67,7 +67,6 @@ const EditInvoice: React.FC = () => {
 
   const [createInvoice, setCreateInvoice] = useState<any>(INITIAL_STATE);
   const [, setTaxInput] = useState<any>(0);
-  const [userData, setUserData] = useState<any>();
   const [productID, setProductID] = useState<any>();
   const [errors, setErrors] = useState<ValidationError | undefined>();
   const [prevTotal, setPrevTotal] = useState<any>();
@@ -356,8 +355,6 @@ const EditInvoice: React.FC = () => {
       getDiscountValue={getDiscountValue}
       calculateTotalDiscount={calculateTotalDiscount}
       calculateTotal={calculateTotal}
-      userData={userData}
-      setUserData={setUserData}
       setCreateInvoice={setCreateInvoice}
       updateUserDetail={updateUserDetail}
       pickProduct={updateProductDetail}

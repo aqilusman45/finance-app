@@ -17,10 +17,17 @@ li {
   background-color: #000000de;
 }
 
-li a {
+ul.pagination > li > a {
   color: white;
+  font-size: 18px;
+  font-weight: 900;
 }
 .paginationMain {
   display: flex;
   justify-content: center;
+}
+
+ul.pagination > li > a:hover {
+  color: #6f7378;
+  text-decoration: none;
 }

@@ -86,15 +86,15 @@ export const signUpSchema = yup.object().shape({
   name: yup.string().required(),
   email: yup.string().email().required(),
   phone: yup.string().required(),
-  password: yup.string().required("Password must be 6 characters logn !"),
+  password: yup.string().required("Password must be atleast 6 characters!"),
 });
 
 export const authenticateUser = () => {
-  throw new Error(`Email and/or Password is not matched !`);
+  throw new Error(`Incorrect email or password!`);
 };
 
 export const checkDuplication = () => {
-  throw new Error(`A User with that Email or Phone Already Exists !`);
+  throw new Error(`A user with that Email or Phone already exists!`);
 };
 
 export const signInSchema = yup.object().shape({
@@ -103,5 +103,5 @@ export const signInSchema = yup.object().shape({
 });
 
 export const checkExistedUser = () => {
-  throw new Error(`If you are new User Please Sign Up First !`);
+  throw new Error(`If you are new user please sign up first!`);
 };
