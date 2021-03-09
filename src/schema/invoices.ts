@@ -22,7 +22,7 @@ export const invoiceSchema: RxJsonSchema = {
       properties: {
         value: {
           type: "string",
-          enum: [PaymentOptions.BANK, PaymentOptions.CASH, PaymentOptions.CHEQUE]
+          enum: [PaymentOptions.PARTIAL, PaymentOptions.CASH, PaymentOptions.CREDIT, ]
         },
         label: {
           type: "string",

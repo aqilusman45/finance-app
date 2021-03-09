@@ -19,8 +19,8 @@ import {
   checkProduct,
   invoiceSchema,
 } from "../../helpers/validations";
+
 const INITIAL_STATE = {
-  uid: uuidv4(),
   invoiceNumber: "",
   date: Date.now(),
   paymentOption: {
@@ -52,8 +52,6 @@ const INITIAL_STATE = {
   total: 0,
   remarks: "",
   accountRef: "",
-  createdAt: Date.now(),
-  updatedAt: Date.now(),
   quantity: 0,
 };
 
@@ -298,7 +296,7 @@ const CreateInvoice = () => {
       setUserData={setUserData}
       setCreateInvoice={setCreateInvoice}
       updateUserDetail={updateUserDetail}
-      updateProductDetail={updateProductDetail}
+      pickProduct={updateProductDetail}
       getProductId={getProductId}
       submit={submit}
       errors={errors}

@@ -28,7 +28,7 @@ interface ISearchUserModelProps {
   updateUserDetail?: any;
 }
 
-const UserSearchModel: React.FC<ISearchUserModelProps> = ({
+const UserSearchModal: React.FC<ISearchUserModelProps> = ({
   setShowModal,
   showModal,
   accounts,
@@ -110,4 +110,4 @@ const UserSearchModel: React.FC<ISearchUserModelProps> = ({
     </IonModal>
   );
 };
-export default UserSearchModel;
+export default UserSearchModal;

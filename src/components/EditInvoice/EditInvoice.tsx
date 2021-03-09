@@ -360,7 +360,7 @@ const EditInvoice: React.FC = () => {
       setUserData={setUserData}
       setCreateInvoice={setCreateInvoice}
       updateUserDetail={updateUserDetail}
-      updateProductDetail={updateProductDetail}
+      pickProduct={updateProductDetail}
       getProductId={getProductId}
       submit={submit}
       errors={errors}

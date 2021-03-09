@@ -59,7 +59,7 @@ interface InvoiceViewProps {
   setUserData?: any;
   setCreateInvoice?: any;
   updateUserDetail?: any;
-  updateProductDetail?: any;
+  pickProduct?: any;
   getProductId?: any;
   submit?: any;
   errors?: any;
@@ -81,7 +81,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   userData,
   setUserData,
   updateUserDetail,
-  updateProductDetail,
+  pickProduct,
   getProductId,
   submit,
   errors,
@@ -141,7 +141,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
           showProductModal={showProductModal}
           setShowProductModal={setShowProductModal}
           products={products}
-          updateProductDetail={updateProductDetail}
+          pickProduct={pickProduct}
         />
         <IonGrid className="ion-margin">
           <IonRow>
@@ -184,7 +184,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
                   value={paymentOption.value}
                   name="paymentOption"
                   multiple={false}
-                  placeholder="Pay Option"
+                  placeholder="Payment Option"
                 >
                   {options.map(({ value, label }) => (
                     <IonSelectOption key={value} value={value}>

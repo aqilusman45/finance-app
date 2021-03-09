@@ -1,5 +1,6 @@
 import ExploreContainer from "../components/ExploreContainer";
 import AddProduct from "../components/AddProduct/AddProduct";
+import AddInvoice from "../components/AddInvoice/AddInvoice";
 import {
   ManageProduct,
   AddAttributes,
@@ -9,7 +10,6 @@ import {
   EditAccount,
   EditEntry,
   AddEntry,
-  CreateInvoice,
   EditInvoice,
   ManageInvoices,
   ManageEntries,
@@ -74,7 +74,7 @@ export const routes = [
         link: "/create-invoice",
         text: "Create Invoice",
         icon: "",
-        component: CreateInvoice,
+        component: AddInvoice,
       },
       {
         link: "/manage-invoices",
