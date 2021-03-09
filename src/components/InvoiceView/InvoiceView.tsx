@@ -55,8 +55,6 @@ interface InvoiceViewProps {
   getDiscountValue?: any;
   calculateTotalDiscount?: any;
   calculateTotal?: any;
-  userData?: any;
-  setUserData?: any;
   setCreateInvoice?: any;
   updateUserDetail?: any;
   pickProduct?: any;
@@ -78,8 +76,6 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
   getDiscountValue,
   calculateTotalDiscount,
   calculateTotal,
-  userData,
-  setUserData,
   updateUserDetail,
   pickProduct,
   getProductId,
@@ -133,9 +129,7 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({
           accounts={accounts}
           showModal={showModal}
           setShowModal={setShowModal}
-          userData={userData}
-          setUserData={setUserData}
-          updateUserDetail={updateUserDetail}
+          pickAccount={updateUserDetail}
         />
         <ProductSearchModel
           showProductModal={showProductModal}

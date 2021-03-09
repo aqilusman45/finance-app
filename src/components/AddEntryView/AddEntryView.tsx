@@ -62,8 +62,6 @@ interface AddEntryViewProps {
 const AddEntryView: React.FC<AddEntryViewProps> = ({
   isEdit,
   accounts,
-  userData,
-  setUserData,
   updateUserDetail,
   amount,
   setAmount,
@@ -103,9 +101,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
           accounts={accounts}
           showModal={showModal}
           setShowModal={setShowModal}
-          userData={userData}
-          setUserData={setUserData}
-          updateUserDetail={updateUserDetail}
+          pickAccount={updateUserDetail}
         />
         <IonGrid className="ion-margin">
           <IonRow>

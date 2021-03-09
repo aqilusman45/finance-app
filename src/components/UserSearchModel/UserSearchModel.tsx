@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   IonModal,
   IonContent,
@@ -23,19 +23,17 @@ interface ISearchUserModelProps {
   showModal: boolean;
   setShowModal: (show: boolean) => void;
   accounts: any;
-  userData: any;
-  setUserData: any;
-  updateUserDetail?: any;
+  pickAccount?: any;
 }
 
 const UserSearchModal: React.FC<ISearchUserModelProps> = ({
   setShowModal,
   showModal,
   accounts,
-  userData,
-  setUserData,
-  updateUserDetail,
+  pickAccount,
 }) => {
+  const [userData, setUserData] = useState<IAccount[] | null>(null);
+
   // js-search code start here
   var search = new JsSearch.Search("name");
   search.addIndex("name");
@@ -47,8 +45,7 @@ const UserSearchModal: React.FC<ISearchUserModelProps> = ({
     search.addDocuments(accounts);
   }
   const searchedUser = (input: any) => {
-    search.search(input);
-    setUserData(search.search(input));
+    setUserData(search.search(input) as any);
   };
 
   // js-search code end here
@@ -70,7 +67,7 @@ const UserSearchModal: React.FC<ISearchUserModelProps> = ({
                             (filter: any) => filter.uid === account.uid
                           );
                           setShowModal(!showModal);
-                          updateUserDetail(user);
+                          pickAccount(user);
                         }}
                       >
                         <IonLabel>
@@ -91,7 +88,7 @@ const UserSearchModal: React.FC<ISearchUserModelProps> = ({
                             (filter: any) => filter.uid === account.uid
                           );
                           setShowModal(!showModal);
-                          updateUserDetail(user);
+                          pickAccount(user);
                         }}
                       >
                         <IonLabel>
