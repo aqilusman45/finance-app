@@ -19,7 +19,7 @@ import "./ManageEntries.css";
 import * as JsSearch from "js-search";
 import { convertDate } from "../../utils/dateConversion";
 import PaginationView from "../Pagination/Pagination";
-
+import {seriolNumber  } from "../../utils/utilities";
 const keys = ["Name", "Phone", "Date", "Amount"];
 
 const ManageEntries = () => {
@@ -134,7 +134,7 @@ const ManageEntries = () => {
                         };
                         return (
                           <tr key={index} className="table-row-hover">
-                            <td>{index + 1}</td>
+                            <td>{seriolNumber(entries, entry.uid)}</td>
                             {Object.values(objValues).map((item, index) => {
                               return <td key={index}>{item}</td>;
                             })}
@@ -150,7 +150,7 @@ const ManageEntries = () => {
                         };
                         return (
                           <tr key={index} className="table-row-hover">
-                            <td>{index + 1}</td>
+                            <td>{seriolNumber(entries, entry.uid)}</td>
 
                             {Object.values(objValues).map((item, index) => {
                               return <td key={index}>{item}</td>;

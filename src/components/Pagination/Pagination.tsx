@@ -24,7 +24,7 @@ const PaginationView = ({
   };
 
   return (
-    <div className="pgStyle">
+    <div className="paginationMain">
       {data?.length ? (
         <Pagination
           activePage={active}

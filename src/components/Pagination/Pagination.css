@@ -4,7 +4,7 @@
 }
 
 .active {
-  background-color: #0062cc !important;
+  background-color: gray;
 }
 
 .active a {
@@ -14,8 +14,13 @@
 li {
   padding: 5px 14px !important;
   border: 1px solid #8080805e;
+  background-color: #000000de;
 }
 
-/* .pgStyle {
-  margin: 0 auto;
-} */
+li a {
+  color: white;
+}
+.paginationMain {
+  display: flex;
+  justify-content: center;
+}
