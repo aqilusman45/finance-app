@@ -23,6 +23,7 @@ import { RootState } from "../../store/rootReducer";
 import { fetchProducts } from "../../store/reducers/products";
 import { IProduct } from "../../lib/products";
 import { PaymentOptions } from "../../lib/enum";
+import { updateProductAsync } from "../../store/reducers/products";
 import "./AddInvoice.css";
 
 const INITIAL_STATE = {
@@ -195,11 +196,26 @@ const AddInvoice: React.FC = () => {
   const getTotal = (subTotal: number, totalDiscount: number, tax: number) => {
     const dis = (subTotal * totalDiscount) / 100;
     const tx = (dis * tax) / 100;
-    return (subTotal - dis) + tx;
+    return subTotal - dis + tx;
+  };
+
+  const updateProductInventory = () => {
+    state.products.map(({ product }: any) => {
+      const findProduct = productList?.find(
+        (node: any) => node.uid === product.uid
+      );
+      const updateProduct = {
+        ...findProduct,
+        quantity: findProduct?.quantity! - product.quantity,
+      };
+      dispatch(updateProductAsync(updateProduct as any));
+      return null;
+    });
   };
 
   const submit = (e: any) => {
     e.preventDefault();
+    updateProductInventory();
     // create invoice
     // add entry if partial payment on account
     // update inventory
