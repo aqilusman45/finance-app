@@ -175,7 +175,7 @@ const AddInvoice: React.FC = () => {
           <IonCol size="6" className="mb">
             <IonItem className="ion-margin">
               <IonInput
-                onChange={handleChange}
+                onIonChange={handleChange}
                 name="name"
                 value={name}
                 placeholder="Name"
@@ -183,7 +183,7 @@ const AddInvoice: React.FC = () => {
             </IonItem>
             <IonItem className="ion-margin">
               <IonInput
-                onChange={handleChange}
+                onIonChange={handleChange}
                 name="invoiceNumber"
                 value={invoiceNumber}
                 placeholder="Invoice Number"
@@ -198,7 +198,7 @@ const AddInvoice: React.FC = () => {
               >
                 {PAYMENT_OPTIONS.map((node) => {
                   return (
-                    <IonSelectOption value={node}>{node.label}</IonSelectOption>
+                    <IonSelectOption key={node.value} value={node}>{node.label}</IonSelectOption>
                   );
                 })}
               </IonSelect>
@@ -207,7 +207,7 @@ const AddInvoice: React.FC = () => {
           <IonCol size="6">
             <IonItem className="ion-margin">
               <IonInput
-                onChange={handleChange}
+                onIonChange={handleChange}
                 name="shippingAddress"
                 value={shippingAddress}
                 placeholder="Shipping Address"
@@ -215,7 +215,7 @@ const AddInvoice: React.FC = () => {
             </IonItem>
             <IonItem className="ion-margin">
               <IonInput
-                onChange={handleChange}
+                onIonChange={handleChange}
                 name="phone"
                 value={phone}
                 placeholder="Phone"
@@ -223,7 +223,7 @@ const AddInvoice: React.FC = () => {
             </IonItem>
             <IonItem className="ion-margin">
               <IonInput
-                onChange={handleChange}
+                onIonChange={handleChange}
                 name="remarks"
                 value={remarks}
                 placeholder="Remarks"
@@ -231,7 +231,7 @@ const AddInvoice: React.FC = () => {
             </IonItem>
             <IonItem className="ion-margin">
               <IonInput
-                onChange={handleChange}
+                onIonChange={handleChange}
                 name="companyName"
                 value={companyName}
                 placeholder="Company Name"
@@ -262,11 +262,11 @@ const AddInvoice: React.FC = () => {
                 <tbody>
                   {products.map(
                     (
-                      { discount, product: { name }, quantity, price }: any,
+                      { discount, product: { name, uid }, quantity, price }: any,
                       idx: number
                     ) => {
                       return (
-                        <tr>
+                        <tr key={uid}>
                           <td>{idx + 1}</td>
                           <td>{name}</td>
                           <td>Rs. {price} </td>
