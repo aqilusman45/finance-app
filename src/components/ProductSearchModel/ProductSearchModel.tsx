@@ -53,46 +53,54 @@ const ProductSearchModel: React.FC<IProductSearchModelProps> = ({
             <IonList>
               {filteredProducts?.length
                 ? filteredProducts.map((product: any, index: number) => {
-                    return (
-                      <IonItem
-                        key={index}
-                        className="cursor"
-                        onClick={() => {
-                          const prod = filteredProducts.find(
-                            (filter: any) => filter.uid === product.uid
-                          );
-                          setShowProductModal(!showProductModal);
-                          pickProduct(prod);
-                        }}
-                      >
-                        <IonLabel>
-                          <h2>Name: {product.name}</h2>
-                          <h3>Price: {product.price}</h3>
-                          <p>Description: {product.description}</p>
-                        </IonLabel>
-                      </IonItem>
-                    );
+                    if (product.quantity === 0) {
+                      return null;
+                    } else {
+                      return (
+                        <IonItem
+                          key={index}
+                          className="cursor"
+                          onClick={() => {
+                            const prod = filteredProducts.find(
+                              (filter: any) => filter.uid === product.uid
+                            );
+                            setShowProductModal(!showProductModal);
+                            pickProduct(prod);
+                          }}
+                        >
+                          <IonLabel>
+                            <h2>Name: {product.name}</h2>
+                            <h3>Price: {product.price}</h3>
+                            <p>Description: {product.description}</p>
+                          </IonLabel>
+                        </IonItem>
+                      );
+                    }
                   })
                 : products?.map((product: any, index: number) => {
-                    return (
-                      <IonItem
-                        key={index}
-                        className="cursor"
-                        onClick={() => {
-                          const prod = products.find(
-                            (filter: any) => filter.uid === product.uid
-                          );
-                          setShowProductModal(!showProductModal);
-                          pickProduct(prod);
-                        }}
-                      >
-                        <IonLabel>
-                          <h2>Name: {product.name}</h2>
-                          <h3>Price: {product.price}</h3>
-                          <p>Description: {product.description}</p>
-                        </IonLabel>
-                      </IonItem>
-                    );
+                    if (product.quantity === 0) {
+                      return null;
+                    } else {
+                      return (
+                        <IonItem
+                          key={index}
+                          className="cursor"
+                          onClick={() => {
+                            const prod = products.find(
+                              (filter: any) => filter.uid === product.uid
+                            );
+                            setShowProductModal(!showProductModal);
+                            pickProduct(prod);
+                          }}
+                        >
+                          <IonLabel>
+                            <h2>Name: {product.name}</h2>
+                            <h3>Price: {product.price}</h3>
+                            <p>Description: {product.description}</p>
+                          </IonLabel>
+                        </IonItem>
+                      );
+                    }
                   })}
             </IonList>
           </>

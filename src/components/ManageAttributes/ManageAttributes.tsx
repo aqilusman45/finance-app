@@ -16,7 +16,7 @@ import Badge from "react-bootstrap/Badge";
 import "./ManageAttributes.css";
 import AttributeModal from "../ViewAttribute/ViewAttribute";
 import PaginationView from "../Pagination/Pagination";
-import { seriolNumber } from "../../utils/utilities";
+import { serialNumber } from "../../utils/utilities";
 import * as JsSearch from "js-search";
 
 const headers = ["attributeName", "attributeType", "required", "options"];
@@ -107,7 +107,7 @@ const ManageAttributes: React.FC = () => {
                                 }}
                                 key={attribute.uid}
                               >
-                                <td>{seriolNumber(attributes, attribute.uid)}</td>
+                                <td>{serialNumber(attributes, attribute.uid)}</td>
                                 {Object.keys(attribute).map((key) => {
                                   // @ts-ignore
                                   const attributeKey = attribute[key];
@@ -173,7 +173,7 @@ const ManageAttributes: React.FC = () => {
                                 }}
                                 key={attribute.uid}
                               >
-                                <td>{seriolNumber(attributes, attribute.uid)}</td>
+                                <td>{serialNumber(attributes, attribute.uid)}</td>
                                 {Object.keys(attribute).map((key) => {
                                   // @ts-ignore
                                   const attributeKey = attribute[key];

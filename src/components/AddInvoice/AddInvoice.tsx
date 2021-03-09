@@ -13,6 +13,7 @@ import {
   IonList,
   IonButton,
   IonLoading,
+  IonToast,
 } from "@ionic/react";
 import { fetchAccounts } from "./../../store/reducers/accounts";
 import Table from "react-bootstrap/esm/Table";
@@ -23,6 +24,8 @@ import { RootState } from "../../store/rootReducer";
 import { fetchProducts } from "../../store/reducers/products";
 import { IProduct } from "../../lib/products";
 import { PaymentOptions } from "../../lib/enum";
+import { updateProductAsync } from "../../store/reducers/products";
+import { ValidationError } from "yup";
 import "./AddInvoice.css";
 
 const INITIAL_STATE = {
@@ -72,6 +75,7 @@ const AddInvoice: React.FC = () => {
   const [state, setState] = useState({ ...INITIAL_STATE });
   const [showAccountModal, setShowAccountModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
+  const [errors, setErrors] = useState<ValidationError | undefined>();
 
   const { accounts, productList, isLoading, invoices } = useSelector(
     (state: RootState) => {
@@ -130,6 +134,21 @@ const AddInvoice: React.FC = () => {
         shippingAddress: data.address,
       },
       accountRef: data.uid,
+    }));
+  };
+
+  const removeAccount = () => {
+    setState((prevState) => ({
+      ...prevState,
+      detail: {
+        name: "",
+        companyName: "",
+        shippingAddress: "",
+        phone: "",
+        address: "",
+        email: "",
+      },
+      accountRef: "",
     }));
   };
 
@@ -195,14 +214,61 @@ const AddInvoice: React.FC = () => {
   const getTotal = (subTotal: number, totalDiscount: number, tax: number) => {
     const dis = (subTotal * totalDiscount) / 100;
     const tx = (dis * tax) / 100;
-    return (subTotal - dis) + tx;
+    return subTotal - dis + tx;
   };
 
+  const updateProductInventory = (product: any) => {
+    product.map((product: any) => {
+      const updateProduct = {
+        ...product.product,
+        quantity: product.product?.quantity - product.quantity,
+      };
+      dispatch(updateProductAsync(updateProduct as any));
+      return null;
+    });
+  };
+
+  const checkQuantity = (products: any) => {
+    if (!products.length) {
+      throw new Error(`Please add atleast 1 product!`);
+    }
+    products.map((item: any) => {
+      if (item.quantity > item.product.quantity) {
+        throw new Error(
+          `Quantity for ${item.product.name} exceeds current stock!`
+        );
+      }
+      if (item.quantity === 0) {
+        throw new Error(`Quantity for ${item.product.name} atleast be 1!`);
+      }
+      return null;
+    });
+  };
+
+  const checkAccountRef = (accRef: any, payOption: any) => {
+    if (!payOption.value) {
+      throw new Error(`Please select payment option!`);
+    }
+    if (
+      (payOption.value === "PARTIAL" || payOption.value === "CREDIT") &&
+      !accRef
+    ) {
+      throw new Error(`Please select or create a new account!`);
+    }
+  };
   const submit = (e: any) => {
-    e.preventDefault();
-    // create invoice
-    // add entry if partial payment on account
-    // update inventory
+    try {
+      const { products, accountRef, paymentOption } = state;
+      e.preventDefault();
+      checkQuantity(products);
+      checkAccountRef(accountRef, paymentOption);
+      updateProductInventory(products);
+      // create invoice
+      // add entry if partial payment on account
+      // update inventory
+    } catch (error) {
+      setErrors(error);
+    }
   };
 
   const {
@@ -221,6 +287,22 @@ const AddInvoice: React.FC = () => {
 
   return (
     <IonContent>
+      <IonToast
+        isOpen={!!errors}
+        message={errors && errors.message}
+        position="bottom"
+        color="danger"
+        duration={2000}
+        onDidDismiss={() => {
+          setErrors(undefined);
+        }}
+        buttons={[
+          {
+            text: "Cancel",
+            role: "cancel",
+          },
+        ]}
+      />
       <UserSearchModal
         accounts={accounts}
         showModal={showAccountModal}
@@ -243,12 +325,18 @@ const AddInvoice: React.FC = () => {
                 value={name}
                 placeholder="Particulars"
               />
-              <IonButton
-                onClick={() => setShowAccountModal(!showAccountModal)}
-                color="primary"
-              >
-                Select Account
-              </IonButton>
+              {!state.accountRef ? (
+                <IonButton
+                  onClick={() => setShowAccountModal(!showAccountModal)}
+                  color="primary"
+                >
+                  Select Account
+                </IonButton>
+              ) : (
+                <IonButton onClick={() => removeAccount()} color="danger">
+                  Remove Account
+                </IonButton>
+              )}
             </IonItem>
             <IonItem className="ion-margin">
               <IonInput
