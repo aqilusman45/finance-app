@@ -1,4 +1,4 @@
-export const seriolNumber = (data: any, idx: any) => {
+export const serialNumber = (data: any, idx: any) => {
   const number = data?.findIndex((item: any) => {
     return item.uid === idx;
   });

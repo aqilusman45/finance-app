@@ -16,7 +16,7 @@ import { fetchAccounts } from "../../store/reducers/accounts";
 import { IAccount } from "../../lib/accounts";
 import PaginationView from "../Pagination/Pagination";
 import * as JsSearch from "js-search";
-import { seriolNumber } from "../../utils/utilities";
+import { serialNumber } from "../../utils/utilities";
 const headers = ["name", "phone", "email", "accountTitle", "accountType"];
 
 const ManageAccounts: React.FC = () => {
@@ -108,7 +108,7 @@ const ManageAccounts: React.FC = () => {
                                 }}
                                 key={account.uid}
                               >
-                                <td>{seriolNumber(accounts, account.uid)} </td>
+                                <td>{serialNumber(accounts, account.uid)} </td>
                                 {Object.keys(account).map((key) => {
                                   // @ts-ignore
                                   const accountKey = account[key];
@@ -158,7 +158,7 @@ const ManageAccounts: React.FC = () => {
                                 }}
                                 key={account.uid}
                               >
-                                <td>{seriolNumber(accounts, account.uid)} </td>
+                                <td>{serialNumber(accounts, account.uid)} </td>
                                 {Object.keys(account).map((key) => {
                                   // @ts-ignore
                                   const accountKey = account[key];

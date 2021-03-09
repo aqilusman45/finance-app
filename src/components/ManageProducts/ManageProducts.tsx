@@ -15,9 +15,9 @@ import { IProduct } from "../../lib/products";
 import ProductModal from "../ViewProduct/ViewProduct";
 import * as JsSearch from "js-search";
 import PaginationView from "../Pagination/Pagination";
-import {seriolNumber  } from "../../utils/utilities";
+import {serialNumber  } from "../../utils/utilities";
 
-const keys = ["name", "sku", "price", "description", "enabled"];
+const keys = ["name", "sku", "price", "description", "enabled", "quantity"];
 
 const ManageProduct: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -110,7 +110,7 @@ const ManageProduct: React.FC = () => {
                                 }}
                                 key={product.uid}
                               >
-                                <td>{seriolNumber(products, product.uid)}</td>
+                                <td>{serialNumber(products, product.uid)}</td>
                                 {keys.map((key) => {
                                   // @ts-ignore
                                   const productKey = product[key];
@@ -141,10 +141,12 @@ const ManageProduct: React.FC = () => {
                               }}
                               key={product.uid}
                             >
-                              <td>{seriolNumber(products, product.uid)}</td>
+                              <td>{serialNumber(products, product.uid)}</td>
                               {keys.map((key) => {
+                                
                                 // @ts-ignore
                                 const productKey = product[key];
+
                                 if (keys.includes(key)) {
                                   if (typeof productKey !== "object") {
                                     return (

@@ -1,7 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "..";
 import { IImages, IProduct, IProductDocument } from "../../lib/products";
-import { insertProductMutation, productsQuery, updateProductMutation } from "../../utils/database";
+import {
+  insertProductMutation,
+  productsQuery,
+  updateProductMutation,
+} from "../../utils/database";
 import { transformProduct } from "../../utils/transform";
 
 interface IInitialState {
@@ -50,7 +54,7 @@ export const {
   doneLoading,
   startLoading,
   addProduct,
-  updateProduct
+  updateProduct,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;
@@ -92,21 +96,22 @@ export const insertProduct = (
 
 export const updateProductAsync = (
   product: IProductDocument,
-  images: IImages[],
-  cb: () => void
+  images?: IImages[],
+  cb?: () => void
 ): AppThunk => async (dispatch) => {
   try {
     dispatch(startLoading());
-    const doc: any= await updateProductMutation(product);
-    images.forEach(async ({ base64, name, type }) => {
-      await doc.putAttachment({
-        data: base64,
-        id: name,
-        type,
+    const doc: any = await updateProductMutation(product);
+    images &&
+      images.forEach(async ({ base64, name, type }) => {
+        await doc.putAttachment({
+          data: base64,
+          id: name,
+          type,
+        });
       });
-    });
     dispatch(updateProduct(product));
-    cb();
+    cb && cb();
     dispatch(doneLoading());
   } catch (error) {
     throw error;
