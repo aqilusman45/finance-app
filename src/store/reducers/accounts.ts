@@ -81,7 +81,7 @@ export const updateAccountAsync = (
 ): AppThunk => async (dispatch) => {
   try {
     dispatch(startLoading());
-    await updateAccountMutation(account);
+    await updateAccountMutation({...account});
     dispatch(updateAccount(account));
     cb && cb();
     dispatch(doneLoading());

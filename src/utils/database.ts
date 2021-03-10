@@ -174,12 +174,11 @@ export const updateAttributeMutation = async (attribute: IAttribute) => {
 export const updateAccountMutation = async (account: Partial<IAccount>) => {
   const db = await get();
   const { accounts } = db.collections;
-  delete account.uid
+  delete account.uid;
   const acc = await accounts.findOne().where("uid").eq(account.uid).exec();
-  await acc?.update({
-    $set: {
-      ...account,
-    },
+  await acc?.atomicUpdate((oldData) => {
+    oldData = { ...oldData, ...account } as any;
+    return oldData;
   });
 };
 
