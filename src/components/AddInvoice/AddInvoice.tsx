@@ -27,6 +27,7 @@ import { PaymentOptions } from "../../lib/enum";
 import { updateProductAsync } from "../../store/reducers/products";
 import { ValidationError } from "yup";
 import "./AddInvoice.css";
+import { fetchInvoices } from "../../store/reducers/invoices";
 
 const INITIAL_STATE = {
   shippingAddress: "",
@@ -98,6 +99,12 @@ const AddInvoice: React.FC = () => {
       dispatch(fetchAccounts());
     }
   }, [accounts, dispatch]);
+
+  useEffect(() => {
+    if (!invoices) {
+      dispatch(fetchInvoices());
+    }
+  }, [invoices, dispatch]);
 
   useEffect(() => {
     if (!productList) {
@@ -350,7 +357,7 @@ const AddInvoice: React.FC = () => {
               <IonInput
                 name="invoiceNumber"
                 value={`Invoice Number: ${
-                  (invoices && invoices?.length + 1000) || 1001
+                  invoices && invoices?.length ? invoices?.length + 1000 : 1001
                 }`}
                 disabled={true}
                 placeholder="Invoice Number"
