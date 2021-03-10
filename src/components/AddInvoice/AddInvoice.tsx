@@ -137,6 +137,21 @@ const AddInvoice: React.FC = () => {
     }));
   };
 
+  const removeAccount = () => {
+    setState((prevState) => ({
+      ...prevState,
+      detail: {
+        name: "",
+        companyName: "",
+        shippingAddress: "",
+        phone: "",
+        address: "",
+        email: "",
+      },
+      accountRef: "",
+    }));
+  };
+
   const pickProduct = (data: IProduct) => {
     setState((prevState) => {
       const products = [...prevState.products];
@@ -206,29 +221,47 @@ const AddInvoice: React.FC = () => {
     product.map((product: any) => {
       const updateProduct = {
         ...product.product,
-        quantity: product.product?.quantity! - product.quantity,
+        quantity: product.product?.quantity - product.quantity,
       };
       dispatch(updateProductAsync(updateProduct as any));
       return null;
     });
   };
 
-  const checkQuantity = (product: any) => {
-    product.map((item: any) => {
+  const checkQuantity = (products: any) => {
+    if (!products.length) {
+      throw new Error(`Please add atleast 1 product!`);
+    }
+    products.map((item: any) => {
       if (item.quantity > item.product.quantity) {
         throw new Error(
           `Quantity for ${item.product.name} exceeds current stock!`
         );
       }
+      if (item.quantity === 0) {
+        throw new Error(`Quantity for ${item.product.name} atleast be 1!`);
+      }
       return null;
     });
   };
 
+  const checkAccountRef = (accRef: any, payOption: any) => {
+    if (!payOption.value) {
+      throw new Error(`Please select payment option!`);
+    }
+    if (
+      (payOption.value === "PARTIAL" || payOption.value === "CREDIT") &&
+      !accRef
+    ) {
+      throw new Error(`Please select or create a new account!`);
+    }
+  };
   const submit = (e: any) => {
     try {
-      const { products } = state;
+      const { products, accountRef, paymentOption } = state;
       e.preventDefault();
       checkQuantity(products);
+      checkAccountRef(accountRef, paymentOption);
       updateProductInventory(products);
       // create invoice
       // add entry if partial payment on account
@@ -292,12 +325,18 @@ const AddInvoice: React.FC = () => {
                 value={name}
                 placeholder="Particulars"
               />
-              <IonButton
-                onClick={() => setShowAccountModal(!showAccountModal)}
-                color="primary"
-              >
-                Select Account
-              </IonButton>
+              {!state.accountRef ? (
+                <IonButton
+                  onClick={() => setShowAccountModal(!showAccountModal)}
+                  color="primary"
+                >
+                  Select Account
+                </IonButton>
+              ) : (
+                <IonButton onClick={() => removeAccount()} color="danger">
+                  Remove Account
+                </IonButton>
+              )}
             </IonItem>
             <IonItem className="ion-margin">
               <IonInput
