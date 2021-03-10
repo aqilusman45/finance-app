@@ -13,6 +13,7 @@ import {
   IonList,
   IonButton,
   IonLoading,
+  IonToast,
 } from "@ionic/react";
 import { fetchAccounts } from "./../../store/reducers/accounts";
 import Table from "react-bootstrap/esm/Table";
@@ -24,6 +25,7 @@ import { fetchProducts } from "../../store/reducers/products";
 import { IProduct } from "../../lib/products";
 import { PaymentOptions } from "../../lib/enum";
 import { updateProductAsync } from "../../store/reducers/products";
+import { ValidationError } from "yup";
 import "./AddInvoice.css";
 
 const INITIAL_STATE = {
@@ -73,6 +75,7 @@ const AddInvoice: React.FC = () => {
   const [state, setState] = useState({ ...INITIAL_STATE });
   const [showAccountModal, setShowAccountModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
+  const [errors, setErrors] = useState<ValidationError | undefined>();
 
   const { accounts, productList, isLoading, invoices } = useSelector(
     (state: RootState) => {
@@ -199,26 +202,40 @@ const AddInvoice: React.FC = () => {
     return subTotal - dis + tx;
   };
 
-  const updateProductInventory = () => {
-    state.products.map(({ product }: any) => {
-      const findProduct = productList?.find(
-        (node: any) => node.uid === product.uid
-      );
+  const updateProductInventory = (product: any) => {
+    product.map((product: any) => {
       const updateProduct = {
-        ...findProduct,
-        quantity: findProduct?.quantity! - product.quantity,
+        ...product.product,
+        quantity: product.product?.quantity! - product.quantity,
       };
       dispatch(updateProductAsync(updateProduct as any));
       return null;
     });
   };
 
+  const checkQuantity = (product: any) => {
+    product.map((item: any) => {
+      if (item.quantity > item.product.quantity) {
+        throw new Error(
+          `Quantity for ${item.product.name} exceeds current stock!`
+        );
+      }
+      return null;
+    });
+  };
+
   const submit = (e: any) => {
-    e.preventDefault();
-    updateProductInventory();
-    // create invoice
-    // add entry if partial payment on account
-    // update inventory
+    try {
+      const { products } = state;
+      e.preventDefault();
+      checkQuantity(products);
+      updateProductInventory(products);
+      // create invoice
+      // add entry if partial payment on account
+      // update inventory
+    } catch (error) {
+      setErrors(error);
+    }
   };
 
   const {
@@ -237,6 +254,22 @@ const AddInvoice: React.FC = () => {
 
   return (
     <IonContent>
+      <IonToast
+        isOpen={!!errors}
+        message={errors && errors.message}
+        position="bottom"
+        color="danger"
+        duration={2000}
+        onDidDismiss={() => {
+          setErrors(undefined);
+        }}
+        buttons={[
+          {
+            text: "Cancel",
+            role: "cancel",
+          },
+        ]}
+      />
       <UserSearchModal
         accounts={accounts}
         showModal={showAccountModal}
