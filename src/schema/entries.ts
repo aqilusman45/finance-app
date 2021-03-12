@@ -20,9 +20,7 @@ export const entrySchema: RxJsonSchema = {
         value: {
           type: "string",
           enum: [
-            PaymentOptions.BANK,
-            PaymentOptions.CASH,
-            PaymentOptions.CHEQUE,
+            PaymentOptions.PARTIAL,
           ],
         },
         label: {

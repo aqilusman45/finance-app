@@ -23,12 +23,17 @@ import UserSearchModal from "../UserSearchModel/UserSearchModel";
 import { RootState } from "../../store/rootReducer";
 import { fetchProducts } from "../../store/reducers/products";
 import { IProduct } from "../../lib/products";
-import { PaymentOptions } from "../../lib/enum";
+import { PaymentOptions, EntryTypes } from "../../lib/enum";
 import { updateProductAsync } from "../../store/reducers/products";
 import { ValidationError } from "yup";
+import { addInvoice } from "../../store/reducers/invoices";
+import { v4 as uuidv4 } from "uuid";
+import { addEntry } from "../../store/reducers/entries";
+import { useHistory } from "react-router";
 import "./AddInvoice.css";
 
 const INITIAL_STATE = {
+  uid: uuidv4(),
   shippingAddress: "",
   phone: "",
   remarks: "",
@@ -90,7 +95,7 @@ const AddInvoice: React.FC = () => {
       };
     }
   );
-
+  const { push } = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -134,20 +139,15 @@ const AddInvoice: React.FC = () => {
         shippingAddress: data.address,
       },
       accountRef: data.uid,
+      currentBalance: data.balance,
     }));
   };
 
   const removeAccount = () => {
     setState((prevState) => ({
       ...prevState,
-      detail: {
-        name: "",
-        companyName: "",
-        shippingAddress: "",
-        phone: "",
-        address: "",
-        email: "",
-      },
+
+      detail: { ...INITIAL_STATE.detail },
       accountRef: "",
     }));
   };
@@ -256,16 +256,64 @@ const AddInvoice: React.FC = () => {
       throw new Error(`Please select or create a new account!`);
     }
   };
-  const submit = (e: any) => {
+  const submit = () => {
     try {
-      const { products, accountRef, paymentOption } = state;
-      e.preventDefault();
+      const {
+        payment,
+        products,
+        accountRef,
+        paymentOption,
+        detail: { name, address, companyName, email, phone, shippingAddress },
+        currentBalance,
+      } = state;
+      delete state.payment;
+      delete state.companyName;
+      delete state.phone;
+      delete state.shippingAddress;
+      const entry = {
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        uid: uuidv4(),
+        date: Date.now(),
+        accountRef,
+        invoiceRef: state.uid,
+        amount: payment,
+        paymentOption,
+        entryType: {
+          value: EntryTypes.CREDIT,
+          label: EntryTypes.CREDIT,
+        },
+      };
+      const invoice = {
+        ...state,
+        detail: { name, email, address, companyName, phone, shippingAddress },
+        products: state.products.map((node: any) => {
+          return { ...node, product: node.product.uid };
+        }),
+        currentBalance: Number(currentBalance),
+        accountRef,
+        subTotal: getSubTotal(products),
+        total: getTotal(getSubTotal(products), totalDiscount, taxRate),
+        invoiceNumber: (
+          (invoices && invoices?.length + 1000) ||
+          1001
+        ).toString(),
+        date: Date.now(),
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+
       checkQuantity(products);
       checkAccountRef(accountRef, paymentOption);
       updateProductInventory(products);
-      // create invoice
-      // add entry if partial payment on account
-      // update inventory
+      dispatch(
+        addInvoice(invoice as any, () => {
+          push("/home/manage-invoices");
+        })
+      );
+      if (paymentOption.value === "PARTIAL") {
+        dispatch(addEntry(entry as any));
+      }
     } catch (error) {
       setErrors(error);
     }

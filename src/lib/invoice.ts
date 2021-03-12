@@ -36,7 +36,6 @@ export interface IInvoice {
   accountRef: string;
   createdAt: number;
   updatedAt: number;
-  quantity: number;
 }
 
 
