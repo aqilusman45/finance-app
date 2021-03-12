@@ -114,11 +114,42 @@ const AddInvoice: React.FC = () => {
 
   const handleChange = (e: any) => {
     const key = e.target.name;
-    const val = e.target.value;
-    setState((prevState) => ({
-      ...prevState,
-      [key]: val,
-    }));
+    let val = e.target.value;
+    if (key === "totalDiscount" && parseInt(val || 0) > 100) {
+      val = 100;
+    }
+    setState((prevState) => {
+      let update = {
+        [key]: val,
+      } as any;
+
+      let totalDiscount = prevState.totalDiscount;
+      let taxRate = prevState.taxRate;
+
+      if (key === "totalDiscount") {
+        totalDiscount = val;
+      }
+
+      if (key === "taxRate") {
+        taxRate = val;
+      }
+
+      let total = getTotal(getSubTotal(products), totalDiscount, taxRate);
+      const actual = getSubTotal(products);
+      if (key === "total") {
+        total = val;
+        update = {
+          ...update,
+          totalDiscount: Math.floor(100 - (total * 100) / actual),
+        };
+      }
+
+      return {
+        ...prevState,
+        ...update,
+        total,
+      };
+    });
   };
 
   const handleAccountDetails = (e: any) => {
@@ -148,12 +179,7 @@ const AddInvoice: React.FC = () => {
     setState((prevState) => ({
       ...prevState,
       detail: {
-        name: "",
-        companyName: "",
-        shippingAddress: "",
-        phone: "",
-        address: "",
-        email: "",
+        ...INITIAL_STATE.detail,
       },
       accountRef: "",
     }));
@@ -168,6 +194,7 @@ const AddInvoice: React.FC = () => {
           product: { ...data },
           quantity: 0,
           price: data.price,
+          total: 0,
         });
       }
       return { ...prevState, products };
@@ -181,14 +208,59 @@ const AddInvoice: React.FC = () => {
       val = 100;
     }
     setState((prevState) => {
+      let price = products[idx].price;
+      let quantity = products[idx].quantity;
+      let discount = products[idx].discount;
+      if (key === "price") {
+        price = val;
+      }
+
+      if (key === "quantity") {
+        quantity = val;
+      }
+
+      if (key === "discount") {
+        discount = val;
+      }
+
+      let total = calculateTotal(price, quantity, discount);
+
+      let update = {
+        [key]: val,
+      } as any;
+
+      if (key === "total") {
+        discount = calculateDiscount(price, quantity, val);
+        total = val;
+        update = {
+          ...update,
+          discount,
+        };
+      }
+
+      update = {
+        ...update,
+        total,
+      };
+
       prevState.products[idx] = {
         ...prevState.products[idx],
-        [key]: val,
+        ...update,
       };
+
       return {
         ...prevState,
       };
     });
+  };
+
+  const calculateDiscount = (
+    price: number,
+    quantity: number,
+    total: number
+  ) => {
+    const actual = price * quantity;
+    return Math.floor(100 - (total * 100) / actual);
   };
 
   const handleRemove = (idx: number) => {
@@ -286,7 +358,10 @@ const AddInvoice: React.FC = () => {
     taxRate,
     totalDiscount,
     payment,
+    total,
   } = state;
+
+  console.log(total);
 
   if (isLoading) {
     return <IonLoading isOpen={isLoading} message={"Please wait..."} />;
@@ -443,6 +518,7 @@ const AddInvoice: React.FC = () => {
                         product: { name, uid },
                         quantity,
                         price,
+                        total,
                       }: any,
                       idx: number
                     ) => {
@@ -476,7 +552,14 @@ const AddInvoice: React.FC = () => {
                               width: "23%",
                             }}
                           >
-                            Rs. {calculateTotal(price, quantity, discount)}
+                            <input
+                              value={total}
+                              name="total"
+                              onChange={(e) => handleProductChange(e, idx)}
+                              className="inputStyle txtCenter"
+                              type="number"
+                            />
+                            <IonIcon slot="start" icon={create} />
                           </td>
                           <td>
                             <IonIcon
@@ -528,8 +611,8 @@ const AddInvoice: React.FC = () => {
             >
               <tbody>
                 <tr>
-                  <td>SubTotal</td>
-                  <td>Rs. {products.length && getSubTotal(products)}</td>
+                  <td>SubTotal (Rs.)</td>
+                  <td>{products.length && getSubTotal(products)}</td>
                 </tr>
                 <tr>
                   <th>Discount %</th>
@@ -558,11 +641,19 @@ const AddInvoice: React.FC = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td>Total</td>
+                  <td>Total (Rs.)</td>
                   <td>
-                    Rs.
-                    {products.length &&
-                      getTotal(getSubTotal(products), totalDiscount, taxRate)}
+                    <input
+                      value={
+                        total ||
+                        getTotal(getSubTotal(products), totalDiscount, taxRate)
+                      }
+                      name="total"
+                      onChange={handleChange}
+                      className="inputStyle txtCenter"
+                      type="number"
+                    />
+                    <IonIcon slot="start" icon={create} />
                   </td>
                 </tr>
                 {paymentOption.value === PaymentOptions.PARTIAL && (
