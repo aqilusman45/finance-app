@@ -311,7 +311,7 @@ const AddInvoice: React.FC = () => {
           push("/home/manage-invoices");
         })
       );
-      if (paymentOption.value === "PARTIAL") {
+      if (paymentOption.value === "PARTIAL" || paymentOption.value === "CREDIT") {
         dispatch(addEntry(entry as any));
       }
     } catch (error) {

@@ -21,6 +21,7 @@ export const entrySchema: RxJsonSchema = {
           type: "string",
           enum: [
             PaymentOptions.PARTIAL,
+            PaymentOptions.CREDIT,
           ],
         },
         label: {
