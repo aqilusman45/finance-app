@@ -25,13 +25,13 @@ import { fetchProducts } from "../../store/reducers/products";
 import { IProduct } from "../../lib/products";
 import { updateProductAsync } from "../../store/reducers/products";
 import { ValidationError } from "yup";
-import "./AddInvoice.css";
 import { fetchInvoices } from "../../store/reducers/invoices";
 import { PaymentOptions, EntryTypes } from "../../lib/enum";
 import { addInvoice } from "../../store/reducers/invoices";
 import { v4 as uuidv4 } from "uuid";
 import { addEntry } from "../../store/reducers/entries";
 import { useHistory } from "react-router";
+import "./AddInvoice.css";
 
 const INITIAL_STATE = {
   uid: uuidv4(),
@@ -253,7 +253,7 @@ const AddInvoice: React.FC = () => {
 
       prevState.products[idx] = {
         ...prevState.products[idx],
-        [key]: val,
+        ...update
       };
 
       return {
