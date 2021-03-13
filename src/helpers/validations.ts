@@ -105,3 +105,7 @@ export const signInSchema = yup.object().shape({
 export const checkExistedUser = () => {
   throw new Error(`If you are new user please sign up first!`);
 };
+
+export const activationSchema = yup.object().shape({
+  key: yup.string().required("Please enter activation key!"),
+});

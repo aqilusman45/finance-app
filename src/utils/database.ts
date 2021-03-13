@@ -20,7 +20,9 @@ import { IEntry, IEntryDocument } from "../lib/entries";
 import { invoiceSchema } from "./../schema/invoices";
 import { entrySchema } from "./../schema/entries";
 import { authSchema } from "./../schema/auth";
+import { activationSchema } from "./../schema/activation";
 import { IAuthDocument, IAuth } from "../lib/auth";
+import { IActivation } from "../lib/activation";
 
 addRxPlugin(RxDBValidatePlugin);
 addRxPlugin(RxDBEncryptionPlugin);
@@ -41,6 +43,7 @@ const _create = async () => {
   await createCollection(db, invoiceSchema, "invoices");
   await createCollection(db, entrySchema, "entries");
   await createCollection(db, authSchema, "auth");
+  await createCollection(db, activationSchema, "activation");
   return db;
 };
 
@@ -106,6 +109,20 @@ export const productsQuery = async () => {
   const db = await get();
   const { products } = db.collections;
   return products.find().exec();
+};
+
+export const activationQuery = async () => {
+  const db = await get();
+  const { activation } = db.collections;
+  return activation.findOne().where("uid").eq("activation").exec();
+};
+
+export const activateApp = async (data: IActivation) => {
+  const db = await get();
+  const { activation } = db.collections;
+  return activation.insert({
+    ...data,
+  });
 };
 
 export const findProduct = async (uid: string) => {

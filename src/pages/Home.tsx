@@ -82,7 +82,7 @@ const Home: React.FC<{
                   .toUpperCase()}
               </IonTitle>
               <IonButtons slot="primary">
-                <Link to="/">
+                <Link to="/sign-in">
                   <IonButton fill="solid" size="large" color="primary">
                     Log out
                   </IonButton>

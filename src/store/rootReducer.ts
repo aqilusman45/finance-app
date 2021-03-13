@@ -6,6 +6,8 @@ import invoiceReducer from "./reducers/invoices";
 import entriesReducer from "./reducers/entries";
 import usersReducer from "./reducers/user";
 import authReducer from "./reducers/auth";
+import activationReducer from "./reducers/activation";
+
 const rootReducer = combineReducers({
   products: productsReducer,
   attributes: attributesReducer,
@@ -14,6 +16,7 @@ const rootReducer = combineReducers({
   entries: entriesReducer,
   users: usersReducer,
   auth: authReducer,
+  activation: activationReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

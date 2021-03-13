@@ -5,6 +5,7 @@ import { IAccountCollection } from "./accounts";
 import { IInvoiceCollection } from "./invoice";
 import { IEntryCollection } from "./entries";
 import { IAuthCollection } from "./auth";
+import { IActivationCollection } from "./activation";
 
 export interface MyDatabaseCollections {
   users: IUserCollection;
@@ -13,5 +14,6 @@ export interface MyDatabaseCollections {
   accounts: IAccountCollection;
   invoices: IInvoiceCollection;
   entries: IEntryCollection;
-  auth: IAuthCollection
+  auth: IAuthCollection;
+  activation: IActivationCollection;
 }

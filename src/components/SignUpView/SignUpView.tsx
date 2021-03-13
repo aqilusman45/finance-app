@@ -80,7 +80,7 @@ const SignUpView = ({
             >
               Sign Up
             </IonButton>
-            <Link to="/" className="ion-margin">
+            <Link to="/sign-in" className="ion-margin">
               Already have an Account ?
             </Link>
           </IonCol>
