@@ -58,6 +58,10 @@ interface AddEntryViewProps {
   checkEntryType?: any;
   setErrors?: any;
   errors?: any;
+  pickReceiverAccount?: any;
+  receiverAccountFields?: any;
+  removeSenderAccount?: any;
+  removeReceiverAccount?: any;
 }
 const AddEntryView: React.FC<AddEntryViewProps> = ({
   isEdit,
@@ -72,8 +76,13 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
   checkEntryType,
   setErrors,
   errors,
+  pickReceiverAccount,
+  receiverAccountFields,
+  removeSenderAccount,
+  removeReceiverAccount,
 }) => {
   const [showModal, setShowModal] = useState(false);
+  const [reveiverAccountModel, setReveiverAccountModel] = useState(false);
   const { name, phone, balance } = formFields;
   const { paymentOption, entryType } = entryFields;
   const { push } = useHistory();
@@ -97,22 +106,67 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
             },
           ]}
         />
+        {/* Pick Sender Account */}
         <UserSearchModel
           accounts={accounts}
           showModal={showModal}
           setShowModal={setShowModal}
           pickAccount={updateUserDetail}
         />
+        {/* Pick Receiver Account */}
+
+        <UserSearchModel
+          accounts={accounts}
+          showModal={reveiverAccountModel}
+          setShowModal={setReveiverAccountModel}
+          pickAccount={pickReceiverAccount}
+        />
         <IonGrid className="ion-margin">
           <IonRow>
             <IonCol size="6">
-              <IonItem
-                onFocus={() => setShowModal(!showModal)}
-                className="ion-margin"
-              >
-                <IonLabel position="stacked">Account Holder Name</IonLabel>
+              <IonItem className="ion-margin">
                 <IonInput readonly value={name} name="name" />
+                {!name ? (
+                  <IonButton
+                    onFocus={() => setShowModal(!showModal)}
+                    color="primary"
+                  >
+                    Select Sender Account
+                  </IonButton>
+                ) : (
+                  <IonButton onClick={removeSenderAccount} color="danger">
+                    Remove Sender Account
+                  </IonButton>
+                )}
               </IonItem>
+            </IonCol>
+          
+            <IonCol size="6">
+              <IonItem className="ion-margin">
+                <IonInput
+                  readonly
+                  value={receiverAccountFields.name}
+                  name="name"
+                />
+                {!receiverAccountFields.name ? (
+                  <IonButton
+                    onFocus={() =>
+                      setReveiverAccountModel(!reveiverAccountModel)
+                    }
+                    color="primary"
+                  >
+                    Select Receiver Account
+                  </IonButton>
+                ) : (
+                  <IonButton onClick={removeReceiverAccount} color="danger">
+                    Remove Receiver Account
+                  </IonButton>
+                )}
+              </IonItem>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol size="6">
               <IonItem className="ion-margin">
                 <IonLabel position="stacked">Phone</IonLabel>
                 <IonInput readonly value={phone} name="phone" />

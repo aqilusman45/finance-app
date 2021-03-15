@@ -33,7 +33,24 @@ export const checkAmount = async (entry: any) => {
     throw new Error(`Amount should be greather than 0`);
   }
 };
-const INITIAL_STATE = {
+const SENDER_INITIAL_STATE = {
+  uid: "",
+  name: "",
+  email: "",
+  phone: "",
+  description: "",
+  accountNumber: "",
+  accountTitle: "",
+  address: "",
+  companyName: "",
+  balance: 0,
+  accountType: {
+    value: "",
+    label: "",
+  },
+};
+
+const RECEIVER_INITIAL_STATE = {
   uid: "",
   name: "",
   email: "",
@@ -72,7 +89,10 @@ const AddEntry: React.FC = () => {
   const [amount, setAmount] = useState<any>(0);
   const [errors, setErrors] = useState<ValidationError | undefined>();
   const [entryData, setEntryData] = useState({ ...ENTRY_INITIAL_STATE });
-  const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
+  const [formFields, setFormFields] = useState({ ...SENDER_INITIAL_STATE });
+  const [receiverAccount, setReceiverAccount] = useState({
+    ...RECEIVER_INITIAL_STATE,
+  });
   const { push } = useHistory();
   const dispatch = useDispatch();
   const { accounts } = useSelector((state: RootState) => {
@@ -98,6 +118,18 @@ const AddEntry: React.FC = () => {
     setFormFields(user);
   };
 
+  const removeSenderAccount = () => {
+    setFormFields({...SENDER_INITIAL_STATE})
+  };
+
+  const removeReceiverAccount = () => {
+    setReceiverAccount({...RECEIVER_INITIAL_STATE})
+  };
+
+  const pickReceiverAccount = (user: any) => {
+    setReceiverAccount(user);
+  };
+
   const handleChange = (e: any) => {
     setEntryData((prevField: any) => ({
       ...prevField,
@@ -112,11 +144,17 @@ const AddEntry: React.FC = () => {
     }
   };
 
-  const submit = async () => {
+  const submit = async () => {    
     const account = {
       ...formFields,
       balance:
         Number(formFields.balance) + Number(`${checkEntryType()}${amount}`),
+      updatedAt: Date.now(),
+    };
+    const receiverAccountData = {
+      ...receiverAccount,
+      balance:
+        Number(receiverAccount.balance) + Number(amount),
       updatedAt: Date.now(),
     };
     const entry = {
@@ -125,17 +163,19 @@ const AddEntry: React.FC = () => {
       accountRef: formFields.uid,
       amount: Number(`${checkEntryType()}${amount}`),
     };
-
     try {
       await addEntrySchema.validate(account);
       await entryTypeCheck(entry);
       if (entry.entryType.value === "Debit") {
         await paymentOptionCheck(entry);
       } else {
-        delete entry.paymentOption
+        delete entry.paymentOption;
       }
       await checkAmount(entry);
       dispatch(addEntry(entry as any));
+      // update receiver Account
+      dispatch(updateAccountAsync(receiverAccountData as any))
+      // update sender Account
       dispatch(
         updateAccountAsync(account as any, () => {
           push("/home/entries");
@@ -162,6 +202,10 @@ const AddEntry: React.FC = () => {
       checkEntryType={checkEntryType}
       setErrors={setErrors}
       errors={errors}
+      pickReceiverAccount={pickReceiverAccount}
+      receiverAccountFields={receiverAccount}
+      removeSenderAccount={removeSenderAccount}
+      removeReceiverAccount={removeReceiverAccount}
     />
   );
 };

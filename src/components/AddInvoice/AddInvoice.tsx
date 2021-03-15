@@ -17,7 +17,12 @@ import {
 } from "@ionic/react";
 import { fetchAccounts } from "./../../store/reducers/accounts";
 import Table from "react-bootstrap/esm/Table";
-import { create, closeCircle, addCircleOutline, calculator } from "ionicons/icons";
+import {
+  create,
+  closeCircle,
+  addCircleOutline,
+  calculator,
+} from "ionicons/icons";
 import ProductSearchModal from "../ProductSearchModel/ProductSearchModel";
 import UserSearchModal from "../UserSearchModel/UserSearchModel";
 import { RootState } from "../../store/rootReducer";
@@ -34,7 +39,6 @@ import { useHistory } from "react-router";
 import "./AddInvoice.css";
 
 const INITIAL_STATE = {
-  uid: uuidv4(),
   shippingAddress: "",
   phone: "",
   remarks: "",
@@ -181,7 +185,7 @@ const AddInvoice: React.FC = () => {
         shippingAddress: data.address,
       },
       accountRef: data.uid,
-      currentBalance: data.balance
+      currentBalance: data.balance,
     }));
   };
 
@@ -253,7 +257,7 @@ const AddInvoice: React.FC = () => {
 
       prevState.products[idx] = {
         ...prevState.products[idx],
-        ...update
+        ...update,
       };
 
       return {
@@ -358,22 +362,10 @@ const AddInvoice: React.FC = () => {
       delete state.companyName;
       delete state.phone;
       delete state.shippingAddress;
-      const entry = {
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        uid: uuidv4(),
-        date: Date.now(),
-        accountRef,
-        invoiceRef: state.uid,
-        amount: payment,
-        paymentOption,
-        entryType: {
-          value: EntryTypes.CREDIT,
-          label: EntryTypes.CREDIT,
-        },
-      };
+
       const invoice = {
         ...state,
+        uid: uuidv4(),
         detail: { name, email, address, companyName, phone, shippingAddress },
         products: state.products.map((node: any) => {
           return { ...node, product: node.product.uid };
@@ -390,7 +382,20 @@ const AddInvoice: React.FC = () => {
         createdAt: Date.now(),
         updatedAt: Date.now(),
       };
-
+      const entry = {
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        uid: uuidv4(),
+        date: Date.now(),
+        accountRef,
+        invoiceRef: invoice.uid,
+        amount: payment,
+        paymentOption,
+        entryType: {
+          value: EntryTypes.CREDIT,
+          label: EntryTypes.CREDIT,
+        },
+      };
       checkQuantity(products);
       checkAccountRef(accountRef, paymentOption);
       updateProductInventory(products);
@@ -399,7 +404,10 @@ const AddInvoice: React.FC = () => {
           push("/home/manage-invoices");
         })
       );
-      if (paymentOption.value === "PARTIAL" || paymentOption.value === "CREDIT") {
+      if (
+        paymentOption.value === "PARTIAL" ||
+        paymentOption.value === "CREDIT"
+      ) {
         dispatch(addEntry(entry as any));
       }
     } catch (error) {
@@ -417,8 +425,6 @@ const AddInvoice: React.FC = () => {
     payment,
     total,
   } = state;
-
-  console.log(total);
 
   if (isLoading) {
     return <IonLoading isOpen={isLoading} message={"Please wait..."} />;
@@ -706,7 +712,7 @@ const AddInvoice: React.FC = () => {
                   </td>
                 </tr>
                 <tr>
-                <td>Total (Rs.)</td>
+                  <td>Total (Rs.)</td>
                   <td>
                     <input
                       value={
