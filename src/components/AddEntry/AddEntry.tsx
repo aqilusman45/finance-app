@@ -119,11 +119,11 @@ const AddEntry: React.FC = () => {
   };
 
   const removeSenderAccount = () => {
-    setFormFields({...SENDER_INITIAL_STATE})
+    setFormFields({ ...SENDER_INITIAL_STATE });
   };
 
   const removeReceiverAccount = () => {
-    setReceiverAccount({...RECEIVER_INITIAL_STATE})
+    setReceiverAccount({ ...RECEIVER_INITIAL_STATE });
   };
 
   const pickReceiverAccount = (user: any) => {
@@ -144,7 +144,7 @@ const AddEntry: React.FC = () => {
     }
   };
 
-  const submit = async () => {    
+  const submit = async () => {
     const account = {
       ...formFields,
       balance:
@@ -153,8 +153,7 @@ const AddEntry: React.FC = () => {
     };
     const receiverAccountData = {
       ...receiverAccount,
-      balance:
-        Number(receiverAccount.balance) + Number(amount),
+      balance: Number(receiverAccount.balance) + Number(amount),
       updatedAt: Date.now(),
     };
     const entry = {
@@ -174,7 +173,7 @@ const AddEntry: React.FC = () => {
       await checkAmount(entry);
       dispatch(addEntry(entry as any));
       // update receiver Account
-      dispatch(updateAccountAsync(receiverAccountData as any))
+      dispatch(updateAccountAsync(receiverAccountData as any));
       // update sender Account
       dispatch(
         updateAccountAsync(account as any, () => {

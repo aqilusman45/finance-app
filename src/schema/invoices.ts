@@ -12,21 +12,26 @@ export const invoiceSchema: RxJsonSchema = {
       primary: true,
     },
     invoiceNumber: {
-      type: "string"
+      type: "string",
     },
     date: {
-      type: "number"
+      type: "number",
     },
     paymentOption: {
       type: "object",
       properties: {
         value: {
           type: "string",
-          enum: [PaymentOptions.PARTIAL, PaymentOptions.CASH, PaymentOptions.CREDIT, ]
+          enum: [
+            PaymentOptions.PARTIAL,
+            PaymentOptions.CASH,
+            PaymentOptions.CREDIT,
+            PaymentOptions.WALLET,
+          ],
         },
         label: {
           type: "string",
-        }
+        },
       },
     },
     detail: {
@@ -36,20 +41,20 @@ export const invoiceSchema: RxJsonSchema = {
           type: "string",
         },
         companyName: {
-          type: "string"
+          type: "string",
         },
         shippingAddress: {
-          type: "string"
+          type: "string",
         },
         phone: {
           type: "string",
         },
         address: {
-          type: "string"
+          type: "string",
         },
         email: {
-          type: "string"
-        }
+          type: "string",
+        },
       },
     },
     products: {
@@ -59,43 +64,43 @@ export const invoiceSchema: RxJsonSchema = {
         properties: {
           product: {
             type: "string",
-            ref: "products"
+            ref: "products",
           },
           name: {
-            type: "string"
+            type: "string",
           },
           quantity: {
             type: "number",
           },
           unitPrice: {
-            type: "number"
+            type: "number",
           },
           discount: {
-            type: "number"
-          }
-        }
-      }
+            type: "number",
+          },
+        },
+      },
     },
     totalDiscount: {
-      type: "number"
+      type: "number",
     },
     subTotal: {
-      type: "number"
+      type: "number",
     },
     taxRate: {
-      type: "number"
+      type: "number",
     },
     shipping: {
-      type: "number"
+      type: "number",
     },
     currentBalance: {
-      type: "number"
+      type: "number",
     },
     total: {
       type: "number",
     },
     remarks: {
-      type: "string"
+      type: "string",
     },
     accountRef: {
       type: "string",
@@ -110,5 +115,3 @@ export const invoiceSchema: RxJsonSchema = {
   },
   required: ["uid", "invoiceNumber", "paymentOption", "accountRef"],
 };
-
-

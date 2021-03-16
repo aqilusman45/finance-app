@@ -16,7 +16,8 @@ export enum PaymentOptions {
     CHEQUE = "CHEQUE", 
     BANK = "BANK",
     CREDIT = "CREDIT",
-    PARTIAL = "PARTIAL"
+    PARTIAL = "PARTIAL",
+    WALLET = "WALLET"
 }
 
 export enum EntryTypes {

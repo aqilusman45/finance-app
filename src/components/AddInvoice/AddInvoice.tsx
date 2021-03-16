@@ -15,7 +15,10 @@ import {
   IonLoading,
   IonToast,
 } from "@ionic/react";
-import { fetchAccounts } from "./../../store/reducers/accounts";
+import {
+  fetchAccounts,
+  updateAccountAsync,
+} from "./../../store/reducers/accounts";
 import Table from "react-bootstrap/esm/Table";
 import {
   create,
@@ -37,7 +40,6 @@ import { v4 as uuidv4 } from "uuid";
 import { addEntry } from "../../store/reducers/entries";
 import { useHistory } from "react-router";
 import "./AddInvoice.css";
-
 const INITIAL_STATE = {
   shippingAddress: "",
   phone: "",
@@ -79,12 +81,17 @@ const PAYMENT_OPTIONS = [
     value: PaymentOptions.CREDIT,
     label: "Credit",
   },
+  {
+    value: PaymentOptions.WALLET,
+    label: "Wallet",
+  },
 ];
 
 const AddInvoice: React.FC = () => {
   const [state, setState] = useState({ ...INITIAL_STATE });
   const [showAccountModal, setShowAccountModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
+  const [userAccount, setUserAccount] = useState<any>({ ...INITIAL_STATE });
   const [errors, setErrors] = useState<ValidationError | undefined>();
 
   const { accounts, productList, isLoading, invoices } = useSelector(
@@ -178,6 +185,7 @@ const AddInvoice: React.FC = () => {
   };
 
   const pickAccount = (data: any) => {
+    setUserAccount(data);
     setState((prevState) => ({
       ...prevState,
       detail: {
@@ -358,6 +366,13 @@ const AddInvoice: React.FC = () => {
         detail: { name, address, companyName, email, phone, shippingAddress },
         currentBalance,
       } = state;
+      const account = {
+        ...userAccount,
+        balance:
+          userAccount.balance -
+          getTotal(getSubTotal(products), totalDiscount, taxRate),
+        updatedAt: Date.now(),
+      };
       delete state.payment;
       delete state.companyName;
       delete state.phone;
@@ -399,17 +414,20 @@ const AddInvoice: React.FC = () => {
       checkQuantity(products);
       checkAccountRef(accountRef, paymentOption);
       updateProductInventory(products);
-      dispatch(
-        addInvoice(invoice as any, () => {
-          push("/home/manage-invoices");
-        })
-      );
       if (
         paymentOption.value === "PARTIAL" ||
         paymentOption.value === "CREDIT"
       ) {
         dispatch(addEntry(entry as any));
       }
+      if (paymentOption.value === "WALLET") {
+        dispatch(updateAccountAsync(account as any));
+      }
+      dispatch(
+        addInvoice(invoice as any, () => {
+          push("/home/manage-invoices");
+        })
+      );
     } catch (error) {
       setErrors(error);
     }
