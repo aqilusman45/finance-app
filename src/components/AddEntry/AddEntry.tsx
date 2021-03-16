@@ -182,7 +182,7 @@ const AddEntry: React.FC = () => {
       }
       await addEntrySchema.validate(account);
       await entryTypeCheck(senderEntry);
-      if (senderEntry.entryType.value === "Debit") {
+      if (senderEntry.entryType.value === "DEBIT") {
         await paymentOptionCheck(senderEntry);
       } else {
         delete senderEntry.paymentOption;
