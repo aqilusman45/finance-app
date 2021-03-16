@@ -10,7 +10,7 @@ import {
   EditAccount,
   EditEntry,
   AddEntry,
-  EditInvoice,
+  // EditInvoice,
   ManageInvoices,
   ManageEntries,
   EditProduct
@@ -139,6 +139,6 @@ export const nonMenuRoutes = [
   },
   {
     link: "/edit-invoice/:id",
-    component: EditInvoice,
+    component: ExploreContainer,
   }
 ];

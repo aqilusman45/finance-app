@@ -21,6 +21,7 @@ import { fetchInvoices } from "../../store/reducers/invoices";
 import { RootState } from "../../store/rootReducer";
 import * as JsSearch from "js-search";
 import PaginationView from "../Pagination/Pagination";
+import { serialNumber } from "../../utils/utilities";
 const keys = ["Invoice ID", "Name", "Phone", "Discount", "Tax", "Total"];
 
 const ManageInvoices: React.FC = () => {
@@ -174,7 +175,7 @@ const ManageInvoices: React.FC = () => {
                                     setShowModel(!showModel);
                                   }}
                                 >
-                                  <td>{index + 1}</td>
+                                  <td>{serialNumber(invoices, data.uid)}</td>
                                   <td>{data.invoiceNumber}</td>
                                   <td>{data.name}</td>
                                   <td>{data.phone}</td>
@@ -210,7 +211,7 @@ const ManageInvoices: React.FC = () => {
                                   setShowModel(!showModel);
                                 }}
                               >
-                                <td>{index + 1}</td>
+                                <td>{serialNumber(invoices, data.uid)}</td>
                                 <td>{data.invoiceNumber}</td>
                                 <td>{data.name}</td>
                                 <td>{data.phone}</td>
