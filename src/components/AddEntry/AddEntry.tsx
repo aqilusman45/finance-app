@@ -67,7 +67,7 @@ const RECEIVER_INITIAL_STATE = {
   },
 };
 
-const ENTRY_INITIAL_STATE = {
+const SENDER_ENTRY_INITIAL_STATE = {
   date: Date.now(),
   paymentOption: {
     value: "",
@@ -88,7 +88,7 @@ const AddEntry: React.FC = () => {
   const [userData, setUserData] = useState<any>();
   const [amount, setAmount] = useState<any>(0);
   const [errors, setErrors] = useState<ValidationError | undefined>();
-  const [entryData, setEntryData] = useState({ ...ENTRY_INITIAL_STATE });
+  const [entryData, setEntryData] = useState({ ...SENDER_ENTRY_INITIAL_STATE });
   const [formFields, setFormFields] = useState({ ...SENDER_INITIAL_STATE });
   const [receiverAccount, setReceiverAccount] = useState({
     ...RECEIVER_INITIAL_STATE,
@@ -136,7 +136,13 @@ const AddEntry: React.FC = () => {
       [e.currentTarget.name]: e.currentTarget.value,
     }));
   };
-  const checkEntryType = () => {
+  const checkEntryType = (inverse?: boolean) => {
+    if (entryData.entryType.value === "CREDIT" && inverse) {
+      return "+";
+    } 
+    if (entryData.entryType.value === "CREDIT" && !inverse) {
+      return "-";
+    }
     if (entryData.entryType.value === "CREDIT") {
       return "-";
     } else {
@@ -145,33 +151,45 @@ const AddEntry: React.FC = () => {
   };
 
   const submit = async () => {
-    const account = {
-      ...formFields,
-      balance:
-        Number(formFields.balance) + Number(`${checkEntryType()}${amount}`),
-      updatedAt: Date.now(),
-    };
-    const receiverAccountData = {
-      ...receiverAccount,
-      balance: Number(receiverAccount.balance) + Number(amount),
-      updatedAt: Date.now(),
-    };
-    const entry = {
-      ...entryData,
-      uid: uuidv4(),
-      accountRef: formFields.uid,
-      amount: Number(`${checkEntryType()}${amount}`),
-    };
     try {
-      await addEntrySchema.validate(account);
-      await entryTypeCheck(entry);
-      if (entry.entryType.value === "Debit") {
-        await paymentOptionCheck(entry);
-      } else {
-        delete entry.paymentOption;
+      const account = {
+        ...formFields,
+        balance:
+          Number(formFields.balance) + Number(`${checkEntryType()}${amount}`),
+        updatedAt: Date.now(),
+      };
+      const receiverAccountData = {
+        ...receiverAccount,
+        balance: Number(receiverAccount.balance) + Number(amount),
+        updatedAt: Date.now(),
+      };
+      const senderEntry = {
+        ...entryData,
+        uid: uuidv4(),
+        accountRef: formFields.uid,
+        amount: Number(`${checkEntryType()}${amount}`),
+      };
+      const receiverEntry = {
+        uid: uuidv4(),
+        date: Date.now(),
+        paymentOption: entryData.paymentOption,
+        entryData: entryData.entryType,
+        accountRef: receiverAccount.uid,
+        invoiceRef: entryData.invoiceRef,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        amount: Number(`${checkEntryType(true)}${amount}`),
       }
-      await checkAmount(entry);
-      dispatch(addEntry(entry as any));
+      await addEntrySchema.validate(account);
+      await entryTypeCheck(senderEntry);
+      if (senderEntry.entryType.value === "Debit") {
+        await paymentOptionCheck(senderEntry);
+      } else {
+        delete senderEntry.paymentOption;
+      }
+      await checkAmount(senderEntry);
+      dispatch(addEntry(senderEntry as any));
+      dispatch(addEntry(receiverEntry as any));
       // update receiver Account
       dispatch(updateAccountAsync(receiverAccountData as any));
       // update sender Account

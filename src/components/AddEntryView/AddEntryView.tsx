@@ -17,6 +17,7 @@ import UserSearchModel from "./../UserSearchModel/UserSearchModel";
 import { PaymentOptions, EntryTypes } from "../../lib/enum";
 import { IOption } from "../../lib/attributes";
 import { useHistory } from "react-router";
+import { IAccount } from "../../lib/accounts";
 
 const optionsForPayment: IOption[] = [
   {
@@ -45,7 +46,7 @@ const options: IOption[] = [
 ];
 interface AddEntryViewProps {
   isEdit?: boolean;
-  accounts?: any;
+  accounts?: IAccount[] | null;
   userData?: any;
   setUserData?: any;
   updateUserDetail?: any;
@@ -108,7 +109,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
         />
         {/* Pick Sender Account */}
         <UserSearchModel
-          accounts={accounts}
+          accounts={accounts?.filter(({ uid })=> receiverAccountFields.uid !== uid )}
           showModal={showModal}
           setShowModal={setShowModal}
           pickAccount={updateUserDetail}
@@ -116,7 +117,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
         {/* Pick Receiver Account */}
 
         <UserSearchModel
-          accounts={accounts}
+          accounts={accounts?.filter(({ uid })=> formFields.uid !== uid )}
           showModal={reveiverAccountModel}
           setShowModal={setReveiverAccountModel}
           pickAccount={pickReceiverAccount}

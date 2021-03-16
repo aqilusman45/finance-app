@@ -159,7 +159,13 @@ const OpenAccountForm = ({
             <IonItem className="ion-margin">
               <IonSelect
                 onIonChange={(e) => {
-                  const option = options.find(({ value }) => value === e.detail.value)
+                  let option = options.find(({ value }) => value === e.detail.value)
+                  if (!option) {
+                    option = {
+                      value: "",
+                      label: ""
+                    }
+                  }
                   handleChange({
                     currentTarget: {
                       name: "accountType",
