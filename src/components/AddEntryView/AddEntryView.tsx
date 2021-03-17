@@ -12,7 +12,9 @@ import {
   IonSelect,
   IonSelectOption,
   IonToast,
+  IonIcon,
 } from "@ionic/react";
+import { closeCircle } from "ionicons/icons";
 import UserSearchModel from "./../UserSearchModel/UserSearchModel";
 import { PaymentOptions, EntryTypes } from "../../lib/enum";
 import { IOption } from "../../lib/attributes";
@@ -109,7 +111,9 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
         />
         {/* Pick Sender Account */}
         <UserSearchModel
-          accounts={accounts?.filter(({ uid })=> receiverAccountFields.uid !== uid )}
+          accounts={accounts?.filter(
+            ({ uid }) => receiverAccountFields.uid !== uid
+          )}
           showModal={showModal}
           setShowModal={setShowModal}
           pickAccount={updateUserDetail}
@@ -117,7 +121,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
         {/* Pick Receiver Account */}
 
         <UserSearchModel
-          accounts={accounts?.filter(({ uid })=> formFields.uid !== uid )}
+          accounts={accounts?.filter(({ uid }) => formFields.uid !== uid)}
           showModal={reveiverAccountModel}
           setShowModal={setReveiverAccountModel}
           pickAccount={pickReceiverAccount}
@@ -135,13 +139,18 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
                     Select Sender Account
                   </IonButton>
                 ) : (
-                  <IonButton onClick={removeSenderAccount} color="danger">
-                    Remove Sender Account
-                  </IonButton>
+                  <IonIcon
+                    onClick={removeSenderAccount}
+                    style={{
+                      marginTop: "2px",
+                      fontSize: "30px",
+                    }}
+                    icon={closeCircle}
+                  />
                 )}
               </IonItem>
             </IonCol>
-          
+
             <IonCol size="6">
               <IonItem className="ion-margin">
                 <IonInput
@@ -159,9 +168,14 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
                     Select Receiver Account
                   </IonButton>
                 ) : (
-                  <IonButton onClick={removeReceiverAccount} color="danger">
-                    Remove Receiver Account
-                  </IonButton>
+                  <IonIcon
+                    onClick={removeReceiverAccount}
+                    style={{
+                      marginTop: "2px",
+                      fontSize: "30px",
+                    }}
+                    icon={closeCircle}
+                  />
                 )}
               </IonItem>
             </IonCol>

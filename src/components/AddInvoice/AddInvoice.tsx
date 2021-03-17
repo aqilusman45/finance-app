@@ -377,7 +377,8 @@ const AddInvoice: React.FC = () => {
         updatedAt: Date.now(),
         uid: uuidv4(),
         date: Date.now(),
-        accountRef: accounts && accounts.find((account) => account.name === "Cash")?.uid,
+        accountRef:
+          accounts && accounts.find((account) => account.name === "Cash")?.uid,
         invoiceRef: invoice.uid,
         amount: payment,
         paymentOption,
@@ -385,30 +386,33 @@ const AddInvoice: React.FC = () => {
           value: EntryTypes.DEBIT,
           label: EntryTypes.DEBIT,
         },
-      }
+      };
 
       const partialEntry = {
         createdAt: Date.now(),
         updatedAt: Date.now(),
         uid: uuidv4(),
         date: Date.now(),
-        accountRef: accounts && accounts.find((account) => account.name === "Receivable")?.uid,
+        accountRef:
+          accounts &&
+          accounts.find((account) => account.name === "Receivable")?.uid,
         invoiceRef: invoice.uid,
-        amount: payment,
+        amount:
+          getTotal(getSubTotal(products), totalDiscount, taxRate) - payment,
         paymentOption,
         entryType: {
           value: EntryTypes.CREDIT,
           label: EntryTypes.CREDIT,
         },
-      }
+      };
       checkQuantity(products);
       checkAccountRef(accountRef, paymentOption);
       // If invoice is cash. there will be cash entry
-      if( paymentOption.value === "CASH"){
+      if (paymentOption.value === "CASH") {
         dispatch(addEntry(cashEntry as any));
       }
       // if invoice is partial, there will be three entries
-      if( paymentOption.value === "PARTIAL"){
+      if (paymentOption.value === "PARTIAL") {
         dispatch(addEntry(cashEntry as any));
         dispatch(addEntry(partialEntry as any));
         dispatch(addEntry(entry as any));
