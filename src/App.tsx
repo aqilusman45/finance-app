@@ -32,13 +32,13 @@ const App: React.FC = () => {
   const [status, isLoading] = useActivationStatus();
   const { push } = useHistory();
 
-  // useEffect(() => {
-  //   if (!status) {
-  //     push("/");
-  //   } else {
-  //     push("/sign-in");
-  //   }
-  // }, [status, push]);
+  useEffect(() => {
+    if (!status) {
+      push("/");
+    } else {
+      push("/sign-in");
+    }
+  }, [status, push]);
 
   if (isLoading) {
     return <IonLoading isOpen={isLoading} message={"Please wait..."} />;
