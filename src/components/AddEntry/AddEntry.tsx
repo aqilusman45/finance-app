@@ -90,7 +90,7 @@ const AddEntry: React.FC = () => {
   const [errors, setErrors] = useState<ValidationError | undefined>();
   const [entryData, setEntryData] = useState({ ...SENDER_ENTRY_INITIAL_STATE });
   const [formFields, setFormFields] = useState({ ...SENDER_INITIAL_STATE });
-  const [receiverAccount, setReceiverAccount] = useState({
+  const [receiverAccount, setReceiverAccount] = useState<any>({
     ...RECEIVER_INITIAL_STATE,
   });
   const { push } = useHistory();
@@ -113,6 +113,24 @@ const AddEntry: React.FC = () => {
       dispatch(fetchInvoices());
     }
   }, [invoices, dispatch]);
+
+  useEffect(() => {
+    if (entryData.entryType.value === "CREDIT") {
+      if (accounts) {
+        const findAccount = accounts.find(
+          (account) => account.name === "Receivable"
+        );
+        setReceiverAccount(findAccount);
+      }
+    }
+
+    if (entryData.entryType.value === "DEBIT") {
+      if (accounts) {
+        const findAccount = accounts.find((account) => account.name === "Cash");
+        setReceiverAccount(findAccount);
+      }
+    }
+  }, [accounts, entryData.entryType.value]);
 
   const updateUserDetail = (user: any) => {
     setFormFields(user);
@@ -139,7 +157,7 @@ const AddEntry: React.FC = () => {
   const checkEntryType = (inverse?: boolean) => {
     if (entryData.entryType.value === "CREDIT" && inverse) {
       return "+";
-    } 
+    }
     if (entryData.entryType.value === "CREDIT" && !inverse) {
       return "-";
     }
@@ -179,7 +197,7 @@ const AddEntry: React.FC = () => {
         createdAt: Date.now(),
         updatedAt: Date.now(),
         amount: Number(`${checkEntryType(true)}${amount}`),
-      }
+      };
       await addEntrySchema.validate(account);
       await entryTypeCheck(senderEntry);
       if (senderEntry.entryType.value === "DEBIT") {
