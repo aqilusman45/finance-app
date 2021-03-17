@@ -25,11 +25,11 @@ export const userAccountsSchema: RxJsonSchema = {
     },
     address: {
       type: "string",
-      default: ""
+      default: "",
     },
     companyName: {
       type: "string",
-      default: ""
+      default: "",
     },
     phone: {
       type: "string",
@@ -55,13 +55,21 @@ export const userAccountsSchema: RxJsonSchema = {
       properties: {
         value: {
           type: "string",
-          enum: [AccountTypes.BANK, AccountTypes.CUSTOMER, AccountTypes.EXPENSES, AccountTypes.PURCHASE, AccountTypes.SALES]
+          enum: [
+            AccountTypes.BANK,
+            AccountTypes.CUSTOMER,
+            AccountTypes.EXPENSES,
+            AccountTypes.PURCHASE,
+            AccountTypes.SALES,
+            AccountTypes.CASH,
+            AccountTypes.RECEIVABLE,
+          ],
         },
         label: {
           type: "string",
-        }
+        },
       },
-    }
+    },
   },
   required: ["uid", "name", "phone", "balance", "accountType"],
 };

@@ -16,12 +16,33 @@ import { activationSchema } from "../helpers/validations";
 import { ValidationError } from "yup";
 import { updateActivationAsync } from "../store/reducers/activation";
 import { useDispatch } from "react-redux";
+import { addAccount } from "../store/reducers/accounts";
+import { AccountTypes } from "../lib/enum";
+import { v4 as uuidv4 } from "uuid";
 
 const INITIAL_STATE = {
   key: "",
 };
+const ACCOUNT_INITIAL_STATE = {
+  name: "",
+  email: "",
+  phone: "",
+  description: "",
+  accountNumber: "",
+  accountTitle: "",
+  address: "",
+  companyName: "",
+  balance: 0,
+  accountType: {
+    value: "",
+    label: "",
+  },
+};
 const SignIn: React.FC = () => {
   const [formFields, setFormFields] = useState({ ...INITIAL_STATE });
+  const [accountState] = useState({
+    ...ACCOUNT_INITIAL_STATE,
+  });
   const [errors, setErrors] = useState<ValidationError | undefined>();
   const { push } = useHistory();
   const dispatch = useDispatch();
@@ -36,11 +57,45 @@ const SignIn: React.FC = () => {
   const submit = async () => {
     try {
       await activationSchema.validate(formFields);
+      const cashAccountData = {
+        ...accountState,
+        uid: uuidv4(),
+        enabled: true,
+        name: "Cash",
+        accountType: { value: AccountTypes.CASH, label: "Cash" },
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+
+      const expenseAccountData = {
+        ...accountState,
+        uid: uuidv4(),
+        enabled: true,
+        name: "Expenses",
+        accountType: { value: AccountTypes.EXPENSES, label: "Expenses" },
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+
+      const receivableAccountData = {
+        ...accountState,
+        uid: uuidv4(),
+        enabled: true,
+        name: "Receivable",
+        accountType: { value: AccountTypes.RECEIVABLE, label: "Receivable" },
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+
       const data = {
         createdAt: Date.now(),
         updatedAt: Date.now(),
         activated: true,
       };
+
+      dispatch(addAccount(cashAccountData as any));
+      dispatch(addAccount(expenseAccountData as any));
+      dispatch(addAccount(receivableAccountData as any));
       dispatch(
         updateActivationAsync(data as any, () => {
           if (formFields.key === "12345678") {

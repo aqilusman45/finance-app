@@ -62,13 +62,13 @@ export default accountsSlice.reducer;
 
 export const addAccount = (
   account: IAccount,
-  cb: () => void
+  cb?: () => void
 ): AppThunk => async (dispatch) => {
   try {
     dispatch(startLoading());
     await addAccountMutation(account as any);
     dispatch(addNewAccount(account as any));
-    cb();
+    cb && cb();
     dispatch(doneLoading());
   } catch (error) {
     throw error;

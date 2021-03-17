@@ -8,7 +8,9 @@ export enum AccountTypes {
     PURCHASE = "PURCHASE", 
     BANK = "BANK",
     EXPENSES = "EXPENSES",
-    CUSTOMER = "CUSTOMER"
+    CUSTOMER = "CUSTOMER",
+    CASH = "CASH",
+    RECEIVABLE = "RECEIVABLE",
 }
 
 export enum PaymentOptions {
